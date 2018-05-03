@@ -9,3 +9,11 @@ meals.
 
 * SQLite via https://github.com/stephencelis/SQLite.swift
 * That's it!
+
+## Process
+
+* Create data model
+* Implement simple UI
+* Make a study for fancier UI
+* Implement fancy UI
+* Publish on the App Store
