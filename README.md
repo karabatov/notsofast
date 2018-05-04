@@ -17,3 +17,8 @@ meals.
 * Make a study for fancier UI
 * Implement fancy UI
 * Publish on the App Store
+
+## Money
+
+* Maybe pay to enable iCloud sharing?
+* Patronage/donation?
