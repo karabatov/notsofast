@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D10170CD20A3715B00E748A4 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10170CC20A3715B00E748A4 /* Meal.swift */; };
 		D11E81EF2094BE8400B87926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11E81EE2094BE8400B87926 /* AppDelegate.swift */; };
 		D11E81F12094BE8400B87926 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11E81F02094BE8400B87926 /* MainViewController.swift */; };
 		D11E81F42094BE8400B87926 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D11E81F22094BE8400B87926 /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D10170CC20A3715B00E748A4 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		D11E81EB2094BE8400B87926 /* notsofast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notsofast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D11E81EE2094BE8400B87926 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D11E81F02094BE8400B87926 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D10170CB20A36FC600E748A4 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				D10170CC20A3715B00E748A4 /* Meal.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		D11E81E22094BE8400B87926 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +107,7 @@
 		D11E81ED2094BE8400B87926 /* notsofast */ = {
 			isa = PBXGroup;
 			children = (
+				D10170CB20A36FC600E748A4 /* model */,
 				D11E81EE2094BE8400B87926 /* AppDelegate.swift */,
 				D11E81F02094BE8400B87926 /* MainViewController.swift */,
 				D11E81F22094BE8400B87926 /* Main.storyboard */,
@@ -260,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D11E81F12094BE8400B87926 /* MainViewController.swift in Sources */,
+				D10170CD20A3715B00E748A4 /* Meal.swift in Sources */,
 				D11E81EF2094BE8400B87926 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
