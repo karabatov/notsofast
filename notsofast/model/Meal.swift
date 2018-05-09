@@ -30,4 +30,5 @@ struct Meal {
     let eaten: Date
     let size: Serving
     let nutri: Nutrients
+    let what: String?
 }
