@@ -7,7 +7,8 @@ meals.
 
 ## UI
 
-* Based on circles?
+* Left – Date – Right
+* Circle with meals
 
 ## Technology
 
