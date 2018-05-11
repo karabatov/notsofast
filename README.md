@@ -15,6 +15,8 @@ meals.
 * SQLite via https://github.com/stephencelis/SQLite.swift
 * That's it!
 
+(but I think I'll use Core Data instead for UI sync primarily)
+
 ## Process
 
 * Create data model
