@@ -9,6 +9,7 @@ meals.
 
 * Left – Date – Right
 * Circle with meals
+* Add meal
 
 ## Technology
 
