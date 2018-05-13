@@ -1,5 +1,7 @@
 # Not So Fast
 
+Low-key food tracking.
+
 Fasting for slackers.
 
 Non-committally track what you eat. The goal is to increase intervals between
