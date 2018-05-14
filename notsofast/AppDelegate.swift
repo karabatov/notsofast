@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
         }
+        window?.tintColor = UIColor.nsfTintColor
         window?.rootViewController = mainVC
         window?.makeKeyAndVisible()
 
