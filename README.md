@@ -12,6 +12,9 @@ meals.
 * Left – Date – Right
 * Circle with meals
 * Add meal
+* History
+* 4 circles for each ingredient
+* Icons for each size or emoji if it's in title
 
 ## Technology
 
