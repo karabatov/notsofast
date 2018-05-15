@@ -17,6 +17,7 @@
 		D11E82042094BE8400B87926 /* notsofastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11E82032094BE8400B87926 /* notsofastTests.swift */; };
 		D11E820F2094BE8400B87926 /* notsofastUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11E820E2094BE8400B87926 /* notsofastUITests.swift */; };
 		D18A2E0820AA0FFA0076227E /* UIColorPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */; };
+		D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D18A2E0B20AB6B9A0076227E /* MealsModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		D11E820E2094BE8400B87926 /* notsofastUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = notsofastUITests.swift; sourceTree = "<group>"; };
 		D11E82102094BE8400B87926 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorPreset.swift; sourceTree = "<group>"; };
+		D18A2E0C20AB6B9A0076227E /* MealsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MealsModel.xcdatamodel; sourceTree = "<group>"; };
 		D528B5F2609F38BB957A8516 /* Pods-notsofast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofast.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofast/Pods-notsofast.release.xcconfig"; sourceTree = "<group>"; };
 		EC4E00DF96029E40F7EB3BE3 /* Pods_notsofast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_notsofast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC8D8A5AF0A0D9B9A7131A4F /* Pods-notsofastTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofastTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofastTests/Pods-notsofastTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				D10170CC20A3715B00E748A4 /* Meal.swift */,
+				D18A2E0A20AB6B2B0076227E /* CoreData */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -171,6 +174,14 @@
 				D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */,
 			);
 			path = extensions;
+			sourceTree = "<group>";
+		};
+		D18A2E0A20AB6B2B0076227E /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				D18A2E0B20AB6B9A0076227E /* MealsModel.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		FB859553B295997DA42A1D8B /* Pods */ = {
@@ -403,6 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D11E81F12094BE8400B87926 /* MainViewController.swift in Sources */,
+				D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */,
 				D10170CD20A3715B00E748A4 /* Meal.swift in Sources */,
 				D18A2E0820AA0FFA0076227E /* UIColorPreset.swift in Sources */,
 				D11E81EF2094BE8400B87926 /* AppDelegate.swift in Sources */,
@@ -699,6 +711,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D18A2E0B20AB6B9A0076227E /* MealsModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D18A2E0C20AB6B9A0076227E /* MealsModel.xcdatamodel */,
+			);
+			currentVersion = D18A2E0C20AB6B9A0076227E /* MealsModel.xcdatamodel */;
+			path = MealsModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D11E81E32094BE8400B87926 /* Project object */;
 }
