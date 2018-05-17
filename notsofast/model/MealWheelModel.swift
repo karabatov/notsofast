@@ -9,23 +9,39 @@
 import Foundation
 import CoreData
 
+enum DataSourceChange {
+    case insert(IndexPath)
+    case delete(IndexPath)
+    case update(IndexPath)
+}
+
 /// Represents the logical data source for the meal wheel.
 protocol MealWheelDataModel {
     func numberOfSections() -> Int
     func numberOfItems(in section: Int) -> Int
     func model(forItemAt indexPath: IndexPath) -> Meal?
+
+    var delegate: MealWheelDataModelDelegate? { get set }
+}
+
+/// Delegate for the meal wheel data source.
+protocol MealWheelDataModelDelegate {
+    /// Batch-apply an ordered set of data source changes.
+    func batch(changes: [DataSourceChange])
 }
 
 /// Actual class to provide data to the meal wheel.
-final class MealWheelLiveModel: NSObject {
+final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsControllerDelegate {
     private let frc: NSFetchedResultsController<MealEntity>
 
     init(frc: NSFetchedResultsController<MealEntity>) {
         self.frc = frc
     }
-}
 
-extension MealWheelLiveModel: MealWheelDataModel {
+    // MARK: MealWheelDataModel
+
+    var delegate: MealWheelDataModelDelegate?
+
     func numberOfSections() -> Int {
         return frc.sections?.count ?? 0
     }
@@ -37,35 +53,41 @@ extension MealWheelLiveModel: MealWheelDataModel {
     func model(forItemAt indexPath: IndexPath) -> Meal? {
         return frc.object(at: indexPath).meal()
     }
-}
 
-extension MealWheelLiveModel: NSFetchedResultsControllerDelegate {
+    // MARK: NSFetchedResultsControllerDelegate
+    private var changeCollector = [DataSourceChange]()
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            // Insert item at index path.
-            break
+            if let newIP = newIndexPath {
+                changeCollector.append(DataSourceChange.insert(newIP))
+            }
 
         case .delete:
-            // Delete item at index path.
-            break
+            if let delIP = indexPath {
+                changeCollector.append(DataSourceChange.delete(delIP))
+            }
 
         case .update:
-            // Reconfigure item at index path.
-            break
+            if let updIP = indexPath {
+                changeCollector.append(DataSourceChange.update(updIP))
+            }
 
         case .move:
-            // Delete item at index path.
-            // Insert item at index path.
-            break
+            if let delIP = indexPath, let newIP = newIndexPath {
+                changeCollector.append(DataSourceChange.delete(delIP))
+                changeCollector.append(DataSourceChange.insert(newIP))
+            }
         }
     }
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        // Begin updates…
+        // Optimistically preserve capacity for future changes.
+        changeCollector.removeAll(keepingCapacity: true)
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        // End updates…
+        delegate?.batch(changes: changeCollector)
     }
 }
