@@ -8,6 +8,9 @@
 
 import Foundation
 
-final class MealWheelModel {
-
+/// Represents the logical data source for the meal wheel.
+protocol MealWheelDataModel {
+    func numberOfSections() -> Int
+    func numberOfItems(in section: Int) -> Int
+    func model(forItemAt indexPath: IndexPath) -> Meal
 }
