@@ -41,6 +41,31 @@ extension MealWheelLiveModel: MealWheelDataModel {
 
 extension MealWheelLiveModel: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        // Do nothing.
+        switch type {
+        case .insert:
+            // Insert item at index path.
+            break
+
+        case .delete:
+            // Delete item at index path.
+            break
+
+        case .update:
+            // Reconfigure item at index path.
+            break
+
+        case .move:
+            // Delete item at index path.
+            // Insert item at index path.
+            break
+        }
+    }
+
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // Begin updates…
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // End updates…
     }
 }
