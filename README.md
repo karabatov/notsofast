@@ -16,6 +16,8 @@ meals.
 * 4 circles for each ingredient
 * Icons for each size or emoji if it's in title
 * Draw icons in PaintCode
+* Bottom left: switch to list/edit mode
+* Bottom right: settings
 
 ## Technology
 
