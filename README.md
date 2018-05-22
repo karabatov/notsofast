@@ -7,7 +7,7 @@ Fasting for slackers.
 Non-committally track what you eat. The goal is to increase intervals between
 meals.
 
-Target release date: June 1, 2018 (tentative).
+Target release date: June 1, 2018 (tentative, *very* tentative).
 
 ## UI
 
