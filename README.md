@@ -21,11 +21,8 @@ meals.
 
 ## Technology
 
-* SQLite via https://github.com/stephencelis/SQLite.swift
 * RxSwift
-* That's it!
-
-(but I think I'll use Core Data instead for UI sync primarily)
+* Core Data
 
 ## Process
 
