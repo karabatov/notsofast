@@ -2,9 +2,6 @@
 
 Low-key food tracking.
 
-Non-committally track what you eat. The goal is to increase intervals between
-meals.
-
 ## UI
 
 * Left – Date – Right
