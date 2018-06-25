@@ -16,6 +16,10 @@ final class TwentyFourListViewModel {
         self.dataModel = dataModel
     }
 
+    /// Returns an initialized instance of itself for use in live app.
     class func liveViewModel() -> TwentyFourListViewModel {
+        let frc = CoreDataProvider.sharedInstance.fetchedResultsController(for: FetchResultsTarget.twentyFourHourList)
+        let dataModel = MealWheelLiveModel(frc: frc)
+        return TwentyFourListViewModel(dataModel: dataModel)
     }
 }

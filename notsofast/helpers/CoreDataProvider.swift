@@ -22,14 +22,19 @@ final class CoreDataProvider {
     private let container: NSPersistentContainer
 
     required init() {
-        container = NSPersistentContainer(name: "CoreDataProvider")
+        container = NSPersistentContainer(name: "MealsModel")
+        container.loadPersistentStores() { description, maybeError in
+            if let error = maybeError {
+                fatalError("Unable to load persistent stores: \(error)")
+            }
+        }
     }
 
     /// Returns a preconfigured fetched results controller for the target place to be used.
     func fetchedResultsController(for target: FetchResultsTarget) -> NSFetchedResultsController<MealEntity> {
         switch target {
         case .twentyFourHourList:
-            let fr: NSFetchRequest<MealEntity> = MealEntity.fetchRequest()
+            let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
             return NSFetchedResultsController(
                 fetchRequest: fr,
                 managedObjectContext: container.viewContext,
