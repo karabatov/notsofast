@@ -1,0 +1,8 @@
+/* 
+  LocalizableStrings.strings
+  notsofast
+
+  Created by Yuri Karabatov on 25/06/2018.
+  Copyright © 2018 Yuri Karabatov. All rights reserved.
+*/
+"LAST_24_HOURS" = "Last 24 hours";
