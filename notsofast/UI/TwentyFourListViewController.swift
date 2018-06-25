@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import Rswift
 
 class TwentyFourListViewController: UIViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         navigationItem.largeTitleDisplayMode = .automatic
-        title = "Last 24 hours"
+        title = R.string.localizableStrings.last_24_hours()
     }
 
     required init?(coder aDecoder: NSCoder) {
