@@ -27,6 +27,7 @@
 		D19B0A9120B00C2A003A27B9 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A9020B00C2A003A27B9 /* MainViewModel.swift */; };
 		D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */; };
 		D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8120E11B8F0058CBFB /* R.generated.swift */; };
+		D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8420E12B830058CBFB /* NSFLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		D19B0A9020B00C2A003A27B9 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = LocalizableStrings.strings; sourceTree = "<group>"; };
 		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
+		D1F4FB8420E12B830058CBFB /* NSFLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFLog.swift; sourceTree = "<group>"; };
 		D528B5F2609F38BB957A8516 /* Pods-notsofast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofast.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofast/Pods-notsofast.release.xcconfig"; sourceTree = "<group>"; };
 		EC4E00DF96029E40F7EB3BE3 /* Pods_notsofast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_notsofast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC8D8A5AF0A0D9B9A7131A4F /* Pods-notsofastTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofastTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofastTests/Pods-notsofastTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				D18A2E0E20AB6E640076227E /* Constants.swift */,
 				D11E81EE2094BE8400B87926 /* AppDelegate.swift */,
 				D18A2E0920AA10000076227E /* extensions */,
+				D1F4FB8320E12B030058CBFB /* helpers */,
 				D10170CB20A36FC600E748A4 /* model */,
 				D18A2E0620AA0F880076227E /* UI */,
 				D11E81F52094BE8400B87926 /* Assets.xcassets */,
@@ -217,6 +220,14 @@
 				D18A2E1020AB88ED0076227E /* MealWheelView.swift */,
 			);
 			path = MealWheel;
+			sourceTree = "<group>";
+		};
+		D1F4FB8320E12B030058CBFB /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D1F4FB8420E12B830058CBFB /* NSFLog.swift */,
+			);
+			path = helpers;
 			sourceTree = "<group>";
 		};
 		FB859553B295997DA42A1D8B /* Pods */ = {
@@ -470,6 +481,7 @@
 				D18A2E1120AB88ED0076227E /* MealWheelView.swift in Sources */,
 				D19B0A8F20ADFCB9003A27B9 /* MealEntityExtension.swift in Sources */,
 				D19B0A8B20AD8AA8003A27B9 /* MealWheelModel.swift in Sources */,
+				D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */,
 				D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */,
 				D18A2E1320AD850D0076227E /* MealWheelDataSource.swift in Sources */,
 				D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */,
