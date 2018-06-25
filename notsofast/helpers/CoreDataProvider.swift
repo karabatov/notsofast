@@ -36,12 +36,14 @@ final class CoreDataProvider {
         case .twentyFourHourList:
             let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
             fr.sortDescriptors = [NSSortDescriptor(key: "eaten", ascending: true)]
-            return NSFetchedResultsController(
+            let frc = NSFetchedResultsController(
                 fetchRequest: fr,
                 managedObjectContext: container.viewContext,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )
+            try? frc.performFetch()
+            return frc
         }
     }
 }

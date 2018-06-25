@@ -18,6 +18,7 @@ final class MealWheelDataSource: NSObject, UITableViewDataSource {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
+        NSFLog("Number of sections: \(model.numberOfSections())")
         return model.numberOfSections()
     }
 

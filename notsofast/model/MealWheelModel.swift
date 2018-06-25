@@ -21,7 +21,7 @@ protocol MealWheelDataModel {
     func numberOfItems(in section: Int) -> Int
     func model(forItemAt indexPath: IndexPath) -> Meal?
 
-    var delegate: MealWheelDataModelDelegate? { get set }
+    func configure(delegate: MealWheelDataModelDelegate?)
 }
 
 /// Delegate for the meal wheel data source.
@@ -40,7 +40,7 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
 
     // MARK: MealWheelDataModel
 
-    var delegate: MealWheelDataModelDelegate?
+    private var delegate: MealWheelDataModelDelegate?
 
     func numberOfSections() -> Int {
         return frc.sections?.count ?? 0
@@ -52,6 +52,10 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
 
     func model(forItemAt indexPath: IndexPath) -> Meal? {
         return frc.object(at: indexPath).meal()
+    }
+
+    func configure(delegate: MealWheelDataModelDelegate?) {
+        self.delegate = delegate
     }
 
     // MARK: NSFetchedResultsControllerDelegate
