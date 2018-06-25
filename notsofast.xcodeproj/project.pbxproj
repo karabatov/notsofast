@@ -190,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				D11E81F02094BE8400B87926 /* TwentyFourListViewController.swift */,
+				D18A2E1220AD850D0076227E /* MealWheelDataSource.swift */,
 				D18A2E1420AD85BE0076227E /* MealWheel */,
 			);
 			path = UI;
@@ -216,7 +217,6 @@
 		D18A2E1420AD85BE0076227E /* MealWheel */ = {
 			isa = PBXGroup;
 			children = (
-				D18A2E1220AD850D0076227E /* MealWheelDataSource.swift */,
 				D18A2E1020AB88ED0076227E /* MealWheelView.swift */,
 			);
 			path = MealWheel;

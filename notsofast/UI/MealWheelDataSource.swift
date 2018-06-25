@@ -9,14 +9,15 @@
 import UIKit
 
 /// Connects the meal wheel model to the actual collection view.
-final class MealWheelDataSource: NSObject, UICollectionViewDataSource {
+final class MealWheelDataSource: NSObject, UITableViewDelegate {
     private let model: MealWheelDataModel
-    weak var collectionView: UICollectionView?
+    weak var tableView: UITableView?
 
     init(model: MealWheelDataModel) {
         self.model = model
     }
 
+    /*
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return model.numberOfSections()
     }
@@ -27,26 +28,28 @@ final class MealWheelDataSource: NSObject, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let _ = model.model(forItemAt: indexPath)
-        return UICollectionViewCell()
+        return UITableViewCell()
     }
+    */
 }
 
 extension MealWheelDataSource: MealWheelDataModelDelegate {
     func batch(changes: [DataSourceChange]) {
-        guard let cv = collectionView else { return }
-        cv.performBatchUpdates({
-            for change in changes {
-                switch change {
-                case .delete(let ip):
-                    cv.deleteItems(at: [ip])
+        guard let tv = tableView else { return }
 
-                case .insert(let ip):
-                    cv.insertItems(at: [ip])
+        tv.beginUpdates()
+        for change in changes {
+            switch change {
+            case .delete(let ip):
+                tv.deleteRows(at: [ip], with: UITableViewRowAnimation.automatic)
 
-                case .update(let ip):
-                    cv.reloadItems(at: [ip])
-                }
+            case .insert(let ip):
+                tv.insertRows(at: [ip], with: UITableViewRowAnimation.automatic)
+
+            case .update(let ip):
+                tv.reloadRows(at: [ip], with: UITableViewRowAnimation.automatic)
             }
-        }, completion: nil)
+        }
+        tv.endUpdates()
     }
 }
