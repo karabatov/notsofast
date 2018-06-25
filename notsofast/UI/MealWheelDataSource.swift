@@ -9,7 +9,7 @@
 import UIKit
 
 /// Connects the meal wheel model to the actual collection view.
-final class MealWheelDataSource: NSObject, UITableViewDelegate {
+final class MealWheelDataSource: NSObject, UITableViewDataSource {
     private let model: MealWheelDataModel
     weak var tableView: UITableView?
 
@@ -17,20 +17,18 @@ final class MealWheelDataSource: NSObject, UITableViewDelegate {
         self.model = model
     }
 
-    /*
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return model.numberOfSections()
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return model.numberOfItems(in: section)
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let _ = model.model(forItemAt: indexPath)
         return UITableViewCell()
     }
-    */
 }
 
 extension MealWheelDataSource: MealWheelDataModelDelegate {
