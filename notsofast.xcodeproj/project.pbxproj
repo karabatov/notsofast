@@ -24,7 +24,7 @@
 		D19B0A8B20AD8AA8003A27B9 /* MealWheelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A8A20AD8AA8003A27B9 /* MealWheelModel.swift */; };
 		D19B0A8D20ADF7A2003A27B9 /* MealContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A8C20ADF7A2003A27B9 /* MealContainer.swift */; };
 		D19B0A8F20ADFCB9003A27B9 /* MealEntityExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A8E20ADFCB9003A27B9 /* MealEntityExtension.swift */; };
-		D19B0A9120B00C2A003A27B9 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A9020B00C2A003A27B9 /* MainViewModel.swift */; };
+		D19B0A9120B00C2A003A27B9 /* TwentyFourListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */; };
 		D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */; };
 		D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8120E11B8F0058CBFB /* R.generated.swift */; };
 		D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8420E12B830058CBFB /* NSFLog.swift */; };
@@ -72,7 +72,7 @@
 		D19B0A8A20AD8AA8003A27B9 /* MealWheelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealWheelModel.swift; sourceTree = "<group>"; };
 		D19B0A8C20ADF7A2003A27B9 /* MealContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealContainer.swift; sourceTree = "<group>"; };
 		D19B0A8E20ADFCB9003A27B9 /* MealEntityExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEntityExtension.swift; sourceTree = "<group>"; };
-		D19B0A9020B00C2A003A27B9 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourListViewModel.swift; sourceTree = "<group>"; };
 		D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = LocalizableStrings.strings; sourceTree = "<group>"; };
 		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D1F4FB8420E12B830058CBFB /* NSFLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFLog.swift; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 			children = (
 				D10170CC20A3715B00E748A4 /* Meal.swift */,
 				D19B0A8A20AD8AA8003A27B9 /* MealWheelModel.swift */,
-				D19B0A9020B00C2A003A27B9 /* MainViewModel.swift */,
+				D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */,
 				D18A2E0A20AB6B2B0076227E /* CoreData */,
 			);
 			path = model;
@@ -490,7 +490,7 @@
 				D11E81EF2094BE8400B87926 /* AppDelegate.swift in Sources */,
 				D19B0A8D20ADF7A2003A27B9 /* MealContainer.swift in Sources */,
 				D18A2E0F20AB6E640076227E /* Constants.swift in Sources */,
-				D19B0A9120B00C2A003A27B9 /* MainViewModel.swift in Sources */,
+				D19B0A9120B00C2A003A27B9 /* TwentyFourListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

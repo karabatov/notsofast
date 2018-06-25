@@ -17,8 +17,8 @@ final class TwentyFourListViewController: UIViewController {
     private let bottomPanel = UIToolbar(frame: CGRect.zero)
     private let plusButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: nil, action: nil)
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    required init(viewModel: TwentyFourListViewModel) {
+        super.init(nibName: nil, bundle: nil)
         navigationItem.largeTitleDisplayMode = .automatic
         navigationItem.rightBarButtonItem = plusButton
         title = R.string.localizableStrings.last_24_hours()

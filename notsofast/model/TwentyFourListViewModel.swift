@@ -1,5 +1,5 @@
 //
-//  MainViewModel.swift
+//  TwentyFourListViewModel.swift
 //  notsofast
 //
 //  Created by Yuri Karabatov on 19/05/2018.
@@ -8,5 +8,6 @@
 
 import Foundation
 
-final class MainViewModel {
+/// View model for `TwentyFourListViewController`.
+final class TwentyFourListViewModel {
 }
