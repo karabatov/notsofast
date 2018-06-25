@@ -26,6 +26,7 @@
 		D19B0A8F20ADFCB9003A27B9 /* MealEntityExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A8E20ADFCB9003A27B9 /* MealEntityExtension.swift */; };
 		D19B0A9120B00C2A003A27B9 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A9020B00C2A003A27B9 /* MainViewModel.swift */; };
 		D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */; };
+		D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8120E11B8F0058CBFB /* R.generated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		D19B0A8E20ADFCB9003A27B9 /* MealEntityExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEntityExtension.swift; sourceTree = "<group>"; };
 		D19B0A9020B00C2A003A27B9 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = LocalizableStrings.strings; sourceTree = "<group>"; };
+		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D528B5F2609F38BB957A8516 /* Pods-notsofast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofast.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofast/Pods-notsofast.release.xcconfig"; sourceTree = "<group>"; };
 		EC4E00DF96029E40F7EB3BE3 /* Pods_notsofast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_notsofast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC8D8A5AF0A0D9B9A7131A4F /* Pods-notsofastTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofastTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofastTests/Pods-notsofastTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 		D11E81ED2094BE8400B87926 /* notsofast */ = {
 			isa = PBXGroup;
 			children = (
+				D1F4FB8120E11B8F0058CBFB /* R.generated.swift */,
 				D18A2E0E20AB6E640076227E /* Constants.swift */,
 				D11E81EE2094BE8400B87926 /* AppDelegate.swift */,
 				D18A2E0920AA10000076227E /* extensions */,
@@ -235,6 +238,7 @@
 			buildConfigurationList = D11E82132094BE8400B87926 /* Build configuration list for PBXNativeTarget "notsofast" */;
 			buildPhases = (
 				FF804728E95C1F0D177E0E08 /* [CP] Check Pods Manifest.lock */,
+				D1F4FB8020E11B1F0058CBFB /* ShellScript */,
 				D11E81E72094BE8400B87926 /* Sources */,
 				D11E81E82094BE8400B87926 /* Frameworks */,
 				D11E81E92094BE8400B87926 /* Resources */,
@@ -423,6 +427,20 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-notsofastTests/Pods-notsofastTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D1F4FB8020E11B1F0058CBFB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT\"";
+			showEnvVarsInLog = 0;
+		};
 		FF804728E95C1F0D177E0E08 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -454,6 +472,7 @@
 				D19B0A8B20AD8AA8003A27B9 /* MealWheelModel.swift in Sources */,
 				D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */,
 				D18A2E1320AD850D0076227E /* MealWheelDataSource.swift in Sources */,
+				D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */,
 				D10170CD20A3715B00E748A4 /* Meal.swift in Sources */,
 				D18A2E0820AA0FFA0076227E /* UIColorPreset.swift in Sources */,
 				D11E81EF2094BE8400B87926 /* AppDelegate.swift in Sources */,
