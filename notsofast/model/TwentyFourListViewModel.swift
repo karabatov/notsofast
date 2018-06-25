@@ -10,4 +10,12 @@ import Foundation
 
 /// View model for `TwentyFourListViewController`.
 final class TwentyFourListViewModel {
+    let dataModel: MealWheelDataModel
+
+    required init(dataModel: MealWheelDataModel) {
+        self.dataModel = dataModel
+    }
+
+    class func liveViewModel() -> TwentyFourListViewModel {
+    }
 }
