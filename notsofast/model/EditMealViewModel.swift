@@ -80,21 +80,16 @@ final class EditMealViewModel {
 
     private func configureInput() {
         input
-            .subscribe(
-                onNext: { [weak self] input in
-                    switch input {
-                    case .configure(model: let newMeal, title: let newTitle):
-                        self?.model.onNext(newMeal)
-                        self?.title.onNext(newTitle.forDisplay())
+            .subscribe(onNext: { [weak self] input in
+                switch input {
+                case .configure(model: let newMeal, title: let newTitle):
+                    self?.model.onNext(newMeal)
+                    self?.title.onNext(newTitle.forDisplay())
 
-                    case .selectedCell(_):
-                        break
-                    }
-                },
-                onError: nil,
-                onCompleted: nil,
-                onDisposed: nil
-            )
+                case .selectedCell(_):
+                    break
+                }
+            })
             .disposed(by: disposeBag)
     }
 }
