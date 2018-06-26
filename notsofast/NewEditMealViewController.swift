@@ -7,14 +7,23 @@
 //
 
 import UIKit
+import RxSwift
 
 /// Create or edit a meal.
 final class NewEditMealViewController: UIViewController {
     private let viewModel: EditMealViewModel
+    private var disposeBag = DisposeBag()
 
     required init(viewModel: EditMealViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+
+        viewModel.title
+            .asDriver(onErrorJustReturn: "")
+            .drive(onNext: { [weak self] title in
+                self?.navigationItem.title = title
+            })
+            .disposed(by: disposeBag)
     }
 
     required init?(coder aDecoder: NSCoder) {

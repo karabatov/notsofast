@@ -63,6 +63,7 @@ final class TwentyFourListViewController: UIViewController {
 
     private func plusButtonTapped() {
         let vm = EditMealViewModel()
+        vm.input.onNext(EditMealInput.configure(model: Meal.createNewMeal(), title: CreateEditMealTitle.create))
         let vc = NewEditMealViewController(viewModel: vm)
         navigationController?.pushViewController(vc, animated: true)
     }
