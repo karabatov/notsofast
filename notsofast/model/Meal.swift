@@ -19,11 +19,10 @@ enum Serving: Int {
 struct Nutrients: OptionSet {
     let rawValue: Int
 
-    static let nothing = Nutrients(rawValue: 1 << 0)
-    static let protein = Nutrients(rawValue: 1 << 1)
-    static let fat = Nutrients(rawValue: 1 << 2)
-    static let slowCarb = Nutrients(rawValue: 1 << 3)
-    static let fastCarb = Nutrients(rawValue: 1 << 4)
+    static let protein = Nutrients(rawValue: 1 << 0)
+    static let fat = Nutrients(rawValue: 1 << 1)
+    static let slowCarb = Nutrients(rawValue: 1 << 2)
+    static let fastCarb = Nutrients(rawValue: 1 << 3)
 
     static let all: Nutrients = [.fastCarb, .protein, .slowCarb, .fat]
 }
@@ -33,4 +32,14 @@ struct Meal {
     let size: Serving
     let nutri: Nutrients
     let what: String?
+
+    /// Creates a new meal dated NOW but with empty fields.
+    static func createNewMeal() -> Meal {
+        return Meal(
+            eaten: Date(),
+            size: Serving.nothing,
+            nutri: [],
+            what: nil
+        )
+    }
 }
