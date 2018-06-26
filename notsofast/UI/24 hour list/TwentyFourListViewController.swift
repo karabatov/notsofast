@@ -62,7 +62,9 @@ final class TwentyFourListViewController: UIViewController {
     }
 
     private func plusButtonTapped() {
-        NSFLog("Plus button tapped.")
+        let vm = EditMealViewModel()
+        let vc = NewEditMealViewController(viewModel: vm)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
