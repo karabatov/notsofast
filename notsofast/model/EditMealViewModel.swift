@@ -14,7 +14,7 @@ struct EditMealSection {
     let rows: [EditMealCell]
 }
 
-enum EditMealCell {
+enum EditMealCell: Equatable {
     case size(size: Serving, selected: Bool)
     case ingredients(nutri: Nutrients, selected: Bool)
     case date(Date)
@@ -71,6 +71,7 @@ final class EditMealViewModel {
         configureButtonsSection()
         configureDataOutput()
         configureInput()
+        scheduleSectionUpdates()
     }
 
     private func configureSizeSection() {
@@ -81,6 +82,7 @@ final class EditMealViewModel {
                         return EditMealCell.size(size: size, selected: size == model.size)
                     }
             }
+            .distinctUntilChanged()
             .bind(to: sizeSection)
             .disposed(by: disposeBag)
     }
@@ -98,6 +100,7 @@ final class EditMealViewModel {
                         return EditMealCell.ingredients(nutri: nutri, selected: model.nutri.contains(nutri))
                     }
             }
+            .distinctUntilChanged()
             .bind(to: typeSection)
             .disposed(by: disposeBag)
     }
@@ -109,6 +112,7 @@ final class EditMealViewModel {
                     EditMealCell.date(model.eaten)
                 ]
             }
+            .distinctUntilChanged()
             .bind(to: dateSection)
             .disposed(by: disposeBag)
     }
@@ -120,7 +124,29 @@ final class EditMealViewModel {
                     EditMealCell.delete
                 ]
             }
+            .distinctUntilChanged()
             .bind(to: buttonSection)
+            .disposed(by: disposeBag)
+    }
+
+    private func scheduleSectionUpdates() {
+        let sec0Bump = sizeSection
+            .map { _ -> EditMealOutput in
+                return EditMealOutput.reloadSection(0)
+            }
+
+        let sec1Bump = typeSection
+            .map { _ -> EditMealOutput in
+                return EditMealOutput.reloadSection(1)
+            }
+
+        let sec2Bump = dateSection
+            .map { _ -> EditMealOutput in
+                return EditMealOutput.reloadSection(2)
+            }
+
+        Observable.merge(sec0Bump, sec1Bump, sec2Bump)
+            .bind(to: output)
             .disposed(by: disposeBag)
     }
 
