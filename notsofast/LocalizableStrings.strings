@@ -23,3 +23,5 @@
 "Nutrients_fast_carb_short" = "FC";
 "Nutrients_fat_short" = "F";
 "Nutrients_slow_carb_short" = "SC";
+"Edit_meal_date" = "Date";
+"Edit_meal_delete" = "Delete meal";

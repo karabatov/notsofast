@@ -39,6 +39,8 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
+
+        tableView.dataSource = self
     }
 
     private func setupTitleBind() {
@@ -73,13 +75,44 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-        /*
         let model = data.value[indexPath.section].rows[indexPath.row]
         switch model {
         case .size(size: let size, selected: let selected):
-            break
+            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Simple")
+            cell.textLabel?.text = size.forDisplay()
+            cell.detailTextLabel?.text = nil
+            if selected {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
+            return cell
+
+        case .ingredients(nutri: let nutri, selected: let selected):
+            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Simple")
+            cell.textLabel?.text = nutri.forDisplay()
+            cell.detailTextLabel?.text = nil
+            if selected {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
+            return cell
+
+        case .date(let date):
+            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Date")
+            cell.textLabel?.text = R.string.localizableStrings.edit_meal_date()
+            cell.detailTextLabel?.text = date.description
+            cell.accessoryType = .disclosureIndicator
+            return cell
+
+        case .delete:
+            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Delete")
+            cell.textLabel?.text = R.string.localizableStrings.edit_meal_delete()
+            cell.textLabel?.textColor = UIColor.red
+            cell.detailTextLabel?.text = nil
+            cell.accessoryType = .none
+            return cell
         }
-        */
     }
 }
