@@ -62,15 +62,19 @@ final class EditMealViewModel {
 
     private let model = PublishSubject<Meal>()
 
+    private let mealStorage: MealActionController
+
     private var disposeBag = DisposeBag()
 
-    required init() {
+    required init(mealStorage: MealActionController) {
+        self.mealStorage = mealStorage
         configureSizeSection()
         configureTypeSection()
         configureDateSection()
         configureButtonsSection()
         configureDataOutput()
         configureInput()
+        configureModelSaving()
         // scheduleSectionUpdates()
     }
 
@@ -197,6 +201,14 @@ final class EditMealViewModel {
                 default:
                     break
                 }
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func configureModelSaving() {
+        model
+            .subscribe(onNext: { [weak self] mdl in
+                self?.mealStorage.upsert(meal: mdl, original: mdl)
             })
             .disposed(by: disposeBag)
     }
