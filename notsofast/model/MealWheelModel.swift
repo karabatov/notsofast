@@ -36,6 +36,8 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
 
     init(frc: NSFetchedResultsController<MealEntity>) {
         self.frc = frc
+        super.init()
+        frc.delegate = self
     }
 
     // MARK: MealWheelDataModel
@@ -92,6 +94,7 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        NSFLog("Batch! Collector: \(changeCollector.count)")
         delegate?.batch(changes: changeCollector)
     }
 }
