@@ -18,12 +18,7 @@ final class NewEditMealViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
 
-        viewModel.title
-            .asDriver(onErrorJustReturn: "")
-            .drive(onNext: { [weak self] title in
-                self?.navigationItem.title = title
-            })
-            .disposed(by: disposeBag)
+        setupTitleBind()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -32,5 +27,14 @@ final class NewEditMealViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+
+    private func setupTitleBind() {
+        viewModel.title
+            .asDriver(onErrorJustReturn: "")
+            .drive(onNext: { [weak self] title in
+                self?.navigationItem.title = title
+            })
+            .disposed(by: disposeBag)
     }
 }
