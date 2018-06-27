@@ -72,7 +72,12 @@ final class EditMealViewModel {
     private func configureDataOutput() {
         Observable.combineLatest(sizeSection, typeSection, dateSection, buttonSection) { ($0, $1, $2, $3) }
             .map { (sizes, types, dates, buttons) -> [EditMealSection] in
-                return []
+                return [
+                    EditMealSection(title: R.string.localizableStrings.serving(), rows: sizes),
+                    EditMealSection(title: R.string.localizableStrings.nutrients(), rows: types),
+                    EditMealSection(title: nil, rows: dates),
+                    EditMealSection(title: nil, rows: buttons),
+                ]
             }
             .bind(to: data)
             .disposed(by: disposeBag)
