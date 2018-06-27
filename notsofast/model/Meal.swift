@@ -44,6 +44,39 @@ struct Nutrients: OptionSet {
     static let fastCarb = Nutrients(rawValue: 1 << 3)
 
     static let all: Nutrients = [.fastCarb, .protein, .slowCarb, .fat]
+
+    func forDisplay() -> String {
+        switch self {
+        case Nutrients.fastCarb:
+            return R.string.localizableStrings.nutrients_fast_carb_full()
+
+        case Nutrients.protein:
+            return R.string.localizableStrings.nutrients_protein_full()
+
+        case Nutrients.slowCarb:
+            return R.string.localizableStrings.nutrients_slow_carb_full()
+
+        case Nutrients.fat:
+            return R.string.localizableStrings.nutrients_fat_full()
+
+        default:
+            var units: [String] = []
+            if self.contains(Nutrients.fastCarb) {
+                units.append(R.string.localizableStrings.nutrients_fast_carb_short())
+            }
+            if self.contains(Nutrients.protein) {
+                units.append(R.string.localizableStrings.nutrients_protein_short())
+            }
+            if self.contains(Nutrients.slowCarb) {
+                units.append(R.string.localizableStrings.nutrients_slow_carb_short())
+            }
+            if self.contains(Nutrients.fat) {
+                units.append(R.string.localizableStrings.nutrients_fat_short())
+            }
+
+            return "[\(units.joined(separator: ", "))]"
+        }
+    }
 }
 
 struct Meal {
