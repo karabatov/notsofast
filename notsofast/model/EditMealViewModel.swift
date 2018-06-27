@@ -67,6 +67,8 @@ final class EditMealViewModel {
     required init() {
         configureSizeSection()
         configureTypeSection()
+        configureDateSection()
+        configureButtonsSection()
         configureDataOutput()
         configureInput()
     }
@@ -108,6 +110,17 @@ final class EditMealViewModel {
                 ]
             }
             .bind(to: dateSection)
+            .disposed(by: disposeBag)
+    }
+
+    private func configureButtonsSection() {
+        model
+            .map { _ -> [EditMealCell] in
+                return [
+                    EditMealCell.delete
+                ]
+            }
+            .bind(to: buttonSection)
             .disposed(by: disposeBag)
     }
 
