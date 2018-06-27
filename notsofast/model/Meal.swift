@@ -16,7 +16,22 @@ enum Serving: Int {
     case bucket = 40
 
     func forDisplay() -> String {
-        return ""
+        switch self {
+        case .nothing:
+            return R.string.localizableStrings.serving_nothing()
+
+        case .bite:
+            return R.string.localizableStrings.serving_bite()
+
+        case .handful:
+            return R.string.localizableStrings.serving_handful()
+
+        case .plate:
+            return R.string.localizableStrings.serving_plate()
+
+        case .bucket:
+            return R.string.localizableStrings.serving_bucket()
+        }
     }
 }
 
