@@ -55,44 +55,44 @@ final class CoreDataProvider: MealActionController {
     // MARK: MealActionController
 
     func upsert(meal: Meal, original: Meal) {
-        container.performBackgroundTask { context in
-            let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
-            fr.predicate = NSPredicate(format: "eaten = %@", argumentArray: [original.eaten])
+        let context = container.viewContext
 
-            guard let mealsCount = try? context.count(for: fr) else { return }
+        let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
+        fr.predicate = NSPredicate(format: "eaten = %@", argumentArray: [original.eaten])
 
-            switch mealsCount {
-            case 0:
-                let newMealEntity = MealEntity(entity: MealEntity.entity(), insertInto: context)
-                newMealEntity.eaten = meal.eaten
-                newMealEntity.what = meal.what
-                newMealEntity.size = Int32(meal.size.rawValue)
-                newMealEntity.nutri = Int64(meal.nutri.rawValue)
+        guard let mealsCount = try? context.count(for: fr) else { return }
 
-            case 1:
-                if
-                    let meals = try? context.fetch(fr),
-                    meals.count == 1,
-                    let firstMeal = meals.first
-                {
-                    firstMeal.eaten = meal.eaten
-                    firstMeal.what = meal.what
-                    firstMeal.size = Int32(meal.size.rawValue)
-                    firstMeal.nutri = Int64(meal.nutri.rawValue)
-                }
+        switch mealsCount {
+        case 0:
+            let newMealEntity = MealEntity(entity: MealEntity.entity(), insertInto: context)
+            newMealEntity.eaten = meal.eaten
+            newMealEntity.what = meal.what
+            newMealEntity.size = Int32(meal.size.rawValue)
+            newMealEntity.nutri = Int64(meal.nutri.rawValue)
 
-            default:
-                return
+        case 1:
+            if
+                let meals = try? context.fetch(fr),
+                meals.count == 1,
+                let firstMeal = meals.first
+            {
+                firstMeal.eaten = meal.eaten
+                firstMeal.what = meal.what
+                firstMeal.size = Int32(meal.size.rawValue)
+                firstMeal.nutri = Int64(meal.nutri.rawValue)
             }
 
+        default:
+            return
+        }
 
-            do {
-                if context.hasChanges {
-                    try context.save()
-                }
-            } catch {
-                NSFLog("Context failed to save: \(meal)")
+
+        do {
+            if context.hasChanges {
+                try context.save()
             }
+        } catch {
+            NSFLog("Context failed to save: \(meal)")
         }
     }
 
