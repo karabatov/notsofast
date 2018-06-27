@@ -66,6 +66,7 @@ final class EditMealViewModel {
 
     required init() {
         configureSizeSection()
+        configureTypeSection()
         configureDataOutput()
         configureInput()
     }
@@ -79,6 +80,23 @@ final class EditMealViewModel {
                     }
             }
             .bind(to: sizeSection)
+            .disposed(by: disposeBag)
+    }
+
+    private func configureTypeSection() {
+        model
+            .map { model -> [EditMealCell] in
+                return [
+                        Nutrients.fastCarb,
+                        Nutrients.protein,
+                        Nutrients.slowCarb,
+                        Nutrients.fat
+                    ]
+                    .map { nutri -> EditMealCell in
+                        return EditMealCell.ingredients(nutri: nutri, selected: model.nutri.contains(nutri))
+                    }
+            }
+            .bind(to: typeSection)
             .disposed(by: disposeBag)
     }
 
