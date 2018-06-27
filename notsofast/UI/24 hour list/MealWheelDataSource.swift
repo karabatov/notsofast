@@ -28,8 +28,15 @@ final class MealWheelDataSource: NSObject, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let _ = model.model(forItemAt: indexPath)
-        return UITableViewCell()
+        guard let mdl = model.model(forItemAt: indexPath) else {
+            return UITableViewCell()
+        }
+
+        let cell = UITableViewCell(style: UITableViewCellStyle.value2, reuseIdentifier: "Meal")
+        cell.textLabel?.text = mdl.eaten.debugDescription
+        cell.detailTextLabel?.text = "\(mdl.size.forDisplay()), \(mdl.nutri.forDisplay())"
+        cell.accessoryType = .disclosureIndicator
+        return cell
     }
 }
 

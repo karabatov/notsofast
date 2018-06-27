@@ -38,6 +38,11 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
         self.frc = frc
         super.init()
         frc.delegate = self
+        do {
+            try frc.performFetch()
+        } catch {
+            fatalError("Failed to fetch! No live updates!")
+        }
     }
 
     // MARK: MealWheelDataModel

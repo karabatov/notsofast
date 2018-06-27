@@ -63,7 +63,7 @@ final class CoreDataProvider: MealActionController {
 
             switch mealsCount {
             case 0:
-                let newMealEntity = MealEntity(context: context)
+                let newMealEntity = MealEntity(entity: MealEntity.entity(), insertInto: context)
                 newMealEntity.eaten = meal.eaten
                 newMealEntity.what = meal.what
                 newMealEntity.size = Int32(meal.size.rawValue)
@@ -87,7 +87,9 @@ final class CoreDataProvider: MealActionController {
 
 
             do {
-                try context.save()
+                if context.hasChanges {
+                    try context.save()
+                }
             } catch {
                 NSFLog("Context failed to save: \(meal)")
             }
