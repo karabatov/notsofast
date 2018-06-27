@@ -129,7 +129,7 @@ final class EditMealViewModel {
         if newNutri.contains(nutri) {
             newNutri.subtract(nutri)
         } else {
-            newNutri.formUnion(nutri)
+            newNutri.insert(nutri)
         }
         let newMeal = Meal(eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
         self.model.onNext(newMeal)
