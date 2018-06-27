@@ -179,19 +179,16 @@ final class EditMealViewModel {
             .disposed(by: disposeBag)
 
         Observable.combineLatest(model, input) { ($0, $1) }
+            .sample(input)
             .subscribe(onNext: { [weak self] model, input in
                 switch input {
                 case .selectedCell(let cell):
                     switch cell {
                     case .size(size: let size, selected: _):
-                        DispatchQueue.main.async {
-                            self?.update(model: model, withSize: size)
-                        }
+                        self?.update(model: model, withSize: size)
 
                     case .ingredients(nutri: let nutri, selected: _):
-                        DispatchQueue.main.async {
-                            self?.update(model: model, withNutri: nutri)
-                        }
+                        self?.update(model: model, withNutri: nutri)
 
                     default:
                         break

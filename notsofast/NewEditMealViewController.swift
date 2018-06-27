@@ -56,7 +56,6 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
     private func setupTableReload() {
         viewModel.data
             .asDriver(onErrorJustReturn: [])
-            .debug("DATA")
             .do(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
             })
