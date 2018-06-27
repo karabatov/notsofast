@@ -65,8 +65,21 @@ final class EditMealViewModel {
     private var disposeBag = DisposeBag()
 
     required init() {
+        configureSizeSection()
         configureDataOutput()
         configureInput()
+    }
+
+    private func configureSizeSection() {
+        model
+            .map { model -> [EditMealCell] in
+                return [Serving.bite, Serving.handful, Serving.plate, Serving.bucket]
+                    .map { size -> EditMealCell in
+                        return EditMealCell.size(size: size, selected: size == model.size)
+                    }
+            }
+            .bind(to: sizeSection)
+            .disposed(by: disposeBag)
     }
 
     private func configureDataOutput() {
