@@ -14,7 +14,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
     private let viewModel: EditMealViewModel
     private var disposeBag = DisposeBag()
     private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-    private let data = Variable<[EditMealSection]>.init([])
+    private var data: [EditMealSection] = []
 
     required init(viewModel: EditMealViewModel) {
         self.viewModel = viewModel
@@ -53,9 +53,13 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
     }
 
     private func setupTableReload() {
-        data.asDriver()
-            .drive(onNext: { [weak self] _ in
+        viewModel.data
+            .asDriver(onErrorJustReturn: [])
+            .do(onNext: { [weak self] _ in
                 self?.tableView.reloadData()
+            })
+            .drive(onNext: { [weak self] newData in
+                self?.data = newData
             })
             .disposed(by: disposeBag)
     }
@@ -63,19 +67,19 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
     // MARK: UITableViewDataSource
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return data.value.count
+        return data.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.value[section].rows.count
+        return data[section].rows.count
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return data.value[section].title
+        return data[section].title
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let model = data.value[indexPath.section].rows[indexPath.row]
+        let model = data[indexPath.section].rows[indexPath.row]
         switch model {
         case .size(size: let size, selected: let selected):
             let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Simple")
@@ -102,7 +106,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
         case .date(let date):
             let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Date")
             cell.textLabel?.text = R.string.localizableStrings.edit_meal_date()
-            cell.detailTextLabel?.text = date.description
+            cell.detailTextLabel?.text = date.debugDescription
             cell.accessoryType = .disclosureIndicator
             return cell
 
