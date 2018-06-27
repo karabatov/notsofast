@@ -16,7 +16,7 @@ enum FetchResultsTarget {
 }
 
 protocol MealActionController {
-    func upsert(meal: Meal)
+    func upsert(meal: Meal, original: Meal)
     func delete(meal: Meal)
 }
 
