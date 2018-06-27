@@ -100,6 +100,17 @@ final class EditMealViewModel {
             .disposed(by: disposeBag)
     }
 
+    private func configureDateSection() {
+        model
+            .map { model -> [EditMealCell] in
+                return [
+                    EditMealCell.date(model.eaten)
+                ]
+            }
+            .bind(to: dateSection)
+            .disposed(by: disposeBag)
+    }
+
     private func configureDataOutput() {
         Observable.combineLatest(sizeSection, typeSection, dateSection, buttonSection) { ($0, $1, $2, $3) }
             .map { (sizes, types, dates, buttons) -> [EditMealSection] in
