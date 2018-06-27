@@ -99,7 +99,6 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        NSFLog("Batch! Collector: \(changeCollector.count)")
         delegate?.batch(changes: changeCollector)
     }
 }

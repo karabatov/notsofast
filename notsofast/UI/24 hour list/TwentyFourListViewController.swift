@@ -21,7 +21,7 @@ final class TwentyFourListViewController: UIViewController {
 
     required init(viewModel: TwentyFourListViewModel) {
         self.viewModel = viewModel
-        self.dataSource = MealWheelDataSource(model: viewModel.dataModel)
+        self.dataSource = MealWheelDataSource(model: viewModel.dataModel, tableView: self.tableView)
         viewModel.dataModel.configure(delegate: self.dataSource)
 
         super.init(nibName: nil, bundle: nil)

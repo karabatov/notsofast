@@ -13,8 +13,9 @@ final class MealWheelDataSource: NSObject, UITableViewDataSource {
     private let model: MealWheelDataModel
     weak var tableView: UITableView?
 
-    init(model: MealWheelDataModel) {
+    init(model: MealWheelDataModel, tableView: UITableView) {
         self.model = model
+        self.tableView = tableView
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
