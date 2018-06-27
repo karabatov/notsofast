@@ -86,10 +86,47 @@ final class EditMealViewModel {
                     self?.model.onNext(newMeal)
                     self?.title.onNext(newTitle.forDisplay())
 
-                case .selectedCell(_):
+                default:
                     break
                 }
             })
             .disposed(by: disposeBag)
+
+        Observable.combineLatest(model, input) { ($0, $1) }
+            .subscribe(onNext: { [weak self] model, input in
+                switch input {
+                case .selectedCell(let cell):
+                    switch cell {
+                    case .size(size: let size, selected: _):
+                        self?.update(model: model, withSize: size)
+
+                    case .ingredients(nutri: let nutri, selected: _):
+                        self?.update(model: model, withNutri: nutri)
+
+                    default:
+                        break
+                    }
+
+                default:
+                    break
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func update(model: Meal, withSize size: Serving) {
+        let newMeal = Meal(eaten: model.eaten, size: size, nutri: model.nutri, what: model.what)
+        self.model.onNext(newMeal)
+    }
+
+    private func update(model: Meal, withNutri nutri: Nutrients) {
+        var newNutri = model.nutri
+        if newNutri.contains(nutri) {
+            newNutri.subtract(nutri)
+        } else {
+            newNutri.formUnion(nutri)
+        }
+        let newMeal = Meal(eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
+        self.model.onNext(newMeal)
     }
 }
