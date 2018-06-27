@@ -184,10 +184,14 @@ final class EditMealViewModel {
                 case .selectedCell(let cell):
                     switch cell {
                     case .size(size: let size, selected: _):
-                        self?.update(model: model, withSize: size)
+                        DispatchQueue.main.async {
+                            self?.update(model: model, withSize: size)
+                        }
 
                     case .ingredients(nutri: let nutri, selected: _):
-                        self?.update(model: model, withNutri: nutri)
+                        DispatchQueue.main.async {
+                            self?.update(model: model, withNutri: nutri)
+                        }
 
                     default:
                         break

@@ -22,6 +22,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
 
         setupTitleBind()
         setupTableReload()
+        setupTableReaction()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -61,6 +62,18 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
             .drive(onNext: { [weak self] newData in
                 self?.data = newData
             })
+            .disposed(by: disposeBag)
+    }
+
+    private func setupTableReaction() {
+        tableView.rx.itemSelected
+            .do(onNext: { [weak self] path in
+                self?.tableView.deselectRow(at: path, animated: true)
+            })
+            .map { [unowned self] path -> EditMealInput in
+                return EditMealInput.selectedCell(self.data[path.section].rows[path.row])
+            }
+            .bind(to: viewModel.input)
             .disposed(by: disposeBag)
     }
 
