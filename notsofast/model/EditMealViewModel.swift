@@ -71,7 +71,7 @@ final class EditMealViewModel {
         configureButtonsSection()
         configureDataOutput()
         configureInput()
-        scheduleSectionUpdates()
+        // scheduleSectionUpdates()
     }
 
     private func configureSizeSection() {

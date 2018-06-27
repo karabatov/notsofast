@@ -10,3 +10,16 @@
 "Edit_meal" = "Did I really?…";
 "Serving" = "Size";
 "Nutrients" = "What's in it?";
+"Serving_nothing" = "Nothing";
+"Serving_bite" = "Bite";
+"Serving_handful" = "Handful";
+"Serving_plate" = "Plate";
+"Serving_bucket" = "Bucket";
+"Nutrients_protein_full" = "Protein";
+"Nutrients_fast_carb_full" = "Fast carb";
+"Nutrients_fat_full" = "Fat";
+"Nutrients_slow_carb_full" = "Slow carb";
+"Nutrients_protein_short" = "P";
+"Nutrients_fast_carb_short" = "FC";
+"Nutrients_fat_short" = "F";
+"Nutrients_slow_carb_short" = "SC";

@@ -14,6 +14,10 @@ enum Serving: Int {
     case handful = 20
     case plate = 30
     case bucket = 40
+
+    func forDisplay() -> String {
+        return ""
+    }
 }
 
 struct Nutrients: OptionSet {
