@@ -81,6 +81,13 @@ final class TwentyFourListViewController: UIViewController {
         let btnLabel = UIBarButtonItem(customView: sinceLastMealLabel)
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         bottomPanel.setItems([btnLabel, space], animated: false)
+
+        viewModel.lastMealModel.lastLoggedMeal
+            .map { meal -> String? in
+                return R.string.localizableStrings.since_last_meal("DICK")
+            }
+            .bind(to: sinceLastMealLabel.rx.text)
+            .disposed(by: disposeBag)
     }
 
     private func plusButtonTapped() {

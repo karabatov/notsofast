@@ -25,3 +25,4 @@
 "Nutrients_slow_carb_short" = "SC";
 "Edit_meal_date" = "When";
 "Edit_meal_delete" = "Delete meal";
+"Since_last_meal" = "%@ since last meal";
