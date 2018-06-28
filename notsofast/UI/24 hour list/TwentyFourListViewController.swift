@@ -16,6 +16,8 @@ final class TwentyFourListViewController: UIViewController {
     private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     private let bottomPanel = UIToolbar(frame: CGRect.zero)
     private let plusButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: nil, action: nil)
+    /// Display “XX since last meal” on the toolbar.
+    private let sinceLastMealLabel = UILabel(frame: CGRect.zero)
     private let viewModel: TwentyFourListViewModel
     private let dataSource: MealWheelDataSource
 
@@ -44,6 +46,7 @@ final class TwentyFourListViewController: UIViewController {
             .disposed(by: disposeBag)
 
         configureTableViewReactions()
+        configureBottomPanelButtons()
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
         bottomPanel.translatesAutoresizingMaskIntoConstraints = false
@@ -72,6 +75,12 @@ final class TwentyFourListViewController: UIViewController {
                 self?.openEditMeal(with: mdl, title: CreateEditMealTitle.edit)
             })
             .disposed(by: disposeBag)
+    }
+
+    private func configureBottomPanelButtons() {
+        let btnLabel = UIBarButtonItem(customView: sinceLastMealLabel)
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        bottomPanel.setItems([btnLabel, space], animated: false)
     }
 
     private func plusButtonTapped() {
