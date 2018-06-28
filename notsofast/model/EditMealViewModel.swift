@@ -196,7 +196,7 @@ final class EditMealViewModel {
                         self?.update(model: model, withNutri: nutri)
 
                     case .delete:
-                        self?.delete()
+                        self?.delete(model: model)
 
                     default:
                         break
@@ -233,16 +233,8 @@ final class EditMealViewModel {
         self.model.onNext(newMeal)
     }
 
-    private func delete() {
-        model
-            .take(1)
-            .do(onNext: { [weak self] mdl in
-                self?.mealStorage.delete(meal: mdl)
-            })
-            .map { _ -> EditMealOutput in
-                return EditMealOutput.dismissController
-            }
-            .bind(to: output)
-            .disposed(by: disposeBag)
+    private func delete(model: Meal) {
+        mealStorage.delete(meal: model)
+        output.onNext(EditMealOutput.dismissController)
     }
 }

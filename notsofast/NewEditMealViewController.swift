@@ -33,6 +33,8 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = UIColor.white
+
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(tableView)
@@ -83,7 +85,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
             .subscribe(onNext: { [weak self] output in
                 switch output {
                 case .dismissController:
-                    self?.dismiss(animated: true, completion: nil)
+                    self?.navigationController?.popViewController(animated: true)
 
                 case .reloadSection(_):
                     break
