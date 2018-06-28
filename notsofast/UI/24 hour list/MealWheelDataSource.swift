@@ -32,6 +32,10 @@ final class MealWheelDataSource: NSObject, UITableViewDataSource {
         return model.numberOfItems(in: section)
     }
 
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return model.titleForHeader(in: section)
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let mdl = model.model(forItemAt: indexPath) else {
             return UITableViewCell()

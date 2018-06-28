@@ -19,6 +19,7 @@ enum DataSourceChange {
 protocol MealWheelDataModel {
     func numberOfSections() -> Int
     func numberOfItems(in section: Int) -> Int
+    func titleForHeader(in section: Int) -> String?
     func model(forItemAt indexPath: IndexPath) -> Meal?
 
     func configure(delegate: MealWheelDataModelDelegate?)
@@ -33,6 +34,7 @@ protocol MealWheelDataModelDelegate {
 /// Actual class to provide data to the meal wheel.
 final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsControllerDelegate {
     private let frc: NSFetchedResultsController<MealEntity>
+    private let dateFormatter = DateFormatter()
 
     init(frc: NSFetchedResultsController<MealEntity>) {
         self.frc = frc
@@ -43,6 +45,10 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
         } catch {
             fatalError("Failed to fetch! No live updates!")
         }
+
+        dateFormatter.doesRelativeDateFormatting = true
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
     }
 
     // MARK: MealWheelDataModel
@@ -55,6 +61,18 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
 
     func numberOfItems(in section: Int) -> Int {
         return frc.sections?[section].numberOfObjects ?? 0
+    }
+
+    func titleForHeader(in section: Int) -> String? {
+        guard
+            let name = frc.sections?[section].name,
+            let interval = Double(name)
+        else {
+            return "SHIT"
+        }
+
+        let date = Date(timeIntervalSince1970: interval)
+        return dateFormatter.string(from: date)
     }
 
     func model(forItemAt indexPath: IndexPath) -> Meal? {

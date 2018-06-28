@@ -29,7 +29,7 @@ extension MealEntity {
     @objc func sectionName() -> String {
         guard
             let date = eaten,
-            let compsDate = Calendar.current.dateComponents([.year,.month,.day,], from: date).date
+            let compsDate = Calendar.current.dateComponents([.calendar,.timeZone,.year,.month,.day,], from: date).date
         else {
             return "none"
         }
