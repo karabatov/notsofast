@@ -43,6 +43,8 @@ final class TwentyFourListViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        configureTableViewReactions()
+
         tableView.translatesAutoresizingMaskIntoConstraints = false
         bottomPanel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -61,9 +63,24 @@ final class TwentyFourListViewController: UIViewController {
         tableView.dataSource = dataSource
     }
 
+    private func configureTableViewReactions() {
+        tableView.rx.itemSelected
+            .subscribe(onNext: { [weak self] item in
+                guard let mdl = self?.viewModel.dataModel.model(forItemAt: item) else {
+                    return
+                }
+                self?.openEditMeal(with: mdl, title: CreateEditMealTitle.edit)
+            })
+            .disposed(by: disposeBag)
+    }
+
     private func plusButtonTapped() {
+        openEditMeal(with: Meal.createNewMeal(), title: CreateEditMealTitle.create)
+    }
+
+    private func openEditMeal(with meal: Meal, title: CreateEditMealTitle) {
         let vm = EditMealViewModel(mealStorage: CoreDataProvider.sharedInstance)
-        vm.input.onNext(EditMealInput.configure(model: Meal.createNewMeal(), title: CreateEditMealTitle.create))
+        vm.input.onNext(EditMealInput.configure(model: meal, title: title))
         let vc = NewEditMealViewController(viewModel: vm)
         navigationController?.pushViewController(vc, animated: true)
     }
