@@ -13,6 +13,8 @@ import CoreData
 enum FetchResultsTarget {
     /// List of meals for the last twenty four hours.
     case twentyFourHourList
+    /// Last logged meal.
+    case lastRecordedMeal
 }
 
 protocol MealActionController {
@@ -47,6 +49,19 @@ final class CoreDataProvider: MealActionController {
                 fetchRequest: fr,
                 managedObjectContext: container.viewContext,
                 sectionNameKeyPath: "sectionName",
+                cacheName: nil
+            )
+            try? frc.performFetch()
+            return frc
+
+        case .lastRecordedMeal:
+            let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
+            fr.sortDescriptors = [NSSortDescriptor(key: "eaten", ascending: false)]
+            fr.fetchLimit = 1
+            let frc = NSFetchedResultsController(
+                fetchRequest: fr,
+                managedObjectContext: container.viewContext,
+                sectionNameKeyPath: nil,
                 cacheName: nil
             )
             try? frc.performFetch()
