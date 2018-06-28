@@ -161,7 +161,7 @@ final class EditMealViewModel {
                 return [
                     EditMealSection(title: R.string.localizableStrings.serving(), rows: sizes),
                     EditMealSection(title: R.string.localizableStrings.nutrients(), rows: types),
-                    EditMealSection(title: nil, rows: dates),
+                    EditMealSection(title: R.string.localizableStrings.edit_meal_date(), rows: dates),
                     EditMealSection(title: nil, rows: buttons),
                 ]
             }

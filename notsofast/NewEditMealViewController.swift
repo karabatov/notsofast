@@ -15,10 +15,14 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
     private var disposeBag = DisposeBag()
     private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     private var data: [EditMealSection] = []
+    private let dateFormatter = DateFormatter()
 
     required init(viewModel: EditMealViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
 
         setupTitleBind()
         setupTableReload()
@@ -135,9 +139,9 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
 
         case .date(let date):
             let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Date")
-            cell.textLabel?.text = R.string.localizableStrings.edit_meal_date()
-            cell.detailTextLabel?.text = date.debugDescription
-            cell.accessoryType = .disclosureIndicator
+            cell.textLabel?.text = dateFormatter.string(from: date)
+            cell.detailTextLabel?.text = nil
+            cell.accessoryType = .none
             return cell
 
         case .delete:
