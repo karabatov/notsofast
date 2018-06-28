@@ -86,7 +86,6 @@ final class CoreDataProvider: MealActionController {
             return
         }
 
-
         do {
             if context.hasChanges {
                 try context.save()
@@ -97,6 +96,27 @@ final class CoreDataProvider: MealActionController {
     }
 
     func delete(meal: Meal) {
-        NSFLog("Meal deletion requested.")
+        let context = container.viewContext
+
+        let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
+        fr.predicate = NSPredicate(format: "eaten = %@", argumentArray: [meal.eaten])
+
+        guard let mealsCount = try? context.count(for: fr), mealsCount == 1 else { return }
+
+        if
+            let meals = try? context.fetch(fr),
+            meals.count == 1,
+            let firstMeal = meals.first
+        {
+            context.delete(firstMeal)
+        }
+
+        do {
+            if context.hasChanges {
+                try context.save()
+            }
+        } catch {
+            NSFLog("Context failed to save: \(meal)")
+        }
     }
 }
