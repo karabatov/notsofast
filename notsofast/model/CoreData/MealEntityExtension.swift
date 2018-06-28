@@ -25,4 +25,15 @@ extension MealEntity {
             what: self.what
         )
     }
+
+    @objc func sectionName() -> String {
+        guard
+            let date = eaten,
+            let compsDate = Calendar.current.dateComponents([.year,.month,.day,], from: date).date
+        else {
+            return "none"
+        }
+
+        return String(compsDate.timeIntervalSince1970)
+    }
 }

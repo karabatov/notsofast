@@ -46,7 +46,7 @@ final class CoreDataProvider: MealActionController {
             let frc = NSFetchedResultsController(
                 fetchRequest: fr,
                 managedObjectContext: container.viewContext,
-                sectionNameKeyPath: nil,
+                sectionNameKeyPath: "sectionName",
                 cacheName: nil
             )
             try? frc.performFetch()
