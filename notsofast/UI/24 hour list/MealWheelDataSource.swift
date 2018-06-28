@@ -11,11 +11,15 @@ import UIKit
 /// Connects the meal wheel model to the actual collection view.
 final class MealWheelDataSource: NSObject, UITableViewDataSource {
     private let model: MealWheelDataModel
+    private let dateFormatter = DateFormatter()
     weak var tableView: UITableView?
 
     init(model: MealWheelDataModel, tableView: UITableView) {
         self.model = model
         self.tableView = tableView
+
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -34,7 +38,7 @@ final class MealWheelDataSource: NSObject, UITableViewDataSource {
         }
 
         let cell = UITableViewCell(style: UITableViewCellStyle.value2, reuseIdentifier: "Meal")
-        cell.textLabel?.text = mdl.eaten.debugDescription
+        cell.textLabel?.text = dateFormatter.string(from: mdl.eaten)
         cell.detailTextLabel?.text = "\(mdl.size.forDisplay()), \(mdl.nutri.forDisplay())"
         cell.accessoryType = .disclosureIndicator
         return cell
