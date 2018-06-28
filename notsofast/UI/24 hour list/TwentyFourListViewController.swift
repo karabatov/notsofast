@@ -18,6 +18,7 @@ final class TwentyFourListViewController: UIViewController {
     private let plusButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: nil, action: nil)
     /// Display “XX since last meal” on the toolbar.
     private let sinceLastMealLabel = UILabel(frame: CGRect.zero)
+    private let dateCompsFormatter = DateComponentsFormatter()
     private let viewModel: TwentyFourListViewModel
     private let dataSource: MealWheelDataSource
 
@@ -30,6 +31,9 @@ final class TwentyFourListViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .automatic
         navigationItem.rightBarButtonItem = plusButton
         title = R.string.localizableStrings.last_24_hours()
+
+        dateCompsFormatter.unitsStyle = .abbreviated
+        dateCompsFormatter.allowedUnits = [.hour, .minute]
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -46,7 +50,6 @@ final class TwentyFourListViewController: UIViewController {
             .disposed(by: disposeBag)
 
         configureTableViewReactions()
-        configureBottomPanelButtons()
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
         bottomPanel.translatesAutoresizingMaskIntoConstraints = false
@@ -64,6 +67,8 @@ final class TwentyFourListViewController: UIViewController {
         view.addConstraint(NSLayoutConstraint.init(item: bottomPanel, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
 
         tableView.dataSource = dataSource
+
+        configureBottomPanelButtons()
     }
 
     private func configureTableViewReactions() {
@@ -78,15 +83,28 @@ final class TwentyFourListViewController: UIViewController {
     }
 
     private func configureBottomPanelButtons() {
+        sinceLastMealLabel.translatesAutoresizingMaskIntoConstraints = false
         let btnLabel = UIBarButtonItem(customView: sinceLastMealLabel)
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        bottomPanel.setItems([btnLabel, space], animated: false)
+        bottomPanel.setItems([btnLabel], animated: false)
 
-        viewModel.lastMealModel.lastLoggedMeal
-            .map { meal -> String? in
-                return R.string.localizableStrings.since_last_meal("DICK")
+        let llm = viewModel.lastMealModel.lastLoggedMeal
+        let timer = Observable<Int>.timer(0.0, period: 5.0, scheduler: MainScheduler.instance)
+
+        Observable.combineLatest(llm, timer) { ($0, $1) }
+            .map { [weak self] maybeMeal, _ -> String? in
+                let fail = "–"
+                guard let meal = maybeMeal else {
+                    return fail
+                }
+                let ti = Date().timeIntervalSince(meal.eaten)
+                if let approx = self?.dateCompsFormatter.string(from: ti) {
+                    return R.string.localizableStrings.since_last_meal(approx)
+                }
+                return fail
             }
-            .bind(to: sinceLastMealLabel.rx.text)
+            .distinctUntilChanged()
+            .asDriver(onErrorJustReturn: "–")
+            .drive(sinceLastMealLabel.rx.text)
             .disposed(by: disposeBag)
     }
 
