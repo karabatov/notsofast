@@ -45,6 +45,7 @@ enum EditMealInput {
 
 enum EditMealOutput {
     case reloadSection(Int)
+    case dismissController
 }
 
 /// View model for the create/edit meal view controller.
@@ -194,6 +195,9 @@ final class EditMealViewModel {
                     case .ingredients(nutri: let nutri, selected: _):
                         self?.update(model: model, withNutri: nutri)
 
+                    case .delete:
+                        self?.delete()
+
                     default:
                         break
                     }
@@ -227,5 +231,18 @@ final class EditMealViewModel {
         }
         let newMeal = Meal(eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
         self.model.onNext(newMeal)
+    }
+
+    private func delete() {
+        model
+            .take(1)
+            .do(onNext: { [weak self] mdl in
+                self?.mealStorage.delete(meal: mdl)
+            })
+            .map { _ -> EditMealOutput in
+                return EditMealOutput.dismissController
+            }
+            .bind(to: output)
+            .disposed(by: disposeBag)
     }
 }

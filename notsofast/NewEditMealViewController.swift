@@ -23,6 +23,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
         setupTitleBind()
         setupTableReload()
         setupTableReaction()
+        setupModelOutput()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -74,6 +75,20 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
                 return EditMealInput.selectedCell(self.data[path.section].rows[path.row])
             }
             .bind(to: viewModel.input)
+            .disposed(by: disposeBag)
+    }
+
+    private func setupModelOutput() {
+        viewModel.output
+            .subscribe(onNext: { [weak self] output in
+                switch output {
+                case .dismissController:
+                    self?.dismiss(animated: true, completion: nil)
+
+                case .reloadSection(_):
+                    break
+                }
+            })
             .disposed(by: disposeBag)
     }
 
