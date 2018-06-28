@@ -13,7 +13,7 @@ import RxCocoa
 /// Displays a list of meals for the last 24 hours.
 final class TwentyFourListViewController: UIViewController {
     private var disposeBag = DisposeBag()
-    private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+    private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
     private let bottomPanel = UIToolbar(frame: CGRect.zero)
     private let plusButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: nil, action: nil)
     /// Display “XX since last meal” on the toolbar.
@@ -43,6 +43,11 @@ final class TwentyFourListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = UIColor.white
+        tableView.tableFooterView = UIView()
+        bottomPanel.isOpaque = true
+        bottomPanel.isTranslucent = true
+
         plusButton.rx.tap
             .bind(onNext: { [weak self] in
                 self?.plusButtonTapped()
@@ -60,7 +65,7 @@ final class TwentyFourListViewController: UIViewController {
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: bottomPanel, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
 
         view.addConstraint(NSLayoutConstraint.init(item: bottomPanel, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint.init(item: bottomPanel, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
