@@ -40,6 +40,8 @@ final class CoreDataProvider: MealActionController {
         switch target {
         case .twentyFourHourList:
             let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
+            /// Limit the list to the last 24 hours only.
+            fr.predicate = NSPredicate(format: "eaten >= %@", argumentArray: [Date.init(timeIntervalSinceNow: -60.0 * 60.0 * 24.0)])
             fr.sortDescriptors = [NSSortDescriptor(key: "eaten", ascending: true)]
             let frc = NSFetchedResultsController(
                 fetchRequest: fr,
