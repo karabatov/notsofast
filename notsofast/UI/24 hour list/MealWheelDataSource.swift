@@ -50,6 +50,10 @@ final class MealWheelDataSource: NSObject, UITableViewDataSource {
 }
 
 extension MealWheelDataSource: MealWheelDataModelDelegate {
+    func forceReload() {
+        tableView?.reloadData()
+    }
+
     func batch(changes: [DataSourceChange]) {
         guard let tv = tableView else { return }
 

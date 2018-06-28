@@ -29,6 +29,8 @@ protocol MealWheelDataModel {
 protocol MealWheelDataModelDelegate {
     /// Batch-apply an ordered set of data source changes.
     func batch(changes: [DataSourceChange])
+    /// Just force-reload the target.
+    func forceReload()
 }
 
 /// Actual class to provide data to the meal wheel.
@@ -85,6 +87,7 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
 
     // MARK: NSFetchedResultsControllerDelegate
     private var changeCollector = [DataSourceChange]()
+    private var sectionsCounter = 0
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
@@ -114,9 +117,15 @@ final class MealWheelLiveModel: NSObject, MealWheelDataModel, NSFetchedResultsCo
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Optimistically preserve capacity for future changes.
         changeCollector.removeAll(keepingCapacity: true)
+        sectionsCounter = numberOfSections()
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard sectionsCounter == numberOfSections() else {
+            sectionsCounter = numberOfSections()
+            delegate?.forceReload()
+            return
+        }
         delegate?.batch(changes: changeCollector)
     }
 }
