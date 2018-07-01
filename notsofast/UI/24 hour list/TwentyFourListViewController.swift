@@ -29,6 +29,7 @@ final class TwentyFourListViewController: UIViewController {
 
         super.init(nibName: nil, bundle: nil)
         navigationItem.largeTitleDisplayMode = .automatic
+        navigationItem.rightBarButtonItem = plusButton
         title = R.string.localizableStrings.last_24_hours()
 
         dateCompsFormatter.unitsStyle = .abbreviated
@@ -89,8 +90,7 @@ final class TwentyFourListViewController: UIViewController {
     private func configureBottomPanelButtons() {
         sinceLastMealLabel.translatesAutoresizingMaskIntoConstraints = false
         let btnLabel = UIBarButtonItem(customView: sinceLastMealLabel)
-        let spacing = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        bottomPanel.setItems([btnLabel, spacing, plusButton], animated: false)
+        bottomPanel.setItems([btnLabel], animated: false)
 
         let llm = viewModel.lastMealModel.lastLoggedMeal
         let timer = Observable<Int>.timer(0.0, period: 5.0, scheduler: MainScheduler.instance)
