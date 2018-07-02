@@ -174,7 +174,7 @@ final class EditMealViewModel {
             .subscribe(onNext: { [weak self] input in
                 switch input {
                 case .configure(model: let newMeal, title: let newTitle):
-                    self?.model.onNext(newMeal)
+                    self?.upsertModelIfNeeded(meal: newMeal)
                     self?.title.onNext(newTitle.forDisplay())
 
                 default:
@@ -212,7 +212,7 @@ final class EditMealViewModel {
     private func configureModelSaving() {
         model
             .subscribe(onNext: { [weak self] mdl in
-                self?.mealStorage.upsert(meal: mdl)
+                _ = self?.mealStorage.upsert(meal: mdl)
             })
             .disposed(by: disposeBag)
     }
@@ -236,5 +236,10 @@ final class EditMealViewModel {
     private func delete(model: Meal) {
         mealStorage.delete(meal: model)
         output.onNext(EditMealOutput.dismissController)
+    }
+
+    private func upsertModelIfNeeded(meal: Meal) {
+        let savedMeal = mealStorage.upsert(meal: meal)
+        model.onNext(savedMeal)
     }
 }

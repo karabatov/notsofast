@@ -18,7 +18,7 @@ enum FetchResultsTarget {
 }
 
 protocol MealActionController {
-    func upsert(meal: Meal)
+    func upsert(meal: Meal) -> Meal
     func delete(meal: Meal)
 }
 
@@ -82,21 +82,20 @@ final class CoreDataProvider: MealActionController {
 
     // MARK: MealActionController
 
-    func upsert(meal: Meal) {
+    func upsert(meal: Meal) -> Meal {
         let context = container.viewContext
 
+        let editEntity: MealEntity
         if let existing = entity(from: meal) {
-            existing.eaten = meal.eaten
-            existing.what = meal.what
-            existing.size = Int32(meal.size.rawValue)
-            existing.nutri = Int64(meal.nutri.rawValue)
+            editEntity = existing
         } else {
-            let newMealEntity = MealEntity(entity: MealEntity.entity(), insertInto: context)
-            newMealEntity.eaten = meal.eaten
-            newMealEntity.what = meal.what
-            newMealEntity.size = Int32(meal.size.rawValue)
-            newMealEntity.nutri = Int64(meal.nutri.rawValue)
+            editEntity = MealEntity(entity: MealEntity.entity(), insertInto: context)
         }
+
+        editEntity.eaten = meal.eaten
+        editEntity.what = meal.what
+        editEntity.size = Int32(meal.size.rawValue)
+        editEntity.nutri = Int64(meal.nutri.rawValue)
 
         do {
             if context.hasChanges {
@@ -105,6 +104,8 @@ final class CoreDataProvider: MealActionController {
         } catch {
             NSFLog("Context failed to save: \(meal)")
         }
+
+        return editEntity.meal() ?? meal
     }
 
     func delete(meal: Meal) {
