@@ -212,7 +212,7 @@ final class EditMealViewModel {
     private func configureModelSaving() {
         model
             .subscribe(onNext: { [weak self] mdl in
-                self?.mealStorage.upsert(meal: mdl, original: mdl)
+                self?.mealStorage.upsert(meal: mdl)
             })
             .disposed(by: disposeBag)
     }
