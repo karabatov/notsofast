@@ -18,7 +18,7 @@ enum FetchResultsTarget {
 }
 
 protocol MealActionController {
-    func upsert(meal: Meal, original: Meal)
+    func upsert(meal: Meal)
     func delete(meal: Meal)
 }
 
@@ -69,38 +69,33 @@ final class CoreDataProvider: MealActionController {
         }
     }
 
+    private func entity(from meal: Meal) -> MealEntity? {
+        guard
+            let obURI = meal.id,
+            let obID = container.persistentStoreCoordinator.managedObjectID(forURIRepresentation: obURI)
+        else {
+            return nil
+        }
+
+        return container.viewContext.object(with: obID) as? MealEntity
+    }
+
     // MARK: MealActionController
 
-    func upsert(meal: Meal, original: Meal) {
+    func upsert(meal: Meal) {
         let context = container.viewContext
 
-        let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
-        fr.predicate = NSPredicate(format: "eaten = %@", argumentArray: [original.eaten])
-
-        guard let mealsCount = try? context.count(for: fr) else { return }
-
-        switch mealsCount {
-        case 0:
+        if let existing = entity(from: meal) {
+            existing.eaten = meal.eaten
+            existing.what = meal.what
+            existing.size = Int32(meal.size.rawValue)
+            existing.nutri = Int64(meal.nutri.rawValue)
+        } else {
             let newMealEntity = MealEntity(entity: MealEntity.entity(), insertInto: context)
             newMealEntity.eaten = meal.eaten
             newMealEntity.what = meal.what
             newMealEntity.size = Int32(meal.size.rawValue)
             newMealEntity.nutri = Int64(meal.nutri.rawValue)
-
-        case 1:
-            if
-                let meals = try? context.fetch(fr),
-                meals.count == 1,
-                let firstMeal = meals.first
-            {
-                firstMeal.eaten = meal.eaten
-                firstMeal.what = meal.what
-                firstMeal.size = Int32(meal.size.rawValue)
-                firstMeal.nutri = Int64(meal.nutri.rawValue)
-            }
-
-        default:
-            return
         }
 
         do {
@@ -113,20 +108,12 @@ final class CoreDataProvider: MealActionController {
     }
 
     func delete(meal: Meal) {
-        let context = container.viewContext
-
-        let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
-        fr.predicate = NSPredicate(format: "eaten = %@", argumentArray: [meal.eaten])
-
-        guard let mealsCount = try? context.count(for: fr), mealsCount == 1 else { return }
-
-        if
-            let meals = try? context.fetch(fr),
-            meals.count == 1,
-            let firstMeal = meals.first
-        {
-            context.delete(firstMeal)
+        guard let existing = entity(from: meal) else {
+            return
         }
+
+        let context = container.viewContext
+        context.delete(existing)
 
         do {
             if context.hasChanges {

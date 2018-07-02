@@ -80,6 +80,7 @@ struct Nutrients: OptionSet {
 }
 
 struct Meal {
+    let id: URL?
     let eaten: Date
     let size: Serving
     let nutri: Nutrients
@@ -88,6 +89,7 @@ struct Meal {
     /// Creates a new meal dated NOW but with empty fields.
     static func createNewMeal() -> Meal {
         return Meal(
+            id: nil,
             eaten: Date(),
             size: Serving.nothing,
             nutri: [],

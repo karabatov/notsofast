@@ -218,7 +218,7 @@ final class EditMealViewModel {
     }
 
     private func update(model: Meal, withSize size: Serving) {
-        let newMeal = Meal(eaten: model.eaten, size: size, nutri: model.nutri, what: model.what)
+        let newMeal = Meal(id: model.id, eaten: model.eaten, size: size, nutri: model.nutri, what: model.what)
         self.model.onNext(newMeal)
     }
 
@@ -229,7 +229,7 @@ final class EditMealViewModel {
         } else {
             newNutri.insert(nutri)
         }
-        let newMeal = Meal(eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
+        let newMeal = Meal(id: model.id, eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
         self.model.onNext(newMeal)
     }
 

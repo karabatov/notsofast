@@ -19,6 +19,7 @@ extension MealEntity {
         }
 
         return Meal(
+            id: objectID.uriRepresentation(),
             eaten: date,
             size: size,
             nutri: Nutrients(rawValue: Int(self.nutri)),
