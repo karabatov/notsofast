@@ -38,7 +38,6 @@ Low-key food tracking.
 * Switch dates forward and back.
 * Summary for today displayed when not adding food.
 * The app is localized!
-* That's it!
 
 ## Money
 
