@@ -36,6 +36,8 @@ final class MealListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = UIColor.white
+
         addButton.setImage(R.image.add_meal_button(), for: UIControlState.normal)
         addButton.showsTouchWhenHighlighted = true
         addButton.translatesAutoresizingMaskIntoConstraints = false
