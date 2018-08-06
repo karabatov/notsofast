@@ -15,6 +15,7 @@ final class MealListViewController: UIViewController {
     /// Scroll the calendar to the future.
     private let rightButton = UIBarButtonItem(image: R.image.arrow_right(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.rightButtonPressed))
     /// Hovering plus bottom on the bottom right to add a meal.
+    /// TODO: Make it tinted to the app's tint color. So, a custom control.
     private let addButton = UIButton(type: UIButtonType.custom)
     /// Custom button in the title of the navbar.
     private let titleButton = UIButton(type: UIButtonType.custom)
