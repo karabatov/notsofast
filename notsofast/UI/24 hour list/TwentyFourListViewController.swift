@@ -28,7 +28,6 @@ final class TwentyFourListViewController: UIViewController {
         viewModel.dataModel.configure(delegate: self.dataSource)
 
         super.init(nibName: nil, bundle: nil)
-        navigationItem.largeTitleDisplayMode = .automatic
         navigationItem.rightBarButtonItem = plusButton
         title = R.string.localizableStrings.last_24_hours()
 

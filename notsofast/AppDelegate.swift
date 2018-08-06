@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainVC = TwentyFourListViewController(viewModel: TwentyFourListViewModel.liveViewModel())
         let nav = UINavigationController(rootViewController: mainVC)
 
-        nav.navigationBar.prefersLargeTitles = true
-
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
         }
