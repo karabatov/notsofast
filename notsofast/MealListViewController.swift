@@ -16,6 +16,8 @@ final class MealListViewController: UIViewController {
     private let rightButton = UIBarButtonItem(image: R.image.arrow_right(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.rightButtonPressed))
     /// Hovering plus bottom on the bottom right to add a meal.
     private let addButton = UIButton(type: UIButtonType.custom)
+    /// Custom button in the title of the navbar.
+    private let titleButton = UIButton(type: UIButtonType.custom)
 
     // MARK: System methods
 
@@ -25,8 +27,15 @@ final class MealListViewController: UIViewController {
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = leftButton
         navigationItem.rightBarButtonItem = rightButton
+        navigationItem.titleView = titleButton
 
         addButton.addTarget(self, action: #selector(MealListViewController.addButtonPressed), for: UIControlEvents.primaryActionTriggered)
+
+        titleButton.addTarget(self, action: #selector(MealListViewController.titleButtonPressed), for: UIControlEvents.primaryActionTriggered)
+        titleButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        titleButton.setTitleColor(UIColor.nsfTintColor, for: UIControlState.normal)
+        // Set a test title for now before date formatters are attached.
+        titleButton.setTitle("Yesterday, 21:00 – Today, 21:00", for: UIControlState.normal)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,5 +68,9 @@ final class MealListViewController: UIViewController {
 
     @objc func addButtonPressed() {
         NSFLog("Add pressed")
+    }
+
+    @objc func titleButtonPressed() {
+        NSFLog("Title pressed")
     }
 }
