@@ -21,7 +21,7 @@ final class MealListViewController: UIViewController {
     private let titleButton = UIButton(type: UIButtonType.custom)
     /// Collection view for displaying the list of meals.
     /// Initialize it with a blank layout for now.
-    private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
+    private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
 
     // MARK: System methods
 
