@@ -19,6 +19,9 @@ final class MealListViewController: UIViewController {
     private let addButton = UIButton(type: UIButtonType.custom)
     /// Custom button in the title of the navbar.
     private let titleButton = UIButton(type: UIButtonType.custom)
+    /// Collection view for displaying the list of meals.
+    /// Initialize it with a blank layout for now.
+    private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
 
     // MARK: System methods
 
@@ -47,6 +50,13 @@ final class MealListViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor.white
+
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
 
         addButton.setImage(R.image.add_meal_button(), for: UIControlState.normal)
         addButton.showsTouchWhenHighlighted = true
