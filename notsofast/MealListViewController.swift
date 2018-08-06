@@ -51,6 +51,8 @@ final class MealListViewController: UIViewController {
 
         view.backgroundColor = UIColor.white
 
+        // Keeping the collection view opaque allows showing an “empty” state on the main view background and helps performance.
+        collectionView.backgroundColor = UIColor.white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
