@@ -40,7 +40,6 @@ final class CoreDataProvider: MealActionController {
     func dataProviderForMealList(config: MealListDataConfig) -> MealListDataProvider {
         let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
         let config = MealListDataConfig(startDate: Date.init(timeIntervalSinceNow: -60.0 * 60.0 * 24.0), endDate: Date.distantFuture)
-        /// Limit the list to the last 24 hours only.
         fr.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %2", argumentArray: [config.startDate, config.endDate])
         fr.sortDescriptors = [NSSortDescriptor(key: "eaten", ascending: false)]
         let frc = NSFetchedResultsController(

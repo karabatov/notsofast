@@ -12,21 +12,31 @@ struct MealCellModel {
     let meal: Meal
 }
 
-final class MealListViewModel: ProxyDataSource {
+final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource where ConcreteProvider.CellModel == Meal {
+    typealias CellModel = MealCellModel
+    private let dataProvider: ConcreteProvider
+
+    init(dataProvider: ConcreteProvider) {
+        self.dataProvider = dataProvider
+    }
 
     // MARK: ProxyDataSource
     var dataSourceDelegate: ProxyDataSourceDelegate?
 
     func numberOfSections() -> Int {
-        return 0
+        return dataProvider.numberOfSections()
     }
 
     func numberOfItems(in section: Int) -> Int {
-        return 0
+        return dataProvider.numberOfItems(in: section)
     }
 
     func modelForItem(at indexPath: IndexPath) -> MealCellModel? {
-        return nil
+        guard let meal = dataProvider.modelForItem(at: indexPath) else {
+            return nil
+        }
+
+        return MealCellModel(meal: meal)
     }
 
     func titleForHeader(in section: Int) -> String? {
