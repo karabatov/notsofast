@@ -67,6 +67,8 @@ final class MealListViewController: UIViewController, UICollectionViewDataSource
         let buttonOffset: CGFloat = -12.0
         view.addConstraint(NSLayoutConstraint.init(item: addButton, attribute: NSLayoutAttribute.rightMargin, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: buttonOffset))
         view.addConstraint(NSLayoutConstraint.init(item: addButton, attribute: NSLayoutAttribute.bottomMargin, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: buttonOffset))
+
+        collectionView.dataSource = self
     }
 
     // MARK: Button targets
@@ -88,6 +90,10 @@ final class MealListViewController: UIViewController, UICollectionViewDataSource
     }
 
     // MARK: UICollectionViewDataSource
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 0
+    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 0
