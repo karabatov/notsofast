@@ -84,7 +84,7 @@
 		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D1F4FB8420E12B830058CBFB /* NSFLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFLog.swift; sourceTree = "<group>"; };
 		D1F4FB8620E182B20058CBFB /* CoreDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataProvider.swift; sourceTree = "<group>"; };
-		D1F4FB8920E2B0960058CBFB /* NewEditMealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewEditMealViewController.swift; path = notsofast/NewEditMealViewController.swift; sourceTree = SOURCE_ROOT; };
+		D1F4FB8920E2B0960058CBFB /* NewEditMealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewEditMealViewController.swift; path = "notsofast/New Group/NewEditMealViewController.swift"; sourceTree = SOURCE_ROOT; };
 		D1F4FB8B20E2B14B0058CBFB /* EditMealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMealViewModel.swift; sourceTree = "<group>"; };
 		D528B5F2609F38BB957A8516 /* Pods-notsofast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofast.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofast/Pods-notsofast.release.xcconfig"; sourceTree = "<group>"; };
 		EC4E00DF96029E40F7EB3BE3 /* Pods_notsofast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_notsofast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,7 +134,6 @@
 				D19B0A8A20AD8AA8003A27B9 /* MealWheelModel.swift */,
 				D16F765D20E5624500FC1F02 /* LastLoggedMealModel.swift */,
 				D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */,
-				D1F4FB8B20E2B14B0058CBFB /* EditMealViewModel.swift */,
 				D18A2E0A20AB6B2B0076227E /* CoreData */,
 			);
 			path = model;
@@ -172,9 +171,6 @@
 				D1F4FB8320E12B030058CBFB /* helpers */,
 				D10170CB20A36FC600E748A4 /* model */,
 				D18A2E0620AA0F880076227E /* UI */,
-				D1F4FB8920E2B0960058CBFB /* NewEditMealViewController.swift */,
-				D1A9CF8D2118AF1600E42167 /* CalendarViewController.swift */,
-				D1A9CF8F2118B52400E42167 /* MealListViewController.swift */,
 				D11E81F52094BE8400B87926 /* Assets.xcassets */,
 				D11E81F72094BE8400B87926 /* LaunchScreen.storyboard */,
 				D11E81FA2094BE8400B87926 /* Info.plist */,
@@ -204,6 +200,9 @@
 		D18A2E0620AA0F880076227E /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				D1B9598D2119E4560045A9E2 /* edit meal */,
+				D1A9CF8D2118AF1600E42167 /* CalendarViewController.swift */,
+				D1A9CF8F2118B52400E42167 /* MealListViewController.swift */,
 				D1F4FB8820E2B0370058CBFB /* 24 hour list */,
 			);
 			path = UI;
@@ -225,6 +224,15 @@
 				D19B0A8E20ADFCB9003A27B9 /* MealEntityExtension.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		D1B9598D2119E4560045A9E2 /* edit meal */ = {
+			isa = PBXGroup;
+			children = (
+				D1F4FB8920E2B0960058CBFB /* NewEditMealViewController.swift */,
+				D1F4FB8B20E2B14B0058CBFB /* EditMealViewModel.swift */,
+			);
+			path = "edit meal";
 			sourceTree = "<group>";
 		};
 		D1F4FB8320E12B030058CBFB /* helpers */ = {
