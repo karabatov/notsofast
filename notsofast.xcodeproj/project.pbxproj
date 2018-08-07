@@ -27,11 +27,11 @@
 		D19B0A9120B00C2A003A27B9 /* TwentyFourListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */; };
 		D1A9CF8E2118AF1600E42167 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A9CF8D2118AF1600E42167 /* CalendarViewController.swift */; };
 		D1A9CF902118B52400E42167 /* MealListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A9CF8F2118B52400E42167 /* MealListViewController.swift */; };
+		D1B9598F2119EEEA0045A9E2 /* NewEditMealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */; };
 		D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */; };
 		D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8120E11B8F0058CBFB /* R.generated.swift */; };
 		D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8420E12B830058CBFB /* NSFLog.swift */; };
 		D1F4FB8720E182B20058CBFB /* CoreDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8620E182B20058CBFB /* CoreDataProvider.swift */; };
-		D1F4FB8A20E2B0960058CBFB /* NewEditMealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8920E2B0960058CBFB /* NewEditMealViewController.swift */; };
 		D1F4FB8C20E2B14B0058CBFB /* EditMealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8B20E2B14B0058CBFB /* EditMealViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -80,11 +80,11 @@
 		D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourListViewModel.swift; sourceTree = "<group>"; };
 		D1A9CF8D2118AF1600E42167 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		D1A9CF8F2118B52400E42167 /* MealListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListViewController.swift; sourceTree = "<group>"; };
+		D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEditMealViewController.swift; sourceTree = "<group>"; };
 		D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = LocalizableStrings.strings; sourceTree = "<group>"; };
 		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D1F4FB8420E12B830058CBFB /* NSFLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFLog.swift; sourceTree = "<group>"; };
 		D1F4FB8620E182B20058CBFB /* CoreDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataProvider.swift; sourceTree = "<group>"; };
-		D1F4FB8920E2B0960058CBFB /* NewEditMealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewEditMealViewController.swift; path = "notsofast/New Group/NewEditMealViewController.swift"; sourceTree = SOURCE_ROOT; };
 		D1F4FB8B20E2B14B0058CBFB /* EditMealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMealViewModel.swift; sourceTree = "<group>"; };
 		D528B5F2609F38BB957A8516 /* Pods-notsofast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notsofast.release.xcconfig"; path = "Pods/Target Support Files/Pods-notsofast/Pods-notsofast.release.xcconfig"; sourceTree = "<group>"; };
 		EC4E00DF96029E40F7EB3BE3 /* Pods_notsofast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_notsofast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,7 +229,7 @@
 		D1B9598D2119E4560045A9E2 /* edit meal */ = {
 			isa = PBXGroup;
 			children = (
-				D1F4FB8920E2B0960058CBFB /* NewEditMealViewController.swift */,
+				D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */,
 				D1F4FB8B20E2B14B0058CBFB /* EditMealViewModel.swift */,
 			);
 			path = "edit meal";
@@ -504,13 +504,13 @@
 			files = (
 				D16F765E20E5624500FC1F02 /* LastLoggedMealModel.swift in Sources */,
 				D11E81F12094BE8400B87926 /* TwentyFourListViewController.swift in Sources */,
+				D1B9598F2119EEEA0045A9E2 /* NewEditMealViewController.swift in Sources */,
 				D19B0A8F20ADFCB9003A27B9 /* MealEntityExtension.swift in Sources */,
 				D19B0A8B20AD8AA8003A27B9 /* MealWheelModel.swift in Sources */,
 				D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */,
 				D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */,
 				D18A2E1320AD850D0076227E /* MealWheelDataSource.swift in Sources */,
 				D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */,
-				D1F4FB8A20E2B0960058CBFB /* NewEditMealViewController.swift in Sources */,
 				D1A9CF8E2118AF1600E42167 /* CalendarViewController.swift in Sources */,
 				D10170CD20A3715B00E748A4 /* Meal.swift in Sources */,
 				D18A2E0820AA0FFA0076227E /* UIColorPreset.swift in Sources */,

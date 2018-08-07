@@ -9,7 +9,7 @@
 import UIKit
 
 /// Display a list of meals in a collection view.
-final class MealListViewController: UIViewController {
+final class MealListViewController: UIViewController, UICollectionViewDataSource {
     /// Scroll the calendar to the past.
     private let leftButton = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.leftButtonPressed))
     /// Scroll the calendar to the future.
@@ -85,5 +85,15 @@ final class MealListViewController: UIViewController {
 
     @objc func titleButtonPressed() {
         NSFLog("Title pressed")
+    }
+
+    // MARK: UICollectionViewDataSource
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return UICollectionViewCell()
     }
 }
