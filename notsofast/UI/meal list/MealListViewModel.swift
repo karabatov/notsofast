@@ -28,4 +28,8 @@ final class MealListViewModel: ProxyDataSource {
     func modelForItem(at indexPath: IndexPath) -> MealCellModel? {
         return nil
     }
+
+    func titleForHeader(in section: Int) -> String? {
+        return nil
+    }
 }
