@@ -30,6 +30,7 @@
 		D1B9598F2119EEEA0045A9E2 /* NewEditMealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */; };
 		D1B959922119F4AE0045A9E2 /* MealListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B959912119F4AE0045A9E2 /* MealListViewModel.swift */; };
 		D1B959962119FC370045A9E2 /* ProxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B959952119FC370045A9E2 /* ProxyDataSource.swift */; };
+		D1B95998211A0D990045A9E2 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B95997211A0D990045A9E2 /* DataProvider.swift */; };
 		D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */; };
 		D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8120E11B8F0058CBFB /* R.generated.swift */; };
 		D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8420E12B830058CBFB /* NSFLog.swift */; };
@@ -85,6 +86,7 @@
 		D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEditMealViewController.swift; sourceTree = "<group>"; };
 		D1B959912119F4AE0045A9E2 /* MealListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListViewModel.swift; sourceTree = "<group>"; };
 		D1B959952119FC370045A9E2 /* ProxyDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyDataSource.swift; sourceTree = "<group>"; };
+		D1B95997211A0D990045A9E2 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = LocalizableStrings.strings; sourceTree = "<group>"; };
 		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D1F4FB8420E12B830058CBFB /* NSFLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFLog.swift; sourceTree = "<group>"; };
@@ -135,7 +137,9 @@
 			isa = PBXGroup;
 			children = (
 				D10170CC20A3715B00E748A4 /* Meal.swift */,
+				D1F4FB8620E182B20058CBFB /* CoreDataProvider.swift */,
 				D1B959952119FC370045A9E2 /* ProxyDataSource.swift */,
+				D1B95997211A0D990045A9E2 /* DataProvider.swift */,
 				D19B0A8A20AD8AA8003A27B9 /* MealWheelModel.swift */,
 				D16F765D20E5624500FC1F02 /* LastLoggedMealModel.swift */,
 				D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */,
@@ -253,7 +257,6 @@
 			isa = PBXGroup;
 			children = (
 				D1F4FB8420E12B830058CBFB /* NSFLog.swift */,
-				D1F4FB8620E182B20058CBFB /* CoreDataProvider.swift */,
 			);
 			path = helpers;
 			sourceTree = "<group>";
@@ -532,6 +535,7 @@
 				D11E81EF2094BE8400B87926 /* AppDelegate.swift in Sources */,
 				D19B0A8D20ADF7A2003A27B9 /* MealContainer.swift in Sources */,
 				D1A9CF902118B52400E42167 /* MealListViewController.swift in Sources */,
+				D1B95998211A0D990045A9E2 /* DataProvider.swift in Sources */,
 				D1B959962119FC370045A9E2 /* ProxyDataSource.swift in Sources */,
 				D1F4FB8C20E2B14B0058CBFB /* EditMealViewModel.swift in Sources */,
 				D18A2E0F20AB6E640076227E /* Constants.swift in Sources */,
