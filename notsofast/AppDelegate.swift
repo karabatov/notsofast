@@ -16,7 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let mainVC = MealListViewController()
+        let vm = MealListViewModel()
+        let mainVC = MealListViewController(viewModel: vm)
         let nav = UINavigationController(rootViewController: mainVC)
 
         if window == nil {

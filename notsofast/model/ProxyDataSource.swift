@@ -15,7 +15,7 @@ protocol ProxyDataSource {
     func numberOfItems(in section: Int) -> Int
     func modelForItem(at indexPath: IndexPath) -> CellModel?
 
-    var delegate: ProxyDataSourceDelegate? { get set }
+    var dataSourceDelegate: ProxyDataSourceDelegate? { get set }
 }
 
 enum ProxyDataSourceChange {

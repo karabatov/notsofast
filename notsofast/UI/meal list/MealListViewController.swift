@@ -9,7 +9,7 @@
 import UIKit
 
 /// Display a list of meals in a collection view.
-final class MealListViewController: UIViewController, UICollectionViewDataSource {
+final class MealListViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate {
     /// Scroll the calendar to the past.
     private let leftButton = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.leftButtonPressed))
     /// Scroll the calendar to the future.
@@ -22,11 +22,14 @@ final class MealListViewController: UIViewController, UICollectionViewDataSource
     /// Collection view for displaying the list of meals.
     /// Initialize it with a blank layout for now.
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let viewModel: MealListViewModel
 
     // MARK: System methods
 
-    required init() {
+    required init(viewModel: MealListViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        viewModel.dataSourceDelegate = self
 
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = leftButton
@@ -92,14 +95,45 @@ final class MealListViewController: UIViewController, UICollectionViewDataSource
     // MARK: UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 0
+        return viewModel.numberOfSections()
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return viewModel.numberOfItems(in: section)
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let _ = viewModel.modelForItem(at: indexPath)
         return UICollectionViewCell()
+    }
+
+    // MARK: UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        //
+    }
+
+    // MARK: ProxyDataSourceDelegate
+
+    func batch(changes: [ProxyDataSourceChange]) {
+        let cv = collectionView
+        collectionView.performBatchUpdates({
+            for change in changes {
+                switch change {
+                case .delete(let ip):
+                    cv.deleteItems(at: [ip])
+
+                case .insert(let ip):
+                    cv.insertItems(at: [ip])
+
+                case .update(let ip):
+                    cv.reloadItems(at: [ip])
+                }
+            }
+        }, completion: nil)
+    }
+
+    func forceReload() {
+        collectionView.reloadData()
     }
 }
