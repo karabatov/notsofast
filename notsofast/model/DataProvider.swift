@@ -8,8 +8,8 @@
 
 import Foundation
 
-protocol DataConfig {}
-
 protocol DataProvider: ProxyDataSource {
+    associatedtype DataConfig
+
     var config: DataConfig { get set }
 }

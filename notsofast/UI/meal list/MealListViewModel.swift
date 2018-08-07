@@ -12,16 +12,23 @@ struct MealCellModel {
     let meal: Meal
 }
 
-final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource where ConcreteProvider.CellModel == Meal {
+/// TODO: Make some kind of ViewModel protocol + merge it with ProxyDataSource.
+final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
     typealias CellModel = MealCellModel
     private let dataProvider: ConcreteProvider
 
     init(dataProvider: ConcreteProvider) {
         self.dataProvider = dataProvider
+        self.dataProvider.configure(delegate: self)
     }
 
     // MARK: ProxyDataSource
-    var dataSourceDelegate: ProxyDataSourceDelegate?
+
+    private weak var dataSourceDelegate: ProxyDataSourceDelegate?
+
+    func configure(delegate: ProxyDataSourceDelegate?) {
+        dataSourceDelegate = delegate
+    }
 
     func numberOfSections() -> Int {
         return dataProvider.numberOfSections()
@@ -40,6 +47,16 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource w
     }
 
     func titleForHeader(in section: Int) -> String? {
-        return nil
+        return dataProvider.titleForHeader(in: section)
+    }
+
+    // MARK: ProxyDataSourceDelegate
+
+    func batch(changes: [ProxyDataSourceChange]) {
+        dataSourceDelegate?.batch(changes: changes)
+    }
+
+    func forceReload() {
+        dataSourceDelegate?.forceReload()
     }
 }

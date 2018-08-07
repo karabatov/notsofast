@@ -16,7 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let vm = MealListViewModel()
+        let config = MealListDataConfig(startDate: Date.init(timeIntervalSinceNow: -60.0 * 60.0 * 24.0), endDate: Date.distantFuture)
+        let dp = CoreDataProvider.sharedInstance.dataProviderForMealList(config: config)
+        let vm = MealListViewModel(dataProvider: dp)
         let mainVC = MealListViewController(viewModel: vm)
         let nav = UINavigationController(rootViewController: mainVC)
 

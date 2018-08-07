@@ -16,7 +16,7 @@ protocol ProxyDataSource {
     func titleForHeader(in section: Int) -> String?
     func modelForItem(at indexPath: IndexPath) -> CellModel?
 
-    var dataSourceDelegate: ProxyDataSourceDelegate? { get set }
+    func configure(delegate: ProxyDataSourceDelegate?)
 }
 
 enum ProxyDataSourceChange {
@@ -25,7 +25,7 @@ enum ProxyDataSourceChange {
     case update(IndexPath)
 }
 
-protocol ProxyDataSourceDelegate {
+protocol ProxyDataSourceDelegate: AnyObject {
     func batch(changes: [ProxyDataSourceChange])
     func forceReload()
 }

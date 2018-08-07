@@ -9,7 +9,7 @@
 import UIKit
 
 /// Display a list of meals in a collection view.
-final class MealListViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate {
+final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel {
     /// Scroll the calendar to the past.
     private let leftButton = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.leftButtonPressed))
     /// Scroll the calendar to the future.
@@ -22,14 +22,14 @@ final class MealListViewController: UIViewController, UICollectionViewDataSource
     /// Collection view for displaying the list of meals.
     /// Initialize it with a blank layout for now.
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let viewModel: MealListViewModel
+    private let viewModel: ConcreteDataSource
 
     // MARK: System methods
 
-    required init(viewModel: MealListViewModel) {
+    required init(viewModel: ConcreteDataSource) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        viewModel.dataSourceDelegate = self
+        self.viewModel.configure(delegate: self)
 
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = leftButton

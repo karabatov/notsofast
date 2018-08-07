@@ -29,8 +29,13 @@ final class MealListDataProvider: DataProvider {
 
     // MARK: ProxyDataSource
 
+    private weak var dataSourceDelegate: ProxyDataSourceDelegate?
+
     typealias CellModel = Meal
-    var dataSourceDelegate: ProxyDataSourceDelegate?
+
+    func configure(delegate: ProxyDataSourceDelegate?) {
+        dataSourceDelegate = delegate
+    }
 
     func numberOfSections() -> Int {
         return frc.sections?.count ?? 0
