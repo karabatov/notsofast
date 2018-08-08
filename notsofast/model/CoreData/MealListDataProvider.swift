@@ -52,7 +52,7 @@ struct MealListDataConfig {
     }
 
     func titleForHeader(in section: Int) -> String? {
-        return nil
+        return frc.sections?[section].name
     }
 
     // MARK: CollectingFetchDelegate
