@@ -128,6 +128,12 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
 
                 case .update(let ip):
                     cv.reloadItems(at: [ip])
+
+                case .insertSection(let sectionIndex):
+                    cv.insertSections(IndexSet.init(integer: sectionIndex))
+
+                case .deleteSection(let sectionIndex):
+                    cv.deleteSections(IndexSet.init(integer: sectionIndex))
                 }
             }
         }, completion: nil)

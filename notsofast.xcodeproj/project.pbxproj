@@ -25,6 +25,7 @@
 		D19B0A8D20ADF7A2003A27B9 /* MealContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A8C20ADF7A2003A27B9 /* MealContainer.swift */; };
 		D19B0A8F20ADFCB9003A27B9 /* MealEntityExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A8E20ADFCB9003A27B9 /* MealEntityExtension.swift */; };
 		D19B0A9120B00C2A003A27B9 /* TwentyFourListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */; };
+		D19E765A211B474D002B83B1 /* CollectingFetchDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19E7659211B474D002B83B1 /* CollectingFetchDelegate.swift */; };
 		D1A9CF8E2118AF1600E42167 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A9CF8D2118AF1600E42167 /* CalendarViewController.swift */; };
 		D1A9CF902118B52400E42167 /* MealListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A9CF8F2118B52400E42167 /* MealListViewController.swift */; };
 		D1B9598F2119EEEA0045A9E2 /* NewEditMealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */; };
@@ -82,6 +83,7 @@
 		D19B0A8C20ADF7A2003A27B9 /* MealContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealContainer.swift; sourceTree = "<group>"; };
 		D19B0A8E20ADFCB9003A27B9 /* MealEntityExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEntityExtension.swift; sourceTree = "<group>"; };
 		D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourListViewModel.swift; sourceTree = "<group>"; };
+		D19E7659211B474D002B83B1 /* CollectingFetchDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectingFetchDelegate.swift; sourceTree = "<group>"; };
 		D1A9CF8D2118AF1600E42167 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		D1A9CF8F2118B52400E42167 /* MealListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListViewController.swift; sourceTree = "<group>"; };
 		D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEditMealViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				D10170CC20A3715B00E748A4 /* Meal.swift */,
 				D1B959952119FC370045A9E2 /* ProxyDataSource.swift */,
 				D1B95997211A0D990045A9E2 /* DataProvider.swift */,
+				D19E7659211B474D002B83B1 /* CollectingFetchDelegate.swift */,
 				D16F765D20E5624500FC1F02 /* LastLoggedMealModel.swift */,
 				D19B0A9020B00C2A003A27B9 /* TwentyFourListViewModel.swift */,
 				D18A2E0A20AB6B2B0076227E /* CoreData */,
@@ -539,6 +542,7 @@
 				D11E81EF2094BE8400B87926 /* AppDelegate.swift in Sources */,
 				D19B0A8D20ADF7A2003A27B9 /* MealContainer.swift in Sources */,
 				D1A9CF902118B52400E42167 /* MealListViewController.swift in Sources */,
+				D19E765A211B474D002B83B1 /* CollectingFetchDelegate.swift in Sources */,
 				D1B95998211A0D990045A9E2 /* DataProvider.swift in Sources */,
 				D1B959962119FC370045A9E2 /* ProxyDataSource.swift in Sources */,
 				D1F4FB8C20E2B14B0058CBFB /* EditMealViewModel.swift in Sources */,

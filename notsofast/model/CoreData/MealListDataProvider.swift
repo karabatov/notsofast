@@ -14,12 +14,14 @@ struct MealListDataConfig {
     let endDate: Date
 }
 
-final class MealListDataProvider: DataProvider {
+@objc final class MealListDataProvider: NSObject, DataProvider, CollectingFetchDelegate {
     private var frc: NSFetchedResultsController<MealEntity>
 
     init(frc: NSFetchedResultsController<MealEntity>, config: MealListDataConfig) {
         self.config = config
         self.frc = frc
+        super.init()
+        self.frc.delegate = self
     }
 
     // MARK: DataProvider
@@ -51,5 +53,29 @@ final class MealListDataProvider: DataProvider {
 
     func titleForHeader(in section: Int) -> String? {
         return nil
+    }
+
+    // MARK: CollectingFetchDelegate
+
+    private var changeCollector = [ProxyDataSourceChange]()
+
+    private func append(change: ProxyDataSourceChange) {
+        changeCollector.append(change)
+    }
+
+    func appendChange(type: NSFetchedResultsChangeType, for section: Int) {
+        append(change: convertChange(type: type, for: section))
+    }
+
+    func appendChange(type: NSFetchedResultsChangeType, at indexPath: IndexPath) {
+        append(change: convertChange(type: type, at: indexPath))
+    }
+
+    func clearPendingChanges() {
+        changeCollector.removeAll(keepingCapacity: true)
+    }
+
+    func forwardPendingChanges() {
+        dataSourceDelegate?.batch(changes: changeCollector)
     }
 }

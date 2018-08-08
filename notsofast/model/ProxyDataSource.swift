@@ -23,6 +23,9 @@ enum ProxyDataSourceChange {
     case insert(IndexPath)
     case delete(IndexPath)
     case update(IndexPath)
+
+    case insertSection(Int)
+    case deleteSection(Int)
 }
 
 protocol ProxyDataSourceDelegate: AnyObject {
