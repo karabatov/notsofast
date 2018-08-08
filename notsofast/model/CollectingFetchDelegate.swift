@@ -9,38 +9,60 @@
 import Foundation
 import CoreData
 
-@objc protocol CollectingFetchDelegate: NSFetchedResultsControllerDelegate {
-    func appendChange(type: NSFetchedResultsChangeType, at indexPath: IndexPath)
-    func appendChange(type: NSFetchedResultsChangeType, for section: Int)
+protocol CollectingFetchDelegate: class {
+    var forwardDelegate: CollectingFetchForwardDelegate? { get set }
+    func setupForwardDelegate<T: NSFetchRequestResult>(frc: NSFetchedResultsController<T>)
+
+    func append(change: ProxyDataSourceChange)
     func clearPendingChanges()
     func forwardPendingChanges()
-
-    @objc optional func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
-    @objc optional func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
-    @objc optional func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
-    @objc optional func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
 }
 
 extension CollectingFetchDelegate {
+    func setupForwardDelegate<T: NSFetchRequestResult>(frc: NSFetchedResultsController<T>) {
+        if forwardDelegate == nil {
+            forwardDelegate = CollectingFetchForwardDelegate()
+        }
+        frc.delegate = forwardDelegate
+        forwardDelegate?.fetchDelegate = self
+    }
+}
+
+final class CollectingFetchForwardDelegate: NSObject, NSFetchedResultsControllerDelegate {
+    weak var fetchDelegate: CollectingFetchDelegate?
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .insert, .delete, .update:
+        case .insert:
             if let newIP = newIndexPath {
-                appendChange(type: type, at: newIP)
+                fetchDelegate?.append(change: ProxyDataSourceChange.insert(newIP))
+            }
+
+        case .delete:
+            if let delIP = indexPath {
+                fetchDelegate?.append(change: ProxyDataSourceChange.delete(delIP))
+            }
+
+        case .update:
+            if let updIP = indexPath {
+                fetchDelegate?.append(change: ProxyDataSourceChange.update(updIP))
             }
 
         case .move:
             if let delIP = indexPath, let newIP = newIndexPath {
-                appendChange(type: type, at: delIP)
-                appendChange(type: type, at: newIP)
+                fetchDelegate?.append(change: ProxyDataSourceChange.delete(delIP))
+                fetchDelegate?.append(change: ProxyDataSourceChange.insert(newIP))
             }
         }
     }
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
-        case .insert, .delete:
-            appendChange(type: type, for: sectionIndex)
+        case .insert:
+            fetchDelegate?.append(change: ProxyDataSourceChange.insertSection(sectionIndex))
+
+        case .delete:
+            fetchDelegate?.append(change: ProxyDataSourceChange.deleteSection(sectionIndex))
 
         // Only insert and delete are sent for sections.
         default:
@@ -49,39 +71,10 @@ extension CollectingFetchDelegate {
     }
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        clearPendingChanges()
+        fetchDelegate?.clearPendingChanges()
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        forwardPendingChanges()
-    }
-}
-
-func convertChange(type: NSFetchedResultsChangeType, at indexPath: IndexPath) -> ProxyDataSourceChange {
-    switch type {
-    case .insert:
-        return .insert(indexPath)
-
-    case .delete:
-        return .delete(indexPath)
-
-    case .update:
-        return .update(indexPath)
-
-    case .move:
-        fatalError("Move case should have been handled earlier.")
-    }
-}
-
-func convertChange(type: NSFetchedResultsChangeType, for section: Int) -> ProxyDataSourceChange {
-    switch type {
-    case .insert:
-        return .insertSection(section)
-
-    case .delete:
-        return .deleteSection(section)
-
-    case .move, .update:
-        fatalError("Section updates do not support Move or Update.")
+        fetchDelegate?.forwardPendingChanges()
     }
 }

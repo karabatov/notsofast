@@ -21,7 +21,7 @@ struct MealListDataConfig {
         self.config = config
         self.frc = frc
         super.init()
-        self.frc.delegate = self
+        setupForwardDelegate(frc: frc)
     }
 
     // MARK: DataProvider
@@ -59,16 +59,10 @@ struct MealListDataConfig {
 
     private var changeCollector = [ProxyDataSourceChange]()
 
-    private func append(change: ProxyDataSourceChange) {
+    var forwardDelegate: CollectingFetchForwardDelegate?
+
+    func append(change: ProxyDataSourceChange) {
         changeCollector.append(change)
-    }
-
-    func appendChange(type: NSFetchedResultsChangeType, for section: Int) {
-        append(change: convertChange(type: type, for: section))
-    }
-
-    func appendChange(type: NSFetchedResultsChangeType, at indexPath: IndexPath) {
-        append(change: convertChange(type: type, at: indexPath))
     }
 
     func clearPendingChanges() {
