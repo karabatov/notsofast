@@ -31,6 +31,8 @@ final class MealCollectionViewCell: UICollectionViewCell {
 
     private func commonInit() {
         backgroundColor = UIColor.mealListCellBackground
+        layer.masksToBounds = true
+        layer.cornerRadius = 10.0
 
         servingLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(servingLabel)
@@ -53,7 +55,17 @@ final class MealCollectionViewCell: UICollectionViewCell {
         nutriContainer.addArrangedSubview(slowCarbView)
         nutriContainer.addArrangedSubview(fatView)
 
-
+        let views = [
+            "serving": servingLabel,
+            "relative": relativeDateLabel,
+            "absolute": absoluteDateLabel,
+            "nutri": nutriContainer
+        ]
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        addConstraint(NSLayoutConstraint.init(item: relativeDateLabel, attribute: NSLayoutAttribute.firstBaseline, relatedBy: NSLayoutRelation.equal, toItem: servingLabel, attribute: NSLayoutAttribute.firstBaseline, multiplier: 1.0, constant: 0.0))
     }
 
     func configure(model: MealCellModel) {
