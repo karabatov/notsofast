@@ -71,7 +71,9 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
         view.addConstraint(NSLayoutConstraint.init(item: addButton, attribute: NSLayoutAttribute.rightMargin, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: buttonOffset))
         view.addConstraint(NSLayoutConstraint.init(item: addButton, attribute: NSLayoutAttribute.bottomMargin, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: buttonOffset))
 
+        collectionView.register(MealCollectionViewCell.self, forCellWithReuseIdentifier: MealCollectionViewCell.reuseIdentifier)
         collectionView.dataSource = self
+        collectionView.delegate = self
     }
 
     // MARK: Button targets
@@ -86,6 +88,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
 
     @objc func addButtonPressed() {
         NSFLog("Add pressed")
+        openEditMeal(with: Meal.createNewMeal(), title: CreateEditMealTitle.create)
     }
 
     @objc func titleButtonPressed() {
@@ -103,8 +106,13 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let _ = viewModel.modelForItem(at: indexPath)
-        return UICollectionViewCell()
+        guard let model = viewModel.modelForItem(at: indexPath) else {
+            return UICollectionViewCell()
+        }
+
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MealCollectionViewCell.reuseIdentifier, for: indexPath) as! MealCollectionViewCell
+        cell.configure(model: model)
+        return cell
     }
 
     // MARK: UICollectionViewDelegate
@@ -117,6 +125,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
 
     func batch(changes: [ProxyDataSourceChange]) {
         let cv = collectionView
+        NSFLog("Got \(changes.count) changes.")
         collectionView.performBatchUpdates({
             for change in changes {
                 switch change {
@@ -141,5 +150,14 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
 
     func forceReload() {
         collectionView.reloadData()
+    }
+
+    // MARK: Helpers
+
+    private func openEditMeal(with meal: Meal, title: CreateEditMealTitle) {
+        let vm = EditMealViewModel(mealStorage: CoreDataProvider.sharedInstance)
+        vm.input.onNext(EditMealInput.configure(model: meal, title: title))
+        let vc = NewEditMealViewController(viewModel: vm)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
