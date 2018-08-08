@@ -9,10 +9,10 @@
 import Foundation
 
 struct MealCellModel {
-    let meal: Meal
     let size: String
     let absoluteDate: String
     let relativeDate: NSAttributedString
+    let nutrients: Nutrients
 }
 
 /// TODO: Make some kind of ViewModel protocol + merge it with ProxyDataSource.
@@ -47,10 +47,10 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         }
 
         return MealCellModel(
-            meal: meal, size:
-            meal.size.forDisplay(),
+            size: meal.size.forDisplay(),
             absoluteDate: meal.eaten.description,
-            relativeDate: NSAttributedString(string: "… ago")
+            relativeDate: NSAttributedString(string: "… ago"),
+            nutrients: meal.nutri
         )
     }
 
