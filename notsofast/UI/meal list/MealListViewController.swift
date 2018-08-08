@@ -110,7 +110,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
     // MARK: UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //
+        NSFLog("Selected item at \(indexPath)")
     }
 
     // MARK: ProxyDataSourceDelegate
