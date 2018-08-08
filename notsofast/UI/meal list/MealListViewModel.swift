@@ -10,6 +10,9 @@ import Foundation
 
 struct MealCellModel {
     let meal: Meal
+    let size: String
+    let absoluteDate: String
+    let relativeDate: NSAttributedString
 }
 
 /// TODO: Make some kind of ViewModel protocol + merge it with ProxyDataSource.
@@ -43,7 +46,12 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
             return nil
         }
 
-        return MealCellModel(meal: meal)
+        return MealCellModel(
+            meal: meal, size:
+            meal.size.forDisplay(),
+            absoluteDate: meal.eaten.description,
+            relativeDate: NSAttributedString(string: "… ago")
+        )
     }
 
     func titleForHeader(in section: Int) -> String? {
