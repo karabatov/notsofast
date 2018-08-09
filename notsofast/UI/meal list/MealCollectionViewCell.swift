@@ -9,6 +9,7 @@
 import UIKit
 
 private struct FontSet {
+    let title3Font: UIFont
     let bodyFont: UIFont
     let headlineFont: UIFont
     let subheadItalicFont: UIFont
@@ -43,7 +44,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
         layer.masksToBounds = true
         layer.cornerRadius = 10.0
 
-        servingLabel.font = MealCollectionViewCell.fontSet.bodyFont
+        servingLabel.font = MealCollectionViewCell.fontSet.title3Font
         servingLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(servingLabel)
 
@@ -51,6 +52,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
         addSubview(relativeDateLabel)
 
         absoluteDateLabel.font = MealCollectionViewCell.fontSet.subheadItalicFont
+        absoluteDateLabel.textColor = UIColor.mealListCellAbsDateText
         absoluteDateLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(absoluteDateLabel)
 
@@ -114,6 +116,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
         }
 
         return FontSet(
+            title3Font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.title3),
             bodyFont: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body),
             headlineFont: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),
             subheadItalicFont: subhead

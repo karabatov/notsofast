@@ -13,6 +13,8 @@ extension UIColor {
     static let nsfTintColor = UIColor.red
     /// Solid background for rounded cells in the meal list collection view.
     static let mealListCellBackground = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
+    /// A bit lighter text for meal cell absolute date.
+    static let mealListCellAbsDateText = UIColor.darkGray
 
     /// Protein color.
     static let protein = UIColor(red: 148.0/255.0, green: 226.0/255.0, blue: 250.0/255.0, alpha: 1.0)
