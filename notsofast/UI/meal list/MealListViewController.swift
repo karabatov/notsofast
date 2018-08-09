@@ -121,6 +121,9 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         NSFLog("Selected item at \(indexPath)")
+        if let model = viewModel.modelForItem(at: indexPath) {
+            openEditMeal(with: model.meal, title: CreateEditMealTitle.edit)
+        }
     }
 
     // MARK: ProxyDataSourceDelegate

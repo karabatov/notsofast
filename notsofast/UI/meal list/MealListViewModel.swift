@@ -9,6 +9,7 @@
 import Foundation
 
 struct MealCellModel {
+    let meal: Meal
     let size: String
     let absoluteDate: String
     let relativeDate: String
@@ -73,6 +74,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         }
 
         return MealCellModel(
+            meal: meal,
             size: meal.size.forDisplay(),
             absoluteDate: absDateFormatter.string(from: meal.eaten),
             relativeDate: agoStr,
