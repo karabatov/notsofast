@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 /// Display a list of meals in a collection view.
-final class MealListViewController<ConcreteDataSource: ProxyDataSource, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel, ConcreteViewModel.ViewState == MealListViewState {
+final class MealListViewController<ConcreteDataSource: ProxyDataSource, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
     /// Scroll the calendar to the past.
     private let leftButton = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.leftButtonPressed))
     /// Scroll the calendar to the future.
