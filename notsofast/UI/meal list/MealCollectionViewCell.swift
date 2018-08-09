@@ -25,6 +25,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private let fatView = UIView(frame: CGRect.zero)
     private let nutriContainer = UIStackView(frame: CGRect.zero)
 
+    /// This will come in handy when watching the font size change.
     private var model: MealCellModel?
 
     override init(frame: CGRect) {
@@ -79,21 +80,11 @@ final class MealCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(model: MealCellModel) {
-        let fontSet = MealCollectionViewCell.fontSet
-        let regularAttrs = [
-            NSAttributedStringKey.font: fontSet.bodyFont
-        ]
-        let boldAttrs = [
-            NSAttributedStringKey.font: fontSet.headlineFont
-        ]
-        let agoStr = NSMutableAttributedString(string: R.string.localizableStrings.meal_relative_ago(model.relativeDate), attributes: regularAttrs)
-        if let rangeOfDate = agoStr.string.range(of: model.relativeDate) {
-            agoStr.setAttributes(boldAttrs, range: NSRange(rangeOfDate, in: agoStr.string))
-        }
+        self.model = model
 
         servingLabel.text = model.size
         absoluteDateLabel.text = model.absoluteDate
-        relativeDateLabel.attributedText = agoStr
+        relativeDateLabel.attributedText = agoStr(from: model.relativeDate)
 
         func colorView(view: UIView, nutri: Nutrients, color: UIColor) {
             if model.nutrients.contains(nutri) {
@@ -127,5 +118,21 @@ final class MealCollectionViewCell: UICollectionViewCell {
             headlineFont: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),
             subheadItalicFont: subhead
         )
+    }
+
+    private func agoStr(from relativeDate: String) -> NSAttributedString {
+        let fontSet = MealCollectionViewCell.fontSet
+        let regularAttrs = [
+            NSAttributedStringKey.font: fontSet.bodyFont
+        ]
+        let boldAttrs = [
+            NSAttributedStringKey.font: fontSet.headlineFont
+        ]
+        let agoStr = NSMutableAttributedString(string: R.string.localizableStrings.meal_relative_ago(relativeDate), attributes: regularAttrs)
+        if let rangeOfDate = agoStr.string.range(of: relativeDate) {
+            agoStr.setAttributes(boldAttrs, range: NSRange(rangeOfDate, in: agoStr.string))
+        }
+
+        return agoStr
     }
 }
