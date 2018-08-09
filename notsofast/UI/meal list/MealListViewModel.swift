@@ -11,6 +11,7 @@ import RxSwift
 
 struct MealListViewState: Equatable {
     let title: String
+    let enableCalendarRightButton: Bool
 }
 
 enum MealListInput {
@@ -59,9 +60,15 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         dataProvider.dataConfig
             .map { dataConfig -> MealListViewState in
                 if dataConfig.endDate > Date() {
-                    return MealListViewState(title: "FUTURE")
+                    return MealListViewState(
+                        title: "FUTURE",
+                        enableCalendarRightButton: false
+                    )
                 } else {
-                    return MealListViewState(title: "PAST")
+                    return MealListViewState(
+                        title: "PAST",
+                        enableCalendarRightButton: true
+                    )
                 }
             }
             .bind(to: viewState)

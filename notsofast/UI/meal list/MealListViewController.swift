@@ -170,6 +170,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] viewState in
                 self?.titleButton.setTitle(viewState.title, for: UIControlState.normal)
+                self?.rightButton.isEnabled = viewState.enableCalendarRightButton
             })
             .disposed(by: disposeBag)
     }
