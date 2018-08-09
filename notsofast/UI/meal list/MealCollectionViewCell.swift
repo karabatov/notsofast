@@ -8,6 +8,12 @@
 
 import UIKit
 
+private struct FontSet {
+    let bodyFont: UIFont
+    let headlineFont: UIFont
+    let subheadItalicFont: UIFont
+}
+
 final class MealCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "MealCollectionViewCell"
     private let servingLabel = UILabel(frame: CGRect.zero)
@@ -18,6 +24,8 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private let slowCarbView = UIView(frame: CGRect.zero)
     private let fatView = UIView(frame: CGRect.zero)
     private let nutriContainer = UIStackView(frame: CGRect.zero)
+
+    private var model: MealCellModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,12 +42,14 @@ final class MealCollectionViewCell: UICollectionViewCell {
         layer.masksToBounds = true
         layer.cornerRadius = 10.0
 
+        servingLabel.font = MealCollectionViewCell.fontSet.bodyFont
         servingLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(servingLabel)
 
         relativeDateLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(relativeDateLabel)
 
+        absoluteDateLabel.font = MealCollectionViewCell.fontSet.subheadItalicFont
         absoluteDateLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(absoluteDateLabel)
 
@@ -69,9 +79,11 @@ final class MealCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(model: MealCellModel) {
+        let fontSet = MealCollectionViewCell.fontSet
+
         servingLabel.text = model.size
         absoluteDateLabel.text = model.absoluteDate
-        relativeDateLabel.attributedText = model.relativeDate
+        relativeDateLabel.text = R.string.localizableStrings.meal_relative_ago(model.relativeDate)
 
         func colorView(view: UIView, nutri: Nutrients, color: UIColor) {
             if model.nutrients.contains(nutri) {
@@ -85,5 +97,25 @@ final class MealCollectionViewCell: UICollectionViewCell {
         colorView(view: fastCarbView, nutri: Nutrients.fastCarb, color: UIColor.fastCarb)
         colorView(view: slowCarbView, nutri: Nutrients.slowCarb, color: UIColor.slowCarb)
         colorView(view: fatView, nutri: Nutrients.fat, color: UIColor.fat)
+    }
+
+    // MARK: Dynamic fonts
+    // TODO: Subscribe to font size change notifications.
+
+    private static var fontSet = MealCollectionViewCell.createFontSet()
+
+    private static func createFontSet() -> FontSet {
+        let subhead: UIFont
+        if let descr = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.subheadline).withSymbolicTraits(UIFontDescriptorSymbolicTraits.traitItalic) {
+            subhead = UIFont(descriptor: descr, size: descr.pointSize)
+        } else {
+            subhead = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
+        }
+
+        return FontSet(
+            bodyFont: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body),
+            headlineFont: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),
+            subheadItalicFont: subhead
+        )
     }
 }

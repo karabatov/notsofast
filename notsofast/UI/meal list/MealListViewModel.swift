@@ -11,7 +11,7 @@ import Foundation
 struct MealCellModel {
     let size: String
     let absoluteDate: String
-    let relativeDate: NSAttributedString
+    let relativeDate: String
     let nutrients: Nutrients
 }
 
@@ -49,7 +49,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         return MealCellModel(
             size: meal.size.forDisplay(),
             absoluteDate: meal.eaten.description,
-            relativeDate: NSAttributedString(string: "… ago"),
+            relativeDate: meal.eaten.description,
             nutrients: meal.nutri
         )
     }

@@ -28,3 +28,4 @@
 "Since_last_meal" = "%@ since last meal";
 "Calendar_today" = "Today";
 "Calendar_title" = "Calendar";
+"Meal_relative_ago" = "%@ ago";

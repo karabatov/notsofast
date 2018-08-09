@@ -78,7 +78,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = CGSize(width: 300.0, height: 100.0)
+        (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.itemSize = CGSize(width: 300.0, height: 100.0)
     }
 
     // MARK: Button targets
