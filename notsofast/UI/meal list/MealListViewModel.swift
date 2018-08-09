@@ -22,6 +22,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
     private var agoDateFormatter: DateComponentsFormatter = {
         let df = DateComponentsFormatter()
 
+        df.maximumUnitCount = 1
         df.unitsStyle = .abbreviated
         df.allowedUnits = [.hour, .minute]
 
