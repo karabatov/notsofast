@@ -80,10 +80,20 @@ final class MealCollectionViewCell: UICollectionViewCell {
 
     func configure(model: MealCellModel) {
         let fontSet = MealCollectionViewCell.fontSet
+        let regularAttrs = [
+            NSAttributedStringKey.font: fontSet.bodyFont
+        ]
+        let boldAttrs = [
+            NSAttributedStringKey.font: fontSet.headlineFont
+        ]
+        let agoStr = NSMutableAttributedString(string: R.string.localizableStrings.meal_relative_ago(model.relativeDate), attributes: regularAttrs)
+        if let rangeOfDate = agoStr.string.range(of: model.relativeDate) {
+            agoStr.setAttributes(boldAttrs, range: NSRange(rangeOfDate, in: agoStr.string))
+        }
 
         servingLabel.text = model.size
         absoluteDateLabel.text = model.absoluteDate
-        relativeDateLabel.text = R.string.localizableStrings.meal_relative_ago(model.relativeDate)
+        relativeDateLabel.attributedText = agoStr
 
         func colorView(view: UIView, nutri: Nutrients, color: UIColor) {
             if model.nutrients.contains(nutri) {
