@@ -62,10 +62,19 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
             return nil
         }
 
+        let ago = Date().timeIntervalSince(meal.eaten)
+        let agoStr: String
+        // Only display “… ago” if no more than 24 hours have passed.
+        if let formStr = agoDateFormatter.string(from: ago), ago <= 24 * 60 * 60 {
+            agoStr = formStr
+        } else {
+            agoStr = ""
+        }
+
         return MealCellModel(
             size: meal.size.forDisplay(),
-            absoluteDate: meal.eaten.description,
-            relativeDate: meal.eaten.description,
+            absoluteDate: absDateFormatter.string(from: meal.eaten),
+            relativeDate: agoStr,
             nutrients: meal.nutri
         )
     }
