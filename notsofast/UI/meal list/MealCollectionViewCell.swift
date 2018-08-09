@@ -76,7 +76,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        addConstraint(NSLayoutConstraint.init(item: relativeDateLabel, attribute: NSLayoutAttribute.firstBaseline, relatedBy: NSLayoutRelation.equal, toItem: servingLabel, attribute: NSLayoutAttribute.firstBaseline, multiplier: 1.0, constant: 0.0))
+        addConstraint(relativeDateLabel.firstBaselineAnchor.constraint(equalTo: servingLabel.firstBaselineAnchor))
     }
 
     func configure(model: MealCellModel) {

@@ -20,8 +20,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
     /// Custom button in the title of the navbar.
     private let titleButton = UIButton(type: UIButtonType.custom)
     /// Collection view for displaying the list of meals.
-    /// Initialize it with a blank layout for now.
-    private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: MealListFlowLayout())
     private let viewModel: ConcreteDataSource
 
     // MARK: System methods
@@ -77,8 +76,6 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
         collectionView.register(MealCollectionViewCell.self, forCellWithReuseIdentifier: MealCollectionViewCell.reuseIdentifier)
         collectionView.dataSource = self
         collectionView.delegate = self
-
-        (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.itemSize = CGSize(width: 300.0, height: 100.0)
     }
 
     // MARK: Button targets
