@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol DataProvider: ProxyDataSource {
     associatedtype DataConfig
 
-    var config: DataConfig { get set }
+    var dataConfig: ReplaySubject<DataConfig> { get }
 }

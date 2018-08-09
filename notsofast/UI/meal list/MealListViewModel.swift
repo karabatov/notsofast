@@ -7,6 +7,19 @@
 //
 
 import Foundation
+import RxSwift
+
+struct MealListViewState: Equatable {
+    let title: String
+}
+
+enum MealListInput {
+
+}
+
+enum MealListOutput {
+
+}
 
 struct MealCellModel {
     let meal: Meal
@@ -17,7 +30,7 @@ struct MealCellModel {
 }
 
 /// TODO: Make some kind of ViewModel protocol + merge it with ProxyDataSource.
-final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
+final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate, ViewModel where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
     typealias CellModel = MealCellModel
     private let dataProvider: ConcreteProvider
     private var agoDateFormatter: DateComponentsFormatter = {
@@ -37,11 +50,29 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
 
         return df
     }()
+    private var disposeBag = DisposeBag()
 
     init(dataProvider: ConcreteProvider) {
         self.dataProvider = dataProvider
         self.dataProvider.configure(delegate: self)
+
+        dataProvider.dataConfig
+            .map { dataConfig -> MealListViewState in
+                if dataConfig.endDate > Date() {
+                    return MealListViewState(title: "FUTURE")
+                } else {
+                    return MealListViewState(title: "PAST")
+                }
+            }
+            .bind(to: viewState)
+            .disposed(by: disposeBag)
     }
+
+    // MARK: ViewModel
+
+    let viewState = ReplaySubject<MealListViewState>.create(bufferSize: 1)
+    let input = PublishSubject<MealListInput>()
+    let output = PublishSubject<MealListOutput>()
 
     // MARK: ProxyDataSource
 

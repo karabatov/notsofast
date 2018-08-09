@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import RxSwift
 
 /// Display a list of meals in a collection view.
-final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel {
+final class MealListViewController<ConcreteDataSource: ProxyDataSource, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel, ConcreteViewModel.ViewState == MealListViewState {
     /// Scroll the calendar to the past.
     private let leftButton = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.leftButtonPressed))
     /// Scroll the calendar to the future.
@@ -21,14 +22,17 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
     private let titleButton = UIButton(type: UIButtonType.custom)
     /// Collection view for displaying the list of meals.
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: MealListFlowLayout())
-    private let viewModel: ConcreteDataSource
+    private let dataSource: ConcreteDataSource
+    private let viewModel: ConcreteViewModel
+    private var disposeBag = DisposeBag()
 
     // MARK: System methods
 
-    required init(viewModel: ConcreteDataSource) {
+    required init(dataSource: ConcreteDataSource, viewModel: ConcreteViewModel) {
+        self.dataSource = dataSource
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.viewModel.configure(delegate: self)
+        self.dataSource.configure(delegate: self)
 
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = leftButton
@@ -76,6 +80,8 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
         collectionView.register(MealCollectionViewCell.self, forCellWithReuseIdentifier: MealCollectionViewCell.reuseIdentifier)
         collectionView.dataSource = self
         collectionView.delegate = self
+
+        bindViewState()
     }
 
     // MARK: Button targets
@@ -100,15 +106,15 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
     // MARK: UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel.numberOfSections()
+        return dataSource.numberOfSections()
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfItems(in: section)
+        return dataSource.numberOfItems(in: section)
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let model = viewModel.modelForItem(at: indexPath) else {
+        guard let model = dataSource.modelForItem(at: indexPath) else {
             return UICollectionViewCell()
         }
 
@@ -121,7 +127,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         NSFLog("Selected item at \(indexPath)")
-        if let model = viewModel.modelForItem(at: indexPath) {
+        if let model = dataSource.modelForItem(at: indexPath) {
             openEditMeal(with: model.meal, title: CreateEditMealTitle.edit)
         }
     }
@@ -155,6 +161,17 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource>: UIViewC
 
     func forceReload() {
         collectionView.reloadData()
+    }
+
+    // MARK: ViewModel
+
+    private func bindViewState() {
+        viewModel.viewState
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] viewState in
+                self?.titleButton.setTitle(viewState.title, for: UIControlState.normal)
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: Helpers

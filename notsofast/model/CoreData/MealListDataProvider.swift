@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import RxSwift
 
 struct MealListDataConfig {
     let startDate: Date
@@ -18,7 +19,7 @@ struct MealListDataConfig {
     private var frc: NSFetchedResultsController<MealEntity>
 
     init(frc: NSFetchedResultsController<MealEntity>, config: MealListDataConfig) {
-        self.config = config
+        self.dataConfig.onNext(config)
         self.frc = frc
         super.init()
         setupForwardDelegate(frc: frc)
@@ -27,7 +28,7 @@ struct MealListDataConfig {
     // MARK: DataProvider
 
     typealias DataConfig = MealListDataConfig
-    var config: MealListDataConfig
+    let dataConfig = ReplaySubject<MealListDataConfig>.create(bufferSize: 1)
 
     // MARK: ProxyDataSource
 

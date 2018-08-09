@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = MealListDataConfig(startDate: Date.init(timeIntervalSinceNow: -60.0 * 60.0 * 24.0), endDate: Date.distantFuture)
         let dp = CoreDataProvider.sharedInstance.dataProviderForMealList(config: config)
         let vm = MealListViewModel(dataProvider: dp)
-        let mainVC = MealListViewController(viewModel: vm)
+        let mainVC = MealListViewController(dataSource: vm, viewModel: vm)
         let nav = UINavigationController(rootViewController: mainVC)
 
         if window == nil {
