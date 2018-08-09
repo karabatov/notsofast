@@ -19,6 +19,22 @@ struct MealCellModel {
 final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
     typealias CellModel = MealCellModel
     private let dataProvider: ConcreteProvider
+    private var agoDateFormatter: DateComponentsFormatter = {
+        let df = DateComponentsFormatter()
+
+        df.unitsStyle = .abbreviated
+        df.allowedUnits = [.hour, .minute]
+
+        return df
+    }()
+    private var absDateFormatter: DateFormatter = {
+        let df = DateFormatter()
+
+        df.dateStyle = .medium
+        df.timeStyle = .short
+
+        return df
+    }()
 
     init(dataProvider: ConcreteProvider) {
         self.dataProvider = dataProvider
