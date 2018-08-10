@@ -155,7 +155,12 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
                     cv.insertItems(at: [ip])
 
                 case .update(let ip):
-                    cv.reloadItems(at: [ip])
+                    if
+                        let mdl = dataSource.modelForItem(at: ip),
+                        let cell = cv.cellForItem(at: ip) as? MealCollectionViewCell
+                    {
+                        cell.configure(model: mdl)
+                    }
 
                 case .insertSection(let sectionIndex):
                     cv.insertSections(IndexSet.init(integer: sectionIndex))
