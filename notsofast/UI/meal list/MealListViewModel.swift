@@ -15,7 +15,8 @@ struct MealListViewState: Equatable {
 }
 
 enum MealListInput {
-
+    case goLeft
+    case goRight
 }
 
 enum MealListOutput {
@@ -51,7 +52,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
             .map { dataConfig -> MealListViewState in
                 if dataConfig.endDate > Date() {
                     return MealListViewState(
-                        title: rdf.string(from: dataConfig.startDate, to: dataConfig.endDate),
+                        title: rdf.string(from: dataConfig.startDate, to: dataConfig.startDate + 24 * 60 * 60),
                         enableCalendarRightButton: false
                     )
                 } else {
@@ -62,6 +63,48 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
                 }
             }
             .bind(to: viewState)
+            .disposed(by: disposeBag)
+
+        Observable.combineLatest(dataProvider.dataConfig, input) { ($0, $1) }
+            .sample(input)
+            .filter { _, input in
+                switch input {
+                case .goLeft, .goRight:
+                    return true
+                }
+            }
+            .map { dataConfig, input -> MealListDataConfig in
+                let newStartDate: Date
+                let newEndDate: Date
+
+                let now = Date()
+
+                switch input {
+                case .goLeft where dataConfig.endDate >= now:
+                    newEndDate = now.beginningOfDay()
+                    newStartDate = newEndDate.addingTimeInterval(-Date.sutki())
+
+                case .goLeft where dataConfig.endDate < now:
+                    newStartDate = dataConfig.startDate.beginningOfDay().addingTimeInterval(-Date.sutki())
+                    newEndDate = newStartDate.addingTimeInterval(Date.sutki())
+
+                case .goRight:
+                    let end = dataConfig.endDate.beginningOfDay().addingTimeInterval(Date.sutki())
+                    if end > now {
+                        newEndDate = Date.distantFuture
+                        newStartDate = now.beginningOfNextHourYesterday()
+                    } else {
+                        newStartDate = dataConfig.endDate.beginningOfDay()
+                        newEndDate = newStartDate.addingTimeInterval(Date.sutki())
+                    }
+
+                default:
+                    fatalError("Impossible date configuration when switching day.")
+                }
+
+                return MealListDataConfig(startDate: newStartDate, endDate: newEndDate)
+            }
+            .bind(to: dataProvider.dataConfig)
             .disposed(by: disposeBag)
     }
 

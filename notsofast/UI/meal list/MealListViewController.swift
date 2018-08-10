@@ -12,9 +12,9 @@ import RxSwift
 /// Display a list of meals in a collection view.
 final class MealListViewController<ConcreteDataSource: ProxyDataSource, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
     /// Scroll the calendar to the past.
-    private let leftButton = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.leftButtonPressed))
+    private let leftButton: UIBarButtonItem = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     /// Scroll the calendar to the future.
-    private let rightButton = UIBarButtonItem(image: R.image.arrow_right(), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MealListViewController.rightButtonPressed))
+    private let rightButton = UIBarButtonItem(image: R.image.arrow_right(), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     /// Hovering plus bottom on the bottom right to add a meal.
     /// TODO: Make it tinted to the app's tint color. So, a custom control.
     private let addButton = UIButton(type: UIButtonType.custom)
@@ -44,8 +44,22 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         titleButton.addTarget(self, action: #selector(MealListViewController.titleButtonPressed), for: UIControlEvents.primaryActionTriggered)
         titleButton.titleLabel?.adjustsFontSizeToFitWidth = true
         titleButton.setTitleColor(UIColor.nsfTintColor, for: UIControlState.normal)
-        // Set a test title for now before date formatters are attached.
-        titleButton.setTitle("Yesterday, 21:00 – Today, 21:00", for: UIControlState.normal)
+        // For some reason, if no title is set initially, the button will come out miniscule.
+        titleButton.setTitle("                                                      ", for: UIControlState.normal)
+
+        leftButton.rx.tap
+            .map { _ -> MealListInput in
+                return .goLeft
+            }
+            .bind(to: viewModel.input)
+            .disposed(by: disposeBag)
+
+        rightButton.rx.tap
+            .map { _ -> MealListInput in
+                return .goRight
+            }
+            .bind(to: viewModel.input)
+            .disposed(by: disposeBag)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -85,14 +99,6 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
     }
 
     // MARK: Button targets
-
-    @objc func leftButtonPressed() {
-        NSFLog("Left pressed")
-    }
-
-    @objc func rightButtonPressed() {
-        NSFLog("Left pressed")
-    }
 
     @objc func addButtonPressed() {
         NSFLog("Add pressed")
