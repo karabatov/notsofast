@@ -30,7 +30,6 @@ struct MealCellModel {
     let nutrients: Nutrients
 }
 
-/// TODO: Make some kind of ViewModel protocol + merge it with ProxyDataSource.
 final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate, ViewModel where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
     typealias CellModel = MealCellModel
     private let dataProvider: ConcreteProvider
