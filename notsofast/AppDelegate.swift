@@ -68,12 +68,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         timerDisposeBag = DisposeBag()
 
-        // Set timer to how many seconds remain until next hour.
+        let nextHour = Date().beginningOfNextHour().timeIntervalSinceNow
+        NSFLog("Going to update dataConfig in \(nextHour) seconds.")
         dp.dataConfig
-            .sample(Observable<Int>.timer(1000.0, period: 5.0, scheduler: MainScheduler.asyncInstance))
+            .sample(Observable<Int>.timer(nextHour, period: 60.0 * 60.0, scheduler: MainScheduler.asyncInstance))
             .debug("DATACONFIG")
             .map { dataConfig -> MealListDataConfig in
-                return dataConfig
+                if dataConfig.endDate == Date.distantFuture {
+                    return MealListDataConfig(startDate: Date().beginningOfNextHourYesterday(), endDate: Date.distantFuture)
+                } else {
+                    return dataConfig
+                }
             }
             .bind(to: dp.dataConfig)
             .disposed(by: timerDisposeBag)
