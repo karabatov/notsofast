@@ -40,16 +40,24 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         self.dataProvider = dataProvider
         self.dataProvider.configure(delegate: self)
 
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .none
+
+        let rdf = DateIntervalFormatter()
+        rdf.dateStyle = .short
+        rdf.timeStyle = .short
+
         dataProvider.dataConfig
             .map { dataConfig -> MealListViewState in
                 if dataConfig.endDate > Date() {
                     return MealListViewState(
-                        title: "FUTURE",
+                        title: rdf.string(from: dataConfig.startDate, to: dataConfig.endDate),
                         enableCalendarRightButton: false
                     )
                 } else {
                     return MealListViewState(
-                        title: "PAST",
+                        title: df.string(from: dataConfig.startDate),
                         enableCalendarRightButton: true
                     )
                 }
