@@ -96,6 +96,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         collectionView.delegate = self
 
         bindViewState()
+        configureCellTouchingAnimation()
     }
 
     // MARK: Button targets
@@ -201,5 +202,69 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         vm.input.onNext(EditMealInput.configure(model: meal, title: title))
         let vc = NewEditMealViewController(viewModel: vm)
         navigationController?.pushViewController(vc, animated: true)
+    }
+
+    private func configureCellTouchingAnimation() {
+        var animatedIndexPath: IndexPath?
+        let pressedTransform = CGAffineTransform.identity.scaledBy(x: 0.97, y: 0.97)
+        collectionView.panGestureRecognizer.rx.event
+            .subscribe(onNext: { [weak self] event in
+                guard let cv = self?.collectionView else { return }
+                let point = event.location(in: cv)
+                let indexPath = cv.indexPathForItem(at: point)
+
+                switch event.state {
+                case .began:
+                    if
+                        let indexPath = indexPath,
+                        let cell = cv.cellForItem(at: indexPath)
+                    {
+                        self?.animate(cell: cell, to: pressedTransform)
+                        animatedIndexPath = indexPath
+                    }
+
+                case .changed:
+                    if
+                        indexPath != animatedIndexPath,
+                        let cip = animatedIndexPath,
+                        let cell = cv.cellForItem(at: cip)
+                    {
+                        if cell.transform != CGAffineTransform.identity {
+                            self?.animate(cell: cell, to: CGAffineTransform.identity)
+                        }
+                    } else if
+                        indexPath == animatedIndexPath,
+                        let cip = indexPath,
+                        let cell = cv.cellForItem(at: cip)
+                    {
+                        if cell.transform != pressedTransform {
+                            self?.animate(cell: cell, to: pressedTransform)
+                        }
+                    }
+
+                default:
+                    if
+                        let cip = animatedIndexPath,
+                        let cell = cv.cellForItem(at: cip)
+                    {
+                        self?.animate(cell: cell, to: CGAffineTransform.identity)
+                        animatedIndexPath = nil
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func animate(cell: UICollectionViewCell, to transform: CGAffineTransform) {
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0,
+            usingSpringWithDamping: 0.4,
+            initialSpringVelocity: 3,
+            options: [.curveEaseInOut],
+            animations: {
+                cell.transform = transform
+            },
+        completion: nil)
     }
 }
