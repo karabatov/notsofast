@@ -68,6 +68,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
         servingLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(servingLabel)
 
+        relativeDateLabel.font = MealCollectionViewCell.fontSet.bodyFont
         relativeDateLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(relativeDateLabel)
 
@@ -141,13 +142,17 @@ final class MealCollectionViewCell: UICollectionViewCell {
         }
 
         let ago = Date().timeIntervalSince(date)
-        let formattedElapsed: String
-        if let formStr = MealCollectionViewCell.agoDateFormatter.string(from: ago) {
-            formattedElapsed = formStr
+        if ago < 60.0 {
+            relativeDateLabel.text = R.string.localizableStrings.meal_relative_now()
         } else {
-            formattedElapsed = ""
+            let formattedElapsed: String
+            if let formStr = MealCollectionViewCell.agoDateFormatter.string(from: ago) {
+                formattedElapsed = formStr
+            } else {
+                formattedElapsed = ""
+            }
+            relativeDateLabel.attributedText = agoStr(from: formattedElapsed)
         }
-        relativeDateLabel.attributedText = agoStr(from: formattedElapsed)
     }
 
     private func setupElapsedTimer() {

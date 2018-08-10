@@ -29,3 +29,4 @@
 "Calendar_today" = "Today";
 "Calendar_title" = "Calendar";
 "Meal_relative_ago" = "%@ ago";
+"Meal_relative_now" = "Now";
