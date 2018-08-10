@@ -10,19 +10,29 @@ import Foundation
 import CoreData
 import RxSwift
 
-struct MealListDataConfig {
+struct MealListDataConfig: Equatable {
     let startDate: Date
     let endDate: Date
 }
 
 @objc final class MealListDataProvider: NSObject, DataProvider, CollectingFetchDelegate {
     private var frc: NSFetchedResultsController<MealEntity>
+    private var disposeBag = DisposeBag()
 
     init(frc: NSFetchedResultsController<MealEntity>, config: MealListDataConfig) {
         self.dataConfig.onNext(config)
         self.frc = frc
         super.init()
         setupForwardDelegate(frc: frc)
+
+        self.dataConfig
+            .distinctUntilChanged()
+            .debug("MLDP")
+            .subscribe(onNext: { dc in
+                frc.fetchRequest.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %@", argumentArray: [config.startDate, config.endDate])
+                try? frc.performFetch()
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: DataProvider

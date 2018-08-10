@@ -68,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         timerDisposeBag = DisposeBag()
 
+        // Set timer to how many seconds remain until next hour.
         dp.dataConfig
             .sample(Observable<Int>.timer(1.0, period: 5.0, scheduler: MainScheduler.asyncInstance))
             .debug("DATACONFIG")
