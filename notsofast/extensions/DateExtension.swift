@@ -10,7 +10,7 @@ import Foundation
 
 extension Date {
     static func sutki() -> TimeInterval {
-        return -24.0 * 60.0 * 60.0
+        return 24.0 * 60.0 * 60.0
     }
 
     /// Returns current day at midnight. Drops hours, minutes and seconds.

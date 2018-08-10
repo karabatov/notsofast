@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let config = MealListDataConfig(startDate: Date.init(timeIntervalSinceNow: -60.0 * 60.0 * 24.0), endDate: Date.distantFuture)
+        let config = MealListDataConfig(startDate: Date().beginningOfNextHourYesterday(), endDate: Date.distantFuture)
         let dp = CoreDataProvider.sharedInstance.dataProviderForMealList(config: config)
         mealDataProvider = dp
         let vm = MealListViewModel(dataProvider: dp)
@@ -70,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set timer to how many seconds remain until next hour.
         dp.dataConfig
-            .sample(Observable<Int>.timer(1.0, period: 5.0, scheduler: MainScheduler.asyncInstance))
+            .sample(Observable<Int>.timer(1000.0, period: 5.0, scheduler: MainScheduler.asyncInstance))
             .debug("DATACONFIG")
             .map { dataConfig -> MealListDataConfig in
                 return dataConfig
