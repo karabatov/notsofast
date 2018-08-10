@@ -45,7 +45,7 @@ final class CoreDataProvider: MealActionController {
             fetchRequest: fr,
             managedObjectContext: container.viewContext,
             sectionNameKeyPath: "sectionName",
-            cacheName: nil
+            cacheName: "MealList"
         )
         try? frc.performFetch()
         return MealListDataProvider(frc: frc, config: config)
