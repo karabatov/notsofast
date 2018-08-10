@@ -132,6 +132,14 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         }
     }
 
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as? MealCollectionViewCell)?.willDisplayCell()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as? MealCollectionViewCell)?.didEndDisplayingCell()
+    }
+
     // MARK: ProxyDataSourceDelegate
 
     func batch(changes: [ProxyDataSourceChange]) {

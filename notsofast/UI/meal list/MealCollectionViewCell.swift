@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 private struct FontSet {
     let title3Font: UIFont
@@ -42,6 +43,8 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private let slowCarbView = UIView(frame: CGRect.zero)
     private let fatView = UIView(frame: CGRect.zero)
     private let nutriContainer = UIStackView(frame: CGRect.zero)
+    private var agoTimer: Observable<Int>?
+    private var timerDisposeBag = DisposeBag()
 
     /// This will come in handy when watching the font size change.
     private var model: MealCellModel?
@@ -57,28 +60,28 @@ final class MealCollectionViewCell: UICollectionViewCell {
     }
 
     private func commonInit() {
-        backgroundColor = UIColor.mealListCellBackground
+        contentView.backgroundColor = UIColor.mealListCellBackground
         layer.masksToBounds = true
         layer.cornerRadius = 10.0
 
         servingLabel.font = MealCollectionViewCell.fontSet.title3Font
         servingLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(servingLabel)
+        contentView.addSubview(servingLabel)
 
         relativeDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(relativeDateLabel)
+        contentView.addSubview(relativeDateLabel)
 
         absoluteDateLabel.font = MealCollectionViewCell.fontSet.subheadItalicFont
         absoluteDateLabel.textColor = UIColor.mealListCellAbsDateText
         absoluteDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(absoluteDateLabel)
+        contentView.addSubview(absoluteDateLabel)
 
         nutriContainer.axis = .horizontal
         nutriContainer.alignment = .fill
         nutriContainer.spacing = 0.0
         nutriContainer.distribution = .fillEqually
         nutriContainer.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(nutriContainer)
+        contentView.addSubview(nutriContainer)
 
         nutriContainer.addArrangedSubview(proteinView)
         nutriContainer.addArrangedSubview(fastCarbView)
@@ -91,11 +94,23 @@ final class MealCollectionViewCell: UICollectionViewCell {
             "absolute": absoluteDateLabel,
             "nutri": nutriContainer
         ]
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        addConstraint(relativeDateLabel.firstBaselineAnchor.constraint(equalTo: servingLabel.firstBaselineAnchor))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraint(relativeDateLabel.firstBaselineAnchor.constraint(equalTo: servingLabel.firstBaselineAnchor))
+    }
+
+    func willDisplayCell() {
+        setupElapsedTimer()
+    }
+
+    func didEndDisplayingCell() {
+        timerDisposeBag = DisposeBag()
+    }
+
+    override func prepareForReuse() {
+        timerDisposeBag = DisposeBag()
     }
 
     func configure(model: MealCellModel) {
@@ -133,6 +148,18 @@ final class MealCollectionViewCell: UICollectionViewCell {
             formattedElapsed = ""
         }
         relativeDateLabel.attributedText = agoStr(from: formattedElapsed)
+    }
+
+    private func setupElapsedTimer() {
+        timerDisposeBag = DisposeBag()
+        agoTimer = Observable<Int>.timer(60.0, period: 60.0, scheduler: MainScheduler.asyncInstance)
+        agoTimer?
+            .subscribe(onNext: { [weak self] _ in
+                if let model = self?.model {
+                    self?.configureRelativeDateLabel(displayElapsed: model.displayElapsedTime, date: model.date)
+                }
+            })
+            .disposed(by: timerDisposeBag)
     }
 
     // MARK: Dynamic fonts
