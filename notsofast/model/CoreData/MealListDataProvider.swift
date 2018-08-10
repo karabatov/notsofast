@@ -28,9 +28,12 @@ struct MealListDataConfig: Equatable {
         self.dataConfig
             .distinctUntilChanged()
             .debug("MLDP")
-            .subscribe(onNext: { dc in
-                frc.fetchRequest.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %@", argumentArray: [config.startDate, config.endDate])
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] dc in
+                NSFetchedResultsController<MealEntity>.deleteCache(withName: frc.cacheName)
+                frc.fetchRequest.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %@", argumentArray: [dc.startDate, dc.endDate])
                 try? frc.performFetch()
+                self?.dataSourceDelegate?.forceReload()
             })
             .disposed(by: disposeBag)
     }
