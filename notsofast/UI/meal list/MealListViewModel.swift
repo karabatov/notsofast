@@ -25,8 +25,8 @@ enum MealListOutput {
 struct MealCellModel {
     let meal: Meal
     let size: String
-    let absoluteDate: String
-    let relativeDate: String
+    let date: Date
+    let displayElapsedTime: Bool
     let nutrients: Nutrients
 }
 
@@ -34,23 +34,6 @@ struct MealCellModel {
 final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate, ViewModel where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
     typealias CellModel = MealCellModel
     private let dataProvider: ConcreteProvider
-    private var agoDateFormatter: DateComponentsFormatter = {
-        let df = DateComponentsFormatter()
-
-        df.maximumUnitCount = 1
-        df.unitsStyle = .abbreviated
-        df.allowedUnits = [.hour, .minute]
-
-        return df
-    }()
-    private var absDateFormatter: DateFormatter = {
-        let df = DateFormatter()
-
-        df.dateStyle = .medium
-        df.timeStyle = .short
-
-        return df
-    }()
     private var disposeBag = DisposeBag()
 
     init(dataProvider: ConcreteProvider) {
@@ -102,20 +85,11 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
             return nil
         }
 
-        let ago = Date().timeIntervalSince(meal.eaten)
-        let agoStr: String
-        // Only display “… ago” if no more than 24 hours have passed.
-        if let formStr = agoDateFormatter.string(from: ago), ago <= 24 * 60 * 60 {
-            agoStr = formStr
-        } else {
-            agoStr = ""
-        }
-
         return MealCellModel(
             meal: meal,
             size: meal.size.forDisplay(),
-            absoluteDate: absDateFormatter.string(from: meal.eaten),
-            relativeDate: agoStr,
+            date: meal.eaten,
+            displayElapsedTime: Date().timeIntervalSince(meal.eaten) <= 24 * 60 * 60,
             nutrients: meal.nutri
         )
     }

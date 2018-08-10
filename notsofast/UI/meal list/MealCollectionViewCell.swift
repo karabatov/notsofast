@@ -17,6 +17,23 @@ private struct FontSet {
 
 final class MealCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "MealCollectionViewCell"
+    private static var agoDateFormatter: DateComponentsFormatter = {
+        let df = DateComponentsFormatter()
+
+        df.maximumUnitCount = 1
+        df.unitsStyle = .abbreviated
+        df.allowedUnits = [.hour, .minute]
+
+        return df
+    }()
+    private static var absDateFormatter: DateFormatter = {
+        let df = DateFormatter()
+
+        df.dateStyle = .medium
+        df.timeStyle = .short
+
+        return df
+    }()
     private let servingLabel = UILabel(frame: CGRect.zero)
     private let absoluteDateLabel = UILabel(frame: CGRect.zero)
     private let relativeDateLabel = UILabel(frame: CGRect.zero)
@@ -85,8 +102,8 @@ final class MealCollectionViewCell: UICollectionViewCell {
         self.model = model
 
         servingLabel.text = model.size
-        absoluteDateLabel.text = model.absoluteDate
-        relativeDateLabel.attributedText = agoStr(from: model.relativeDate)
+        absoluteDateLabel.text = MealCollectionViewCell.absDateFormatter.string(from: model.date)
+        configureRelativeDateLabel(displayElapsed: model.displayElapsedTime, date: model.date)
 
         func colorView(view: UIView, nutri: Nutrients, color: UIColor) {
             if model.nutrients.contains(nutri) {
@@ -100,6 +117,22 @@ final class MealCollectionViewCell: UICollectionViewCell {
         colorView(view: fastCarbView, nutri: Nutrients.fastCarb, color: UIColor.fastCarb)
         colorView(view: slowCarbView, nutri: Nutrients.slowCarb, color: UIColor.slowCarb)
         colorView(view: fatView, nutri: Nutrients.fat, color: UIColor.fat)
+    }
+
+    private func configureRelativeDateLabel(displayElapsed: Bool, date: Date) {
+        guard displayElapsed else {
+            relativeDateLabel.attributedText = nil
+            return
+        }
+
+        let ago = Date().timeIntervalSince(date)
+        let formattedElapsed: String
+        if let formStr = MealCollectionViewCell.agoDateFormatter.string(from: ago) {
+            formattedElapsed = formStr
+        } else {
+            formattedElapsed = ""
+        }
+        relativeDateLabel.attributedText = agoStr(from: formattedElapsed)
     }
 
     // MARK: Dynamic fonts
