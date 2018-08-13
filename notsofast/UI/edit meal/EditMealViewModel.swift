@@ -282,6 +282,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
                     }
 
                 case .doneTapped:
+                    _ = self?.mealStorage.upsert(meal: config.meal)
                     self?.output.onNext(EditMealOutput.dismissController)
                 }
             })
