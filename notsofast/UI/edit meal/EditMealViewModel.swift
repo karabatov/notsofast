@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-struct EditMealSection {
+struct EditMealSection: Equatable {
     let title: String?
     let rows: [EditMealCell]
 }
@@ -64,6 +64,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
     private let dateSection = PublishSubject<[EditMealCell]>()
     private let buttonSection = PublishSubject<[EditMealCell]>()
     private let data = ReplaySubject<[EditMealSection]>.create(bufferSize: 1)
+    private var dsSections: [EditMealSection] = []
 
     private let mealStorage: MealActionController
 
@@ -185,6 +186,50 @@ final class EditMealViewModel: ViewModel, DataProvider {
                     EditMealSection(title: R.string.localizableStrings.edit_meal_date(), rows: dates),
                     EditMealSection(title: nil, rows: buttons),
                 ]
+            }
+            .distinctUntilChanged()
+            .do(onNext: { [weak self] sections in
+                self?.dsSections = sections
+            })
+            .scan([EditMealSection]()) { [weak self] (dataBefore, newData) -> [EditMealSection] in
+                var changes: [ProxyDataSourceChange] = []
+
+                var sectionIndex = 0
+                for (lhs, rhs) in zip(dataBefore, newData) {
+                    var rowIndex = 0
+                    for (lhr, rhr) in zip(lhs.rows, rhs.rows) {
+                        if lhr != rhr {
+                            changes.append(ProxyDataSourceChange.update(IndexPath(row: rowIndex, section: sectionIndex)))
+                        }
+
+                        rowIndex += 1
+                    }
+
+                    if rhs.rows.count > lhs.rows.count {
+                        for i in lhs.rows.count..<rhs.rows.count {
+                            changes.append(ProxyDataSourceChange.insert(IndexPath(row: i, section: sectionIndex)))
+                        }
+                    } else if rhs.rows.count < lhs.rows.count {
+                        for i in rhs.rows.count..<lhs.rows.count {
+                            changes.append(ProxyDataSourceChange.delete(IndexPath(row: i, section: sectionIndex)))
+                        }
+                    }
+
+                    sectionIndex += 1
+                }
+                if newData.count > dataBefore.count {
+                    for i in dataBefore.count..<newData.count {
+                        changes.append(ProxyDataSourceChange.insertSection(i))
+                    }
+                } else if newData.count < dataBefore.count {
+                    for i in newData.count..<dataBefore.count {
+                        changes.append(ProxyDataSourceChange.deleteSection(i))
+                    }
+                }
+
+                self?.dataSourceDelegate?.batch(changes: changes)
+
+                return newData
             }
             .bind(to: data)
             .disposed(by: disposeBag)
