@@ -50,10 +50,13 @@ enum CreateEditMealTitle {
 enum EditMealInput {
     case selectedCellAt(IndexPath)
     case doneTapped
+    case cancelTapped
+    case deleteConfirmed
 }
 
 enum EditMealOutput {
     case dismissController
+    case confirmDeletion
 }
 
 /// View model for the create/edit meal view controller.
@@ -275,15 +278,23 @@ final class EditMealViewModel: ViewModel, DataProvider {
                         self?.update(model: config.meal, withNutri: nutri)
 
                     case .delete:
-                        self?.mealStorage.delete(meal: config.meal)
-                        self?.output.onNext(EditMealOutput.dismissController)
+                        self?.output.onNext(EditMealOutput.confirmDeletion)
 
                     default:
                         break
                     }
 
                 case .doneTapped:
-                    _ = self?.mealStorage.upsert(meal: config.meal)
+                    if let savedMeal = self?.mealStorage.upsert(meal: config.meal) {
+                        self?.dataConfig.onNext(EditMealDataConfig(meal: savedMeal))
+                    }
+                    self?.output.onNext(EditMealOutput.dismissController)
+
+                case .cancelTapped:
+                    self?.output.onNext(EditMealOutput.dismissController)
+
+                case .deleteConfirmed:
+                    self?.mealStorage.delete(meal: config.meal)
                     self?.output.onNext(EditMealOutput.dismissController)
                 }
             })

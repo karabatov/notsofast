@@ -77,6 +77,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                 switch output {
                 case .dismissController:
                     self?.parent?.dismiss(animated: true, completion: nil)
+
+                case .confirmDeletion:
+                    self?.displayDeleteConfirmation()
                 }
             })
             .disposed(by: disposeBag)
@@ -144,6 +147,10 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             cell.detailTextLabel?.text = nil
             cell.accessoryType = .none
         }
+    }
+
+    private func displayDeleteConfirmation() {
+        viewModel.input.onNext(EditMealInput.deleteConfirmed)
     }
 
     // MARK: UITableViewDataSource
