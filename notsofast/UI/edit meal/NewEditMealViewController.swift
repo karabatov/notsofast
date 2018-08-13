@@ -65,6 +65,8 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
 
         tableView.register(DateSelectorTableViewCell.self, forCellReuseIdentifier: DateSelectorTableViewCell.reuseIdentifier)
+        tableView.estimatedRowHeight = 44.0
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.dataSource = self
         dataProvider.configure(delegate: self)
     }
@@ -264,7 +266,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             return cell
 
         case .editDate(_):
-            return UITableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DateSelectorTableViewCell.reuseIdentifier)!
+            configureCell(cell: cell, with: model)
+            return cell
         }
     }
 
@@ -287,7 +291,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                     let model = dataProvider.modelForItem(at: ip),
                     reuseIdentifier(for: model) == cell.reuseIdentifier
                 {
-                    configureCell(cell: cell, with: model)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.configureCell(cell: cell, with: model)
+                    }
                 } else {
                     tableView.reloadRows(at: [ip], with: UITableViewRowAnimation.none)
                 }
