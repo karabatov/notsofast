@@ -34,6 +34,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         bindViewState()
         setupTableReaction()
         setupModelOutput()
+        setupModelInput()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -81,6 +82,15 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                     break
                 }
             })
+            .disposed(by: disposeBag)
+    }
+
+    private func setupModelInput() {
+        doneButton.rx.tap
+            .map { _ -> EditMealInput in
+                return .doneTapped
+            }
+            .bind(to: viewModel.input)
             .disposed(by: disposeBag)
     }
 

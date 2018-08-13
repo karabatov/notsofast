@@ -48,8 +48,8 @@ enum CreateEditMealTitle {
 
 /// Input actions for the view model.
 enum EditMealInput {
-    case configure(model: Meal, title: CreateEditMealTitle)
     case selectedCellAt(IndexPath)
+    case doneTapped
 }
 
 enum EditMealOutput {
@@ -265,15 +265,6 @@ final class EditMealViewModel: ViewModel, DataProvider {
     }
 
     private func configureInput() {
-        input
-            .subscribe(onNext: { [weak self] input in
-                switch input {
-                default:
-                    break
-                }
-            })
-            .disposed(by: disposeBag)
-
         Observable.combineLatest(dataConfig, data, input) { ($0, $1, $2) }
             .sample(input)
             .subscribe(onNext: { [weak self] config, data, input in
@@ -294,8 +285,8 @@ final class EditMealViewModel: ViewModel, DataProvider {
                         break
                     }
 
-                default:
-                    break
+                case .doneTapped:
+                    self?.output.onNext(EditMealOutput.dismissController)
                 }
             })
             .disposed(by: disposeBag)
