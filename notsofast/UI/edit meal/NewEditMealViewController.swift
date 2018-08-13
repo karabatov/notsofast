@@ -77,9 +77,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                 switch output {
                 case .dismissController:
                     self?.parent?.dismiss(animated: true, completion: nil)
-
-                case .reloadSection(_):
-                    break
                 }
             })
             .disposed(by: disposeBag)

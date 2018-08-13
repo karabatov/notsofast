@@ -53,7 +53,6 @@ enum EditMealInput {
 }
 
 enum EditMealOutput {
-    case reloadSection(Int)
     case dismissController
 }
 
