@@ -7,9 +7,16 @@
 //
 
 import UIKit
+import RxSwift
 
 final class NutrientsTableViewCell: UITableViewCell {
     static let reuseIdentifier = "NutrientsTableViewCell"
+    private let flowLayout = NutrientsFlowLayout()
+    private lazy var collectionView = {
+        return UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+    }()
+    var disposeBag = DisposeBag()
+    let selectedNutrients = PublishSubject<Nutrients>()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -17,5 +24,15 @@ final class NutrientsTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) not implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        disposeBag = DisposeBag()
+    }
+
+    func configure(nutri: Nutrients) {
+        
     }
 }
