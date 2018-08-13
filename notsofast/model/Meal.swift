@@ -79,7 +79,7 @@ struct Nutrients: OptionSet {
     }
 }
 
-struct Meal {
+struct Meal: Equatable {
     let id: URL?
     let eaten: Date
     let size: Serving

@@ -25,6 +25,10 @@ struct EditMealViewState: Equatable {
     let title: CreateEditMealTitle
 }
 
+struct EditMealDataConfig: Equatable {
+    let meal: Meal
+}
+
 /// Title of the Create/Edit meal controller (it doesn't care too much).
 enum CreateEditMealTitle {
     case create
@@ -53,7 +57,7 @@ enum EditMealOutput {
 }
 
 /// View model for the create/edit meal view controller.
-final class EditMealViewModel: ViewModel {
+final class EditMealViewModel: ViewModel, DataProvider {
     let data = ReplaySubject<[EditMealSection]>.create(bufferSize: 1)
     private let sizeSection = PublishSubject<[EditMealCell]>()
     private let typeSection = PublishSubject<[EditMealCell]>()
@@ -83,6 +87,39 @@ final class EditMealViewModel: ViewModel {
     let viewState = ReplaySubject<EditMealViewState>.create(bufferSize: 1)
     let input = PublishSubject<EditMealInput>()
     let output = PublishSubject<EditMealOutput>()
+
+    // MARK: DataProvider
+
+    typealias DataConfig = EditMealDataConfig
+    let dataConfig = ReplaySubject<EditMealDataConfig>.create(bufferSize: 1)
+
+    // MARK: ProxyDataSource
+    
+    typealias CellModel = EditMealCell
+    weak var dataSourceDelegate: ProxyDataSourceDelegate?
+
+    func numberOfSections() -> Int {
+        return 3
+    }
+
+    func numberOfItems(in section: Int) -> Int {
+        switch section {
+        default:
+            return 0
+        }
+    }
+
+    func titleForHeader(in section: Int) -> String? {
+        return ""
+    }
+
+    func modelForItem(at indexPath: IndexPath) -> EditMealCell? {
+        return nil
+    }
+
+    func configure(delegate: ProxyDataSourceDelegate?) {
+        dataSourceDelegate = delegate
+    }
 
     // MARK: Helpers
 
