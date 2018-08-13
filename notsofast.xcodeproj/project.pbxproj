@@ -32,6 +32,7 @@
 		D1B95998211A0D990045A9E2 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B95997211A0D990045A9E2 /* DataProvider.swift */; };
 		D1B9599A211A24A80045A9E2 /* MealListDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B95999211A24A80045A9E2 /* MealListDataProvider.swift */; };
 		D1C335A82121F99200C6E351 /* DateSelectorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C335A72121F99200C6E351 /* DateSelectorTableViewCell.swift */; };
+		D1C335AA212205B500C6E351 /* NutrientsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C335A9212205B500C6E351 /* NutrientsTableViewCell.swift */; };
 		D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */; };
 		D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8120E11B8F0058CBFB /* R.generated.swift */; };
 		D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8420E12B830058CBFB /* NSFLog.swift */; };
@@ -89,6 +90,7 @@
 		D1B95997211A0D990045A9E2 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		D1B95999211A24A80045A9E2 /* MealListDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListDataProvider.swift; sourceTree = "<group>"; };
 		D1C335A72121F99200C6E351 /* DateSelectorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectorTableViewCell.swift; sourceTree = "<group>"; };
+		D1C335A9212205B500C6E351 /* NutrientsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientsTableViewCell.swift; sourceTree = "<group>"; };
 		D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = LocalizableStrings.strings; sourceTree = "<group>"; };
 		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D1F4FB8420E12B830058CBFB /* NSFLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFLog.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				D1B9598E2119EEEA0045A9E2 /* NewEditMealViewController.swift */,
 				D1F4FB8B20E2B14B0058CBFB /* EditMealViewModel.swift */,
 				D1C335A72121F99200C6E351 /* DateSelectorTableViewCell.swift */,
+				D1C335A9212205B500C6E351 /* NutrientsTableViewCell.swift */,
 			);
 			path = "edit meal";
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				D14595BE211C817D00966BD9 /* MealListFlowLayout.swift in Sources */,
 				D19B0A8F20ADFCB9003A27B9 /* MealEntityExtension.swift in Sources */,
 				D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */,
+				D1C335AA212205B500C6E351 /* NutrientsTableViewCell.swift in Sources */,
 				D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */,
 				D14595C0211C9D3C00966BD9 /* ViewModel.swift in Sources */,
 				D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */,
