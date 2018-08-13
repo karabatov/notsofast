@@ -16,7 +16,7 @@ struct EditMealSection: Equatable {
 
 enum EditMealCell: Equatable {
     case size(size: Serving, selected: Bool)
-    case ingredients(nutri: Nutrients, selected: Bool)
+    case ingredients(nutri: Nutrients)
     case date(Date)
     case editDate(Date)
     case delete
@@ -168,14 +168,8 @@ final class EditMealViewModel: ViewModel, DataProvider {
         dataConfig
             .map { config -> [EditMealCell] in
                 return [
-                        Nutrients.fastCarb,
-                        Nutrients.protein,
-                        Nutrients.slowCarb,
-                        Nutrients.fat
-                    ]
-                    .map { nutri -> EditMealCell in
-                        return EditMealCell.ingredients(nutri: nutri, selected: config.meal.nutri.contains(nutri))
-                    }
+                    EditMealCell.ingredients(nutri: config.meal.nutri)
+                ]
             }
             .distinctUntilChanged()
             .bind(to: typeSection)
@@ -289,9 +283,6 @@ final class EditMealViewModel: ViewModel, DataProvider {
                     switch cell {
                     case .size(size: let size, selected: _):
                         self?.update(model: config.meal, withSize: size)
-
-                    case .ingredients(nutri: let nutri, selected: _):
-                        self?.update(model: config.meal, withNutri: nutri)
 
                     case .delete:
                         self?.output.onNext(EditMealOutput.confirmDeletion)

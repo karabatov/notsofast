@@ -65,6 +65,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
 
         tableView.register(DateSelectorTableViewCell.self, forCellReuseIdentifier: DateSelectorTableViewCell.reuseIdentifier)
+        tableView.register(NutrientsTableViewCell.self, forCellReuseIdentifier: NutrientsTableViewCell.reuseIdentifier)
         tableView.estimatedRowHeight = 44.0
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.dataSource = self
@@ -139,14 +140,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                 cell.accessoryType = .none
             }
 
-        case .ingredients(nutri: let nutri, selected: let selected):
-            cell.textLabel?.text = nutri.forDisplay()
-            cell.detailTextLabel?.text = nil
-            if selected {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
+        case .ingredients(nutri: let nutri):
+            guard let cell = cell as? NutrientsTableViewCell else { return }
+            cell.configure(nutri: nutri)
 
         case .date(let date):
             cell.textLabel?.text = dateFormatter.string(from: date)
@@ -217,7 +213,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             return DateSelectorTableViewCell.reuseIdentifier
 
         case .ingredients(_):
-            return "Simple"
+            return NutrientsTableViewCell.reuseIdentifier
 
         case .size(_):
             return "Simple"
@@ -250,7 +246,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             return cell
 
         case .ingredients(_):
-            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Simple")
+            let cell = tableView.dequeueReusableCell(withIdentifier: NutrientsTableViewCell.reuseIdentifier)!
             configureCell(cell: cell, with: model)
             return cell
 
