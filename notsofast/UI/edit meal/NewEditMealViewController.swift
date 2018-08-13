@@ -18,13 +18,22 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     private let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: nil)
     private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     private let dateFormatter = DateFormatter()
+    private var agoDateFormatter: DateComponentsFormatter = {
+        let df = DateComponentsFormatter()
+
+        df.maximumUnitCount = 1
+        df.unitsStyle = .abbreviated
+        df.allowedUnits = [.hour, .minute]
+
+        return df
+    }()
 
     required init(viewModel: ConcreteViewModel, dataProvider: ConcreteDataProvider) {
         self.viewModel = viewModel
         self.dataProvider = dataProvider
         super.init(nibName: nil, bundle: nil)
 
-        dateFormatter.dateStyle = .medium
+        dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
 
         navigationItem.hidesBackButton = true
@@ -138,8 +147,17 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         case .date(let date):
             cell.textLabel?.text = dateFormatter.string(from: date)
-            cell.detailTextLabel?.text = dateFormatter.string(from: date)
-            cell.accessoryType = .none
+            let ago = Date().timeIntervalSince(date)
+            if ago < 60.0 {
+                cell.detailTextLabel?.text = R.string.localizableStrings.meal_relative_now()
+            } else {
+                if let relativeDate = agoDateFormatter.string(from: ago) {
+                    cell.detailTextLabel?.text = R.string.localizableStrings.meal_relative_ago(relativeDate)
+                } else {
+                    cell.detailTextLabel?.text = nil
+                }
+            }
+            cell.accessoryType = .disclosureIndicator
 
         case .delete:
             cell.textLabel?.text = R.string.localizableStrings.edit_meal_delete()
