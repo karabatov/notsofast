@@ -138,7 +138,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         case .date(let date):
             cell.textLabel?.text = dateFormatter.string(from: date)
-            cell.detailTextLabel?.text = nil
+            cell.detailTextLabel?.text = dateFormatter.string(from: date)
             cell.accessoryType = .none
 
         case .delete:
@@ -205,7 +205,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             return cell
 
         case .date(_):
-            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Date")
+            let cell = UITableViewCell.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Date")
             configureCell(cell: cell, with: model)
             return cell
 
