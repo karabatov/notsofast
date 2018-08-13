@@ -24,8 +24,8 @@ final class NutrientCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(textLabel)
         contentView.addConstraint(textLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8.0))
         contentView.addConstraint(textLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8.0))
-        contentView.addConstraint(textLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 8.0))
-        contentView.addConstraint(textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 8.0))
+        contentView.addConstraint(textLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8.0))
+        contentView.addConstraint(textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8.0))
 
         selectedBgView.layer.masksToBounds = true
         selectedBgView.layer.cornerRadius = 11.0

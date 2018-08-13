@@ -11,12 +11,13 @@ import UIKit
 final class DashedBorderView: UIView {
     var dashColor: UIColor = UIColor.black {
         didSet {
+            backgroundColor = UIColor.white
             setNeedsDisplay()
         }
     }
 
     override func draw(_ rect: CGRect) {
-        let path = UIBezierPath(roundedRect: rect, cornerRadius: 11.0)
+        let path = UIBezierPath(roundedRect: bounds.insetBy(dx: 1.0, dy: 1.0), cornerRadius: 11.0)
 
         dashColor.setStroke()
         path.lineWidth = 2.0

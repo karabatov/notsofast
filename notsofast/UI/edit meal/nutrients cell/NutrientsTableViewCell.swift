@@ -27,6 +27,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        collectionView.backgroundColor = UIColor.white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(collectionView)
         contentView.addConstraint(collectionView.topAnchor.constraint(equalTo: contentView.topAnchor))
@@ -40,6 +41,8 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         collectionView.register(NutrientCollectionViewCell.self, forCellWithReuseIdentifier: NutrientCollectionViewCell.reuseIdentifier)
         collectionView.dataSource = self
         collectionView.delegate = self
+
+        flowLayout.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize
     }
 
     required init?(coder aDecoder: NSCoder) {
