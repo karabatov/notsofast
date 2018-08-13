@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 /// Create or edit a meal.
-final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteDataProvider: DataProvider>: UIViewController, UITableViewDataSource, ProxyDataSourceDelegate where ConcreteViewModel.InputEnum == EditMealInput, ConcreteViewModel.OutputEnum == EditMealOutput, ConcreteDataProvider.CellModel == EditMealCell, ConcreteDataProvider.DataConfig == EditMealDataConfig {
+final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteDataProvider: DataProvider>: UIViewController, UITableViewDataSource, ProxyDataSourceDelegate where ConcreteViewModel.InputEnum == EditMealInput, ConcreteViewModel.OutputEnum == EditMealOutput, ConcreteViewModel.ViewState == EditMealViewState, ConcreteDataProvider.CellModel == EditMealCell, ConcreteDataProvider.DataConfig == EditMealDataConfig {
     private let viewModel: ConcreteViewModel
     private let dataProvider: ConcreteDataProvider
     private var disposeBag = DisposeBag()
@@ -27,8 +27,11 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
 
-        // setupTitleBind()
-        // setupTableReload()
+        navigationItem.hidesBackButton = true
+        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.leftBarButtonItem = cancelButton
+
+        bindViewState()
         setupTableReaction()
         setupModelOutput()
     }
@@ -78,6 +81,28 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                     break
                 }
             })
+            .disposed(by: disposeBag)
+    }
+
+    private func bindViewState() {
+        viewModel.viewState
+            .map { viewState -> Bool in
+                return viewState.hidesCancelButton
+            }
+            .subscribe(onNext: { [weak self] hidden in
+                if hidden {
+                    self?.navigationItem.leftBarButtonItem = nil
+                } else {
+                    self?.navigationItem.leftBarButtonItem = self?.cancelButton
+                }
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.viewState
+            .map { viewState -> String in
+                return viewState.title
+            }
+            .bind(to: navigationItem.rx.title)
             .disposed(by: disposeBag)
     }
 

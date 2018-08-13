@@ -23,7 +23,7 @@ enum EditMealCell: Equatable {
 
 struct EditMealViewState: Equatable {
     let title: String
-    let displaysCancelButton: Bool
+    let hidesCancelButton: Bool
 }
 
 struct EditMealDataConfig: Equatable {
@@ -73,6 +73,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
     required init(mealStorage: MealActionController) {
         self.mealStorage = mealStorage
 
+        configureViewState()
         configureSizeSection()
         configureTypeSection()
         configureDateSection()
@@ -121,6 +122,25 @@ final class EditMealViewModel: ViewModel, DataProvider {
     }
 
     // MARK: Helpers
+
+    private func configureViewState() {
+        dataConfig
+            .map { config -> EditMealViewState in
+                if config.meal.id == nil {
+                    return EditMealViewState(
+                        title: CreateEditMealTitle.create.forDisplay(),
+                        hidesCancelButton: false
+                    )
+                } else {
+                    return EditMealViewState(
+                        title: CreateEditMealTitle.edit.forDisplay(),
+                        hidesCancelButton: true
+                    )
+                }
+            }
+            .bind(to: viewState)
+            .disposed(by: disposeBag)
+    }
 
     private func configureSizeSection() {
         dataConfig
