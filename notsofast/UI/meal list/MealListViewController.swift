@@ -105,7 +105,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
 
     @objc func addButtonPressed() {
         NSFLog("Add pressed")
-        openEditMeal(with: Meal.createNewMeal(), title: CreateEditMealTitle.create)
+        openEditMeal(with: Meal.createNewMeal())
     }
 
     @objc func titleButtonPressed() {
@@ -201,7 +201,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
             .subscribe(onNext: { [weak self] output in
                 switch output {
                 case .openEditMeal(meal: let meal):
-                    self?.openEditMeal(with: meal, title: CreateEditMealTitle.edit)
+                    self?.openEditMeal(with: meal)
                 }
             })
             .disposed(by: disposeBag)
@@ -209,9 +209,9 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
 
     // MARK: Helpers
 
-    private func openEditMeal(with meal: Meal, title: CreateEditMealTitle) {
+    private func openEditMeal(with meal: Meal) {
         let vm = EditMealViewModel(mealStorage: CoreDataProvider.sharedInstance)
-        vm.input.onNext(EditMealInput.configure(model: meal, title: title))
+        vm.dataConfig.onNext(EditMealDataConfig(meal: meal))
         let vc = NewEditMealViewController(viewModel: vm, dataProvider: vm)
         let nav = UINavigationController(rootViewController: vc)
         present(nav, animated: true, completion: nil)
