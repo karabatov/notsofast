@@ -17,10 +17,11 @@ struct MealListViewState: Equatable {
 enum MealListInput {
     case goLeft
     case goRight
+    case itemSelected(IndexPath)
 }
 
 enum MealListOutput {
-
+    case openEditMeal(meal: Meal)
 }
 
 struct MealCellModel {
@@ -71,6 +72,9 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
                 switch input {
                 case .goLeft, .goRight:
                     return true
+
+                default:
+                    return false
                 }
             }
             .map { dataConfig, input -> MealListDataConfig in
@@ -105,6 +109,18 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
                 return MealListDataConfig(startDate: newStartDate, endDate: newEndDate)
             }
             .bind(to: dataProvider.dataConfig)
+            .disposed(by: disposeBag)
+
+        input
+            .subscribe(onNext: { [weak self] inputItem in
+                switch inputItem {
+                case .itemSelected(let item):
+                    self?.openEditMeal(from: item)
+
+                default:
+                    break
+                }
+            })
             .disposed(by: disposeBag)
     }
 
@@ -156,5 +172,15 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
 
     func forceReload() {
         dataSourceDelegate?.forceReload()
+    }
+
+    // MARK: Helpers
+
+    private func openEditMeal(from item: IndexPath) {
+        guard let meal = dataProvider.modelForItem(at: item) else {
+            return
+        }
+
+        output.onNext(MealListOutput.openEditMeal(meal: meal))
     }
 }

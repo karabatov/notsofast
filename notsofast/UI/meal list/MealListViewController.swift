@@ -97,6 +97,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         collectionView.delegate = self
 
         bindViewState()
+        bindModelOutput()
         configureCellTouchingAnimation()
     }
 
@@ -135,9 +136,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         NSFLog("Selected item at \(indexPath)")
-        if let model = dataSource.modelForItem(at: indexPath) {
-            openEditMeal(with: model.meal, title: CreateEditMealTitle.edit)
-        }
+        viewModel.input.onNext(MealListInput.itemSelected(indexPath))
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -192,6 +191,18 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
             .subscribe(onNext: { [weak self] viewState in
                 self?.titleButton.setTitle(viewState.title, for: UIControlState.normal)
                 self?.rightButton.isEnabled = viewState.enableCalendarRightButton
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func bindModelOutput() {
+        viewModel.output
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] output in
+                switch output {
+                case .openEditMeal(meal: let meal):
+                    self?.openEditMeal(with: meal, title: CreateEditMealTitle.edit)
+                }
             })
             .disposed(by: disposeBag)
     }
