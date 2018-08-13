@@ -29,6 +29,12 @@ struct EditMealViewState: Equatable {
 
 struct EditMealDataConfig: Equatable {
     let meal: Meal
+    let editingDate: Bool
+}
+
+enum EditMealDataConfigIntention {
+    case meal(Meal)
+    case editingDate(Bool)
 }
 
 /// Title of the Create/Edit meal controller (it doesn't care too much).
@@ -53,6 +59,7 @@ enum EditMealInput {
     case doneTapped
     case cancelTapped
     case deleteConfirmed
+    case selectedDate(Date)
 }
 
 enum EditMealOutput {
@@ -83,6 +90,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
         configureButtonsSection()
         configureDataOutput()
         configureInput()
+        configureConfigIntention()
     }
 
     // MARK: ViewModel
@@ -95,6 +103,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
 
     typealias DataConfig = EditMealDataConfig
     let dataConfig = ReplaySubject<EditMealDataConfig>.create(bufferSize: 1)
+    private let dataConfigIntention = PublishSubject<EditMealDataConfigIntention>()
 
     // MARK: ProxyDataSource
 
@@ -176,9 +185,15 @@ final class EditMealViewModel: ViewModel, DataProvider {
     private func configureDateSection() {
         dataConfig
             .map { config -> [EditMealCell] in
-                return [
-                    EditMealCell.date(config.meal.eaten)
-                ]
+                if config.editingDate {
+                    return [
+                        EditMealCell.editDate(config.meal.eaten)
+                    ]
+                } else {
+                    return [
+                        EditMealCell.date(config.meal.eaten)
+                    ]
+                }
             }
             .distinctUntilChanged()
             .bind(to: dateSection)
@@ -281,13 +296,16 @@ final class EditMealViewModel: ViewModel, DataProvider {
                     case .delete:
                         self?.output.onNext(EditMealOutput.confirmDeletion)
 
+                    case .date(_):
+                        self?.dataConfigIntention.onNext(EditMealDataConfigIntention.editingDate(true))
+
                     default:
                         break
                     }
 
                 case .doneTapped:
                     if let savedMeal = self?.mealStorage.upsert(meal: config.meal) {
-                        self?.dataConfig.onNext(EditMealDataConfig(meal: savedMeal))
+                        self?.dataConfigIntention.onNext(EditMealDataConfigIntention.meal(savedMeal))
                     }
                     self?.output.onNext(EditMealOutput.dismissController)
 
@@ -297,14 +315,38 @@ final class EditMealViewModel: ViewModel, DataProvider {
                 case .deleteConfirmed:
                     self?.mealStorage.delete(meal: config.meal)
                     self?.output.onNext(EditMealOutput.dismissController)
+
+                case .selectedDate(let date):
+                    self?.update(model: config.meal, withDate: date)
                 }
             })
             .disposed(by: disposeBag)
     }
 
+    private func configureConfigIntention() {
+        Observable.combineLatest(dataConfig, dataConfigIntention) { ($0, $1) }
+            .sample(dataConfigIntention)
+            .map { (config, intention) -> EditMealDataConfig in
+                switch intention {
+                case .meal(let meal):
+                    return EditMealDataConfig(meal: meal, editingDate: config.editingDate)
+
+                case .editingDate(let editing):
+                    return EditMealDataConfig(meal: config.meal, editingDate: editing)
+                }
+            }
+            .bind(to: dataConfig)
+            .disposed(by: disposeBag)
+    }
+
+    private func update(model: Meal, withDate date: Date) {
+        let newMeal = Meal(id: model.id, eaten: date, size: model.size, nutri: model.nutri, what: model.what)
+        dataConfigIntention.onNext(EditMealDataConfigIntention.meal(newMeal))
+    }
+
     private func update(model: Meal, withSize size: Serving) {
         let newMeal = Meal(id: model.id, eaten: model.eaten, size: size, nutri: model.nutri, what: model.what)
-        dataConfig.onNext(EditMealDataConfig(meal: newMeal))
+        dataConfigIntention.onNext(EditMealDataConfigIntention.meal(newMeal))
     }
 
     private func update(model: Meal, withNutri nutri: Nutrients) {
@@ -315,6 +357,6 @@ final class EditMealViewModel: ViewModel, DataProvider {
             newNutri.insert(nutri)
         }
         let newMeal = Meal(id: model.id, eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
-        dataConfig.onNext(EditMealDataConfig(meal: newMeal))
+        dataConfigIntention.onNext(EditMealDataConfigIntention.meal(newMeal))
     }
 }

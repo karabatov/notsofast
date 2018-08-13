@@ -211,7 +211,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
 
     private func openEditMeal(with meal: Meal) {
         let vm = EditMealViewModel(mealStorage: CoreDataProvider.sharedInstance)
-        vm.dataConfig.onNext(EditMealDataConfig(meal: meal))
+        vm.dataConfig.onNext(EditMealDataConfig(meal: meal, editingDate: false))
         let vc = NewEditMealViewController(viewModel: vm, dataProvider: vm)
         let nav = UINavigationController(rootViewController: vc)
         present(nav, animated: true, completion: nil)

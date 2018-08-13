@@ -64,6 +64,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
 
+        tableView.register(DateSelectorTableViewCell.self, forCellReuseIdentifier: DateSelectorTableViewCell.reuseIdentifier)
         tableView.dataSource = self
         dataProvider.configure(delegate: self)
     }
@@ -160,7 +161,15 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             cell.accessoryType = .disclosureIndicator
 
         case .editDate(let date):
-            break
+            guard let cell = cell as? DateSelectorTableViewCell else { return }
+            cell.configure(date: date)
+            cell.selectedDate
+                .debug("GOT DATE")
+                .map { date -> EditMealInput in
+                    return .selectedDate(date)
+                }
+                .bind(to: viewModel.input)
+                .disposed(by: cell.disposeBag)
 
         case .delete:
             cell.textLabel?.text = R.string.localizableStrings.edit_meal_delete()
@@ -204,7 +213,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             return "Delete"
 
         case .editDate(_):
-            return "EditDate"
+            return DateSelectorTableViewCell.reuseIdentifier
 
         case .ingredients(_):
             return "Simple"
