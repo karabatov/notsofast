@@ -275,7 +275,8 @@ final class EditMealViewModel: ViewModel, DataProvider {
                         self?.update(model: config.meal, withNutri: nutri)
 
                     case .delete:
-                        self?.delete(model: config.meal)
+                        self?.mealStorage.delete(meal: config.meal)
+                        self?.output.onNext(EditMealOutput.dismissController)
 
                     default:
                         break
@@ -303,10 +304,5 @@ final class EditMealViewModel: ViewModel, DataProvider {
         }
         let newMeal = Meal(id: model.id, eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
         dataConfig.onNext(EditMealDataConfig(meal: newMeal))
-    }
-
-    private func delete(model: Meal) {
-        mealStorage.delete(meal: model)
-        output.onNext(EditMealOutput.dismissController)
     }
 }
