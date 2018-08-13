@@ -12,36 +12,28 @@ final class MealListFlowLayout: UICollectionViewFlowLayout {
     override init() {
         super.init()
 
-        self.minimumInteritemSpacing = 10
-        self.minimumLineSpacing = 10
-        self.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize
+        self.minimumInteritemSpacing = 20.0
+        self.minimumLineSpacing = 20.0
+        self.sectionInset = UIEdgeInsets(top: self.minimumInteritemSpacing, left: 0.0, bottom: 0.0, right: 0.0)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        guard let layoutAttributes = super.layoutAttributesForItem(at: indexPath) else { return nil }
-        guard let collectionView = collectionView else { return nil }
+    override func prepare() {
+        super.prepare()
+
+        guard let cv = collectionView else { return }
+        self.estimatedItemSize = CGSize(width: cv.bounds.width - cv.layoutMargins.left - cv.layoutMargins.right, height: 80.0)
         if #available(iOS 11.0, *) {
-            layoutAttributes.bounds.size.width = collectionView.safeAreaLayoutGuide.layoutFrame.width - sectionInset.left - sectionInset.right
-        } else {
-            layoutAttributes.bounds.size.width = collectionView.layoutMarginsGuide.layoutFrame.width - sectionInset.left - sectionInset.right
+            self.sectionInsetReference = .fromSafeArea
         }
-        return layoutAttributes
     }
 
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        guard let superLayoutAttributes = super.layoutAttributesForElements(in: rect) else { return nil }
-        guard scrollDirection == .vertical else { return superLayoutAttributes }
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        guard let cv = collectionView else { return true }
 
-        let computedAttributes = superLayoutAttributes.compactMap { layoutAttribute in
-            return layoutAttribute.representedElementCategory == .cell ? layoutAttributesForItem(at: layoutAttribute.indexPath) : layoutAttribute
-        }
-
-        return computedAttributes
+        return newBounds.width != cv.bounds.width
     }
-
 }

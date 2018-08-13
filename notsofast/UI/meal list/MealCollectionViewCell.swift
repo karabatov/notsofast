@@ -45,6 +45,9 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private let nutriContainer = UIStackView(frame: CGRect.zero)
     private var agoTimer: Observable<Int>?
     private var timerDisposeBag = DisposeBag()
+    private lazy var sizingWidthConstraint: NSLayoutConstraint = {
+        return contentView.widthAnchor.constraint(equalToConstant: bounds.size.width)
+    }()
 
     /// This will come in handy when watching the font size change.
     private var model: MealCellModel?
@@ -112,6 +115,15 @@ final class MealCollectionViewCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         timerDisposeBag = DisposeBag()
+    }
+
+    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+        sizingWidthConstraint.constant = targetSize.width
+        return contentView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: UILayoutPriority.required,
+            verticalFittingPriority: verticalFittingPriority
+        )
     }
 
     func configure(model: MealCellModel) {

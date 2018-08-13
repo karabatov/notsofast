@@ -263,10 +263,10 @@
 		D1B959902119F4920045A9E2 /* meal list */ = {
 			isa = PBXGroup;
 			children = (
+				D14595BD211C817D00966BD9 /* MealListFlowLayout.swift */,
 				D1A9CF8F2118B52400E42167 /* MealListViewController.swift */,
 				D1B959912119F4AE0045A9E2 /* MealListViewModel.swift */,
 				D19E765B211B6E29002B83B1 /* MealCollectionViewCell.swift */,
-				D14595BD211C817D00966BD9 /* MealListFlowLayout.swift */,
 			);
 			path = "meal list";
 			sourceTree = "<group>";
