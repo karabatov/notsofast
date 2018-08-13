@@ -166,7 +166,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             guard let cell = cell as? DateSelectorTableViewCell else { return }
             cell.configure(date: date)
             cell.selectedDate
-                .debug("GOT DATE")
                 .map { date -> EditMealInput in
                     return .selectedDate(date)
                 }

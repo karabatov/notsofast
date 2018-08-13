@@ -44,7 +44,6 @@ class DateSelectorTableViewCell: UITableViewCell {
         dateSelector.date = date
 
         dateSelector.rx.date
-            .debug("DATE")
             .bind(to: selectedDate)
             .disposed(by: disposeBag)
     }
