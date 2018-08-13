@@ -159,6 +159,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             }
             cell.accessoryType = .disclosureIndicator
 
+        case .editDate(let date):
+            break
+
         case .delete:
             cell.textLabel?.text = R.string.localizableStrings.edit_meal_delete()
             cell.textLabel?.textColor = UIColor.red
@@ -190,6 +193,25 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             )
         )
         present(alert, animated: true, completion: nil)
+    }
+
+    private func reuseIdentifier(for model: EditMealCell) -> String {
+        switch model {
+        case .date(_):
+            return "Date"
+
+        case .delete:
+            return "Delete"
+
+        case .editDate(_):
+            return "EditDate"
+
+        case .ingredients(_):
+            return "Simple"
+
+        case .size(_):
+            return "Simple"
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -231,6 +253,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Delete")
             configureCell(cell: cell, with: model)
             return cell
+
+        case .editDate(_):
+            return UITableViewCell()
         }
     }
 
@@ -250,9 +275,12 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             case .update(let ip):
                 if
                     let cell = tableView.cellForRow(at: ip),
-                    let model = dataProvider.modelForItem(at: ip)
+                    let model = dataProvider.modelForItem(at: ip),
+                    reuseIdentifier(for: model) == cell.reuseIdentifier
                 {
                     configureCell(cell: cell, with: model)
+                } else {
+                    tableView.reloadRows(at: [ip], with: UITableViewRowAnimation.none)
                 }
 
             case .insertSection(let sectionIndex):

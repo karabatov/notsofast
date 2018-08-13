@@ -18,6 +18,7 @@ enum EditMealCell: Equatable {
     case size(size: Serving, selected: Bool)
     case ingredients(nutri: Nutrients, selected: Bool)
     case date(Date)
+    case editDate(Date)
     case delete
 }
 
