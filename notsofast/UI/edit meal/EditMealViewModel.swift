@@ -167,10 +167,14 @@ final class EditMealViewModel: ViewModel, DataProvider {
 
     private func configureButtonsSection() {
         dataConfig
-            .map { _ -> [EditMealCell] in
-                return [
-                    EditMealCell.delete
-                ]
+            .map { config -> [EditMealCell] in
+                if config.meal.id != nil {
+                    return [
+                        EditMealCell.delete
+                    ]
+                } else {
+                    return []
+                }
             }
             .distinctUntilChanged()
             .bind(to: buttonSection)
@@ -180,12 +184,17 @@ final class EditMealViewModel: ViewModel, DataProvider {
     private func configureDataOutput() {
         Observable.combineLatest(sizeSection, typeSection, dateSection, buttonSection) { ($0, $1, $2, $3) }
             .map { (sizes, types, dates, buttons) -> [EditMealSection] in
-                return [
+                var sections = [
                     EditMealSection(title: R.string.localizableStrings.serving(), rows: sizes),
                     EditMealSection(title: R.string.localizableStrings.nutrients(), rows: types),
                     EditMealSection(title: R.string.localizableStrings.edit_meal_date(), rows: dates),
-                    EditMealSection(title: nil, rows: buttons),
                 ]
+
+                if buttons.count > 0 {
+                    sections.append(EditMealSection(title: nil, rows: buttons))
+                }
+
+                return sections
             }
             .distinctUntilChanged()
             .do(onNext: { [weak self] sections in
