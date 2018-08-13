@@ -22,7 +22,8 @@ enum EditMealCell: Equatable {
 }
 
 struct EditMealViewState: Equatable {
-    let title: CreateEditMealTitle
+    let title: String
+    let displaysCancelButton: Bool
 }
 
 struct EditMealDataConfig: Equatable {
@@ -72,6 +73,8 @@ final class EditMealViewModel: ViewModel, DataProvider {
 
     required init(mealStorage: MealActionController) {
         self.mealStorage = mealStorage
+
+        /*
         configureSizeSection()
         configureTypeSection()
         configureDateSection()
@@ -80,6 +83,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
         configureInput()
         configureModelSaving()
         // scheduleSectionUpdates()
+        */
     }
 
     // MARK: ViewModel
@@ -94,7 +98,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
     let dataConfig = ReplaySubject<EditMealDataConfig>.create(bufferSize: 1)
 
     // MARK: ProxyDataSource
-    
+
     typealias CellModel = EditMealCell
     weak var dataSourceDelegate: ProxyDataSourceDelegate?
 
