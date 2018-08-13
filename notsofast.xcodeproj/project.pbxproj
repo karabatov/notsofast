@@ -35,6 +35,7 @@
 		D1C335AA212205B500C6E351 /* NutrientsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C335A9212205B500C6E351 /* NutrientsTableViewCell.swift */; };
 		D1C335AC212209DB00C6E351 /* NutrientsFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C335AB212209DB00C6E351 /* NutrientsFlowLayout.swift */; };
 		D1C335AE2122127F00C6E351 /* NutrientCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C335AD2122127F00C6E351 /* NutrientCollectionViewCell.swift */; };
+		D1C335B1212217DF00C6E351 /* DashedBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C335B0212217DF00C6E351 /* DashedBorderView.swift */; };
 		D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */; };
 		D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8120E11B8F0058CBFB /* R.generated.swift */; };
 		D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4FB8420E12B830058CBFB /* NSFLog.swift */; };
@@ -95,6 +96,7 @@
 		D1C335A9212205B500C6E351 /* NutrientsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientsTableViewCell.swift; sourceTree = "<group>"; };
 		D1C335AB212209DB00C6E351 /* NutrientsFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientsFlowLayout.swift; sourceTree = "<group>"; };
 		D1C335AD2122127F00C6E351 /* NutrientCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientCollectionViewCell.swift; sourceTree = "<group>"; };
+		D1C335B0212217DF00C6E351 /* DashedBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashedBorderView.swift; sourceTree = "<group>"; };
 		D1F4FB7E20E119BE0058CBFB /* LocalizableStrings.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = LocalizableStrings.strings; sourceTree = "<group>"; };
 		D1F4FB8120E11B8F0058CBFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D1F4FB8420E12B830058CBFB /* NSFLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFLog.swift; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 				D1C335A9212205B500C6E351 /* NutrientsTableViewCell.swift */,
 				D1C335AB212209DB00C6E351 /* NutrientsFlowLayout.swift */,
 				D1C335AD2122127F00C6E351 /* NutrientCollectionViewCell.swift */,
+				D1C335B0212217DF00C6E351 /* DashedBorderView.swift */,
 			);
 			path = "nutrients cell";
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 				D1F4FB8520E12B830058CBFB /* NSFLog.swift in Sources */,
 				D1C335AA212205B500C6E351 /* NutrientsTableViewCell.swift in Sources */,
 				D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */,
+				D1C335B1212217DF00C6E351 /* DashedBorderView.swift in Sources */,
 				D14595C0211C9D3C00966BD9 /* ViewModel.swift in Sources */,
 				D1F4FB8220E11B8F0058CBFB /* R.generated.swift in Sources */,
 				D1B959922119F4AE0045A9E2 /* MealListViewModel.swift in Sources */,
