@@ -59,8 +59,8 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             .do(onNext: { [weak self] path in
                 self?.tableView.deselectRow(at: path, animated: true)
             })
-            .map { [unowned self] path -> EditMealInput in
-                return EditMealInput.selectedCell(self.data[path.section].rows[path.row])
+            .map { path -> EditMealInput in
+                return EditMealInput.selectedCellAt(path)
             }
             .bind(to: viewModel.input)
             .disposed(by: disposeBag)
