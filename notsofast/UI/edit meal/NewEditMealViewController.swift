@@ -150,7 +150,28 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     }
 
     private func displayDeleteConfirmation() {
-        viewModel.input.onNext(EditMealInput.deleteConfirmed)
+        let alert = UIAlertController(
+            title: R.string.localizableStrings.edit_meal_alert_title(),
+            message: R.string.localizableStrings.edit_meal_alert_text(),
+            preferredStyle: UIAlertControllerStyle.actionSheet
+        )
+        alert.addAction(
+            UIAlertAction.init(
+                title: R.string.localizableStrings.edit_meal_alert_delete(),
+                style: UIAlertActionStyle.destructive,
+                handler: { [weak self] _ in
+                    self?.viewModel.input.onNext(EditMealInput.deleteConfirmed)
+                }
+            )
+        )
+        alert.addAction(
+            UIAlertAction.init(
+                title: R.string.localizableStrings.cancel(),
+                style: UIAlertActionStyle.cancel,
+                handler: nil
+            )
+        )
+        present(alert, animated: true, completion: nil)
     }
 
     // MARK: UITableViewDataSource

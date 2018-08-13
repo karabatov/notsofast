@@ -30,3 +30,7 @@
 "Calendar_title" = "Calendar";
 "Meal_relative_ago" = "%@ ago";
 "Meal_relative_now" = "Now";
+"Edit_meal_alert_title" = "Delete meal";
+"Edit_meal_alert_text" = "Do you really want to delete this meal?";
+"Edit_meal_alert_delete" = "Delete";
+"Cancel" = "Cancel";
