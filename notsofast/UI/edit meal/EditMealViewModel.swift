@@ -98,22 +98,19 @@ final class EditMealViewModel: ViewModel, DataProvider {
     weak var dataSourceDelegate: ProxyDataSourceDelegate?
 
     func numberOfSections() -> Int {
-        return 3
+        return dsSections.count
     }
 
     func numberOfItems(in section: Int) -> Int {
-        switch section {
-        default:
-            return 0
-        }
+        return dsSections[section].rows.count
     }
 
     func titleForHeader(in section: Int) -> String? {
-        return ""
+        return dsSections[section].title
     }
 
     func modelForItem(at indexPath: IndexPath) -> EditMealCell? {
-        return nil
+        return dsSections[indexPath.section].rows[indexPath.row]
     }
 
     func configure(delegate: ProxyDataSourceDelegate?) {
