@@ -59,13 +59,11 @@ enum EditMealOutput {
 
 /// View model for the create/edit meal view controller.
 final class EditMealViewModel: ViewModel, DataProvider {
-    let data = ReplaySubject<[EditMealSection]>.create(bufferSize: 1)
     private let sizeSection = PublishSubject<[EditMealCell]>()
     private let typeSection = PublishSubject<[EditMealCell]>()
     private let dateSection = PublishSubject<[EditMealCell]>()
     private let buttonSection = PublishSubject<[EditMealCell]>()
-
-    private let model = PublishSubject<Meal>()
+    private let data = ReplaySubject<[EditMealSection]>.create(bufferSize: 1)
 
     private let mealStorage: MealActionController
 
@@ -74,16 +72,12 @@ final class EditMealViewModel: ViewModel, DataProvider {
     required init(mealStorage: MealActionController) {
         self.mealStorage = mealStorage
 
-        /*
         configureSizeSection()
         configureTypeSection()
         configureDateSection()
         configureButtonsSection()
         configureDataOutput()
         configureInput()
-        configureModelSaving()
-        // scheduleSectionUpdates()
-        */
     }
 
     // MARK: ViewModel
@@ -128,11 +122,11 @@ final class EditMealViewModel: ViewModel, DataProvider {
     // MARK: Helpers
 
     private func configureSizeSection() {
-        model
-            .map { model -> [EditMealCell] in
+        dataConfig
+            .map { config -> [EditMealCell] in
                 return [Serving.bite, Serving.handful, Serving.plate, Serving.bucket]
                     .map { size -> EditMealCell in
-                        return EditMealCell.size(size: size, selected: size == model.size)
+                        return EditMealCell.size(size: size, selected: size == config.meal.size)
                     }
             }
             .distinctUntilChanged()
@@ -141,8 +135,8 @@ final class EditMealViewModel: ViewModel, DataProvider {
     }
 
     private func configureTypeSection() {
-        model
-            .map { model -> [EditMealCell] in
+        dataConfig
+            .map { config -> [EditMealCell] in
                 return [
                         Nutrients.fastCarb,
                         Nutrients.protein,
@@ -150,7 +144,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
                         Nutrients.fat
                     ]
                     .map { nutri -> EditMealCell in
-                        return EditMealCell.ingredients(nutri: nutri, selected: model.nutri.contains(nutri))
+                        return EditMealCell.ingredients(nutri: nutri, selected: config.meal.nutri.contains(nutri))
                     }
             }
             .distinctUntilChanged()
@@ -159,10 +153,10 @@ final class EditMealViewModel: ViewModel, DataProvider {
     }
 
     private func configureDateSection() {
-        model
-            .map { model -> [EditMealCell] in
+        dataConfig
+            .map { config -> [EditMealCell] in
                 return [
-                    EditMealCell.date(model.eaten)
+                    EditMealCell.date(config.meal.eaten)
                 ]
             }
             .distinctUntilChanged()
@@ -171,7 +165,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
     }
 
     private func configureButtonsSection() {
-        model
+        dataConfig
             .map { _ -> [EditMealCell] in
                 return [
                     EditMealCell.delete
@@ -179,27 +173,6 @@ final class EditMealViewModel: ViewModel, DataProvider {
             }
             .distinctUntilChanged()
             .bind(to: buttonSection)
-            .disposed(by: disposeBag)
-    }
-
-    private func scheduleSectionUpdates() {
-        let sec0Bump = sizeSection
-            .map { _ -> EditMealOutput in
-                return EditMealOutput.reloadSection(0)
-            }
-
-        let sec1Bump = typeSection
-            .map { _ -> EditMealOutput in
-                return EditMealOutput.reloadSection(1)
-            }
-
-        let sec2Bump = dateSection
-            .map { _ -> EditMealOutput in
-                return EditMealOutput.reloadSection(2)
-            }
-
-        Observable.merge(sec0Bump, sec1Bump, sec2Bump)
-            .bind(to: output)
             .disposed(by: disposeBag)
     }
 
@@ -221,30 +194,26 @@ final class EditMealViewModel: ViewModel, DataProvider {
         input
             .subscribe(onNext: { [weak self] input in
                 switch input {
-                case .configure(model: let newMeal, title: let newTitle):
-                    self?.upsertModelIfNeeded(meal: newMeal)
-                    // self?.title.onNext(newTitle.forDisplay())
-
                 default:
                     break
                 }
             })
             .disposed(by: disposeBag)
 
-        Observable.combineLatest(model, input) { ($0, $1) }
+        Observable.combineLatest(dataConfig, input) { ($0, $1) }
             .sample(input)
-            .subscribe(onNext: { [weak self] model, input in
+            .subscribe(onNext: { [weak self] config, input in
                 switch input {
                 case .selectedCell(let cell):
                     switch cell {
                     case .size(size: let size, selected: _):
-                        self?.update(model: model, withSize: size)
+                        self?.update(model: config.meal, withSize: size)
 
                     case .ingredients(nutri: let nutri, selected: _):
-                        self?.update(model: model, withNutri: nutri)
+                        self?.update(model: config.meal, withNutri: nutri)
 
                     case .delete:
-                        self?.delete(model: model)
+                        self?.delete(model: config.meal)
 
                     default:
                         break
@@ -257,17 +226,9 @@ final class EditMealViewModel: ViewModel, DataProvider {
             .disposed(by: disposeBag)
     }
 
-    private func configureModelSaving() {
-        model
-            .subscribe(onNext: { [weak self] mdl in
-                _ = self?.mealStorage.upsert(meal: mdl)
-            })
-            .disposed(by: disposeBag)
-    }
-
     private func update(model: Meal, withSize size: Serving) {
         let newMeal = Meal(id: model.id, eaten: model.eaten, size: size, nutri: model.nutri, what: model.what)
-        self.model.onNext(newMeal)
+        dataConfig.onNext(EditMealDataConfig(meal: newMeal))
     }
 
     private func update(model: Meal, withNutri nutri: Nutrients) {
@@ -278,16 +239,11 @@ final class EditMealViewModel: ViewModel, DataProvider {
             newNutri.insert(nutri)
         }
         let newMeal = Meal(id: model.id, eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
-        self.model.onNext(newMeal)
+        dataConfig.onNext(EditMealDataConfig(meal: newMeal))
     }
 
     private func delete(model: Meal) {
         mealStorage.delete(meal: model)
         output.onNext(EditMealOutput.dismissController)
-    }
-
-    private func upsertModelIfNeeded(meal: Meal) {
-        let savedMeal = mealStorage.upsert(meal: meal)
-        model.onNext(savedMeal)
     }
 }
