@@ -21,6 +21,10 @@ enum EditMealCell: Equatable {
     case delete
 }
 
+struct EditMealViewState: Equatable {
+    let title: CreateEditMealTitle
+}
+
 /// Title of the Create/Edit meal controller (it doesn't care too much).
 enum CreateEditMealTitle {
     case create
@@ -49,12 +53,7 @@ enum EditMealOutput {
 }
 
 /// View model for the create/edit meal view controller.
-final class EditMealViewModel {
-    let title = ReplaySubject<String>.create(bufferSize: 1)
-
-    let input = PublishSubject<EditMealInput>()
-    let output = PublishSubject<EditMealOutput>()
-
+final class EditMealViewModel: ViewModel {
     let data = ReplaySubject<[EditMealSection]>.create(bufferSize: 1)
     private let sizeSection = PublishSubject<[EditMealCell]>()
     private let typeSection = PublishSubject<[EditMealCell]>()
@@ -78,6 +77,14 @@ final class EditMealViewModel {
         configureModelSaving()
         // scheduleSectionUpdates()
     }
+
+    // MARK: ViewModel
+
+    let viewState = ReplaySubject<EditMealViewState>.create(bufferSize: 1)
+    let input = PublishSubject<EditMealInput>()
+    let output = PublishSubject<EditMealOutput>()
+
+    // MARK: Helpers
 
     private func configureSizeSection() {
         model
@@ -175,7 +182,7 @@ final class EditMealViewModel {
                 switch input {
                 case .configure(model: let newMeal, title: let newTitle):
                     self?.upsertModelIfNeeded(meal: newMeal)
-                    self?.title.onNext(newTitle.forDisplay())
+                    // self?.title.onNext(newTitle.forDisplay())
 
                 default:
                     break

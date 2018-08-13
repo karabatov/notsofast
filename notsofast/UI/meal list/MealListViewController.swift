@@ -213,7 +213,8 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         let vm = EditMealViewModel(mealStorage: CoreDataProvider.sharedInstance)
         vm.input.onNext(EditMealInput.configure(model: meal, title: title))
         let vc = NewEditMealViewController(viewModel: vm)
-        navigationController?.pushViewController(vc, animated: true)
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true, completion: nil)
     }
 
     private func configureCellTouchingAnimation() {

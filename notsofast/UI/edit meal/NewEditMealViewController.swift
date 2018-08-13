@@ -10,22 +10,24 @@ import UIKit
 import RxSwift
 
 /// Create or edit a meal.
-final class NewEditMealViewController: UIViewController, UITableViewDataSource {
-    private let viewModel: EditMealViewModel
+final class NewEditMealViewController<ConcreteViewModel: ViewModel>: UIViewController, UITableViewDataSource where ConcreteViewModel.InputEnum == EditMealInput, ConcreteViewModel.OutputEnum == EditMealOutput {
+    private let viewModel: ConcreteViewModel
     private var disposeBag = DisposeBag()
+    private let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: nil, action: nil)
+    private let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: nil)
     private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     private var data: [EditMealSection] = []
     private let dateFormatter = DateFormatter()
 
-    required init(viewModel: EditMealViewModel) {
+    required init(viewModel: ConcreteViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
 
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
 
-        setupTitleBind()
-        setupTableReload()
+        // setupTitleBind()
+        // setupTableReload()
         setupTableReaction()
         setupModelOutput()
     }
@@ -51,6 +53,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
         tableView.dataSource = self
     }
 
+    /*
     private func setupTitleBind() {
         viewModel.title
             .asDriver(onErrorJustReturn: "")
@@ -59,7 +62,9 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
             })
             .disposed(by: disposeBag)
     }
+    */
 
+    /*
     private func setupTableReload() {
         viewModel.data
             .asDriver(onErrorJustReturn: [])
@@ -71,6 +76,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
             })
             .disposed(by: disposeBag)
     }
+    */
 
     private func setupTableReaction() {
         tableView.rx.itemSelected
@@ -89,7 +95,7 @@ final class NewEditMealViewController: UIViewController, UITableViewDataSource {
             .subscribe(onNext: { [weak self] output in
                 switch output {
                 case .dismissController:
-                    self?.navigationController?.popViewController(animated: true)
+                    self?.parent?.dismiss(animated: true, completion: nil)
 
                 case .reloadSection(_):
                     break
