@@ -52,6 +52,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
 
         tableView.dataSource = self
+        dataProvider.configure(delegate: self)
     }
 
     private func setupTableReaction() {
@@ -158,6 +159,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     // MARK: ProxyDataSourceDelegate
 
     func batch(changes: [ProxyDataSourceChange]) {
+        print(changes)
         tableView.beginUpdates()
         for change in changes {
             switch change {
