@@ -33,6 +33,16 @@ enum Serving: Int {
             return R.string.localizableStrings.serving_bucket()
         }
     }
+
+    func imageName() -> String {
+        switch self {
+        case .bite:
+            return R.image.size_bite.name
+
+        default:
+            return ""
+        }
+    }
 }
 
 struct Nutrients: OptionSet {

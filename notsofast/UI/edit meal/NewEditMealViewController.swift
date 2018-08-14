@@ -134,6 +134,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         case .size(size: let size, selected: let selected):
             cell.textLabel?.text = size.forDisplay()
             cell.detailTextLabel?.text = nil
+            cell.imageView?.image = UIImage(named: size.imageName())
             if selected {
                 cell.accessoryType = .checkmark
             } else {
@@ -145,6 +146,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             cell.configure(nutri: nutri)
 
         case .date(let date):
+            cell.imageView?.image = nil
             cell.textLabel?.text = dateFormatter.string(from: date)
             let ago = Date().timeIntervalSince(date)
             if ago < 60.0 {
@@ -169,6 +171,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                 .disposed(by: cell.disposeBag)
 
         case .delete:
+            cell.imageView?.image = nil
             cell.textLabel?.text = R.string.localizableStrings.edit_meal_delete()
             cell.textLabel?.textColor = UIColor.red
             cell.detailTextLabel?.text = nil
