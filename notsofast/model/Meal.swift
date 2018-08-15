@@ -39,6 +39,9 @@ enum Serving: Int {
         case .bite:
             return R.image.size_bite_32.name
 
+        case .handful:
+            return R.image.size_handful_32.name
+
         default:
             return ""
         }
