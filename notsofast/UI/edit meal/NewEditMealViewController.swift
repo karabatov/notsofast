@@ -66,6 +66,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         tableView.register(DateSelectorTableViewCell.self, forCellReuseIdentifier: DateSelectorTableViewCell.reuseIdentifier)
         tableView.register(NutrientsTableViewCell.self, forCellReuseIdentifier: NutrientsTableViewCell.reuseIdentifier)
+        tableView.estimatedRowHeight = 44.0
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.dataSource = self
         dataProvider.configure(delegate: self)
