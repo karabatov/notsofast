@@ -110,7 +110,9 @@ final class NutrientsFlowLayout: UICollectionViewFlowLayout {
             }
 
             // Add inter-line spacing on top if we're not on the first row.
-            height += minimumLineSpacing
+            if idx > 0 {
+                height += minimumLineSpacing
+            }
 
             let la1 = UICollectionViewLayoutAttributes(forCellWith: ip1)
             var la2: UICollectionViewLayoutAttributes?

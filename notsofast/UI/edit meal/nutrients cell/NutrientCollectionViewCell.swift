@@ -18,6 +18,7 @@ final class NutrientCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        textLabel.textAlignment = .center
         textLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
         textLabel.lineBreakMode = .byTruncatingTail
         textLabel.translatesAutoresizingMaskIntoConstraints = false

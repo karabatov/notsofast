@@ -17,7 +17,6 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         return UICollectionView(frame: NutrientsTableViewCell.defaultRect, collectionViewLayout: flowLayout)
     }()
     var disposeBag = DisposeBag()
-    private var internalDisposeBag = DisposeBag()
     let selectedNutrients = PublishSubject<Nutrients>()
     /// IndexPath.item to Selected.
     private var selectDict = [Int: Bool]()
