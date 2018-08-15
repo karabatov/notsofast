@@ -17,11 +17,11 @@ extension UIColor {
     static let mealListCellAbsDateText = UIColor.darkGray
 
     /// Protein color.
-    static let protein = UIColor(red: 148.0/255.0, green: 226.0/255.0, blue: 250.0/255.0, alpha: 1.0)
+    static let protein = UIColor(red: 44.0/255.0, green: 213.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     /// Fast carb color.
-    static let fastCarb = UIColor(red: 248.0/255.0, green: 148.0/255.0, blue: 250.0/255.0, alpha: 1.0)
+    static let fastCarb = UIColor(red: 255.0/255.0, green: 158.0/255.0, blue: 61.0/255.0, alpha: 1.0)
     /// Slow carb color.
-    static let slowCarb = UIColor(red: 181.0/255.0, green: 245.0/255.0, blue: 195.0/255.0, alpha: 1.0)
+    static let slowCarb = UIColor(red: 79.0/255.0, green: 235.0/255.0, blue: 52.0/255.0, alpha: 1.0)
     /// Fat color.
-    static let fat = UIColor(red: 230.0/255.0, green: 237.0/255.0, blue: 148.0/255.0, alpha: 1.0)
+    static let fat = UIColor(red: 242.0/255.0, green: 239.0/255.0, blue: 51.0/255.0, alpha: 1.0)
 }
