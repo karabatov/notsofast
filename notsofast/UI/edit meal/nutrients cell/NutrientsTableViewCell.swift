@@ -64,6 +64,29 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         }
     }
 
+    private func animateTap(on cell: UICollectionViewCell) {
+        UIView.animate(
+            withDuration: 0.1,
+            delay: 0.0,
+            options: [.curveEaseOut],
+            animations: {
+                cell.transform = CGAffineTransform.identity.scaledBy(x: 0.97, y: 0.97)
+            },
+            completion: nil
+        )
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0.1,
+            usingSpringWithDamping: 0.4,
+            initialSpringVelocity: 3,
+            options: [.curveEaseInOut],
+            animations: {
+                cell.transform = CGAffineTransform.identity
+            },
+            completion: nil
+        )
+    }
+
     // MARK: UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -80,5 +103,15 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectDict[indexPath.item] = true
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            animateTap(on: cell)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        selectDict[indexPath.item] = true
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            animateTap(on: cell)
+        }
     }
 }
