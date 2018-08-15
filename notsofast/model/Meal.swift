@@ -37,7 +37,7 @@ enum Serving: Int {
     func imageName() -> String {
         switch self {
         case .bite:
-            return R.image.size_bite.name
+            return R.image.size_bite_32.name
 
         default:
             return ""
