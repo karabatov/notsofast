@@ -11,17 +11,19 @@ import RxSwift
 
 final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, NutrientsFlowLayoutDelegate {
     static let reuseIdentifier = "NutrientsTableViewCell"
+    private static let defaultRect = CGRect(origin: CGPoint.zero, size: CGSize(width: 200.0, height: 150.0))
     private let flowLayout = NutrientsFlowLayout()
     private lazy var collectionView = {
-        return UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+        return UICollectionView(frame: NutrientsTableViewCell.defaultRect, collectionViewLayout: flowLayout)
     }()
     var disposeBag = DisposeBag()
+    private var internalDisposeBag = DisposeBag()
     let selectedNutrients = PublishSubject<Nutrients>()
     /// IndexPath.item to Selected.
     private var selectDict = [Int: Bool]()
     private let prefNutri = [Nutrients.protein, Nutrients.fastCarb, Nutrients.slowCarb, Nutrients.fat]
     private lazy var collHeight: NSLayoutConstraint = {
-        return collectionView.heightAnchor.constraint(equalToConstant: 100.0)
+        return collectionView.heightAnchor.constraint(equalToConstant: 150.0)
     }()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -43,6 +45,10 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         collectionView.delegate = self
 
         flowLayout.delegate = self
+
+        flowLayout.prepare()
+        collHeight.constant = flowLayout.collectionViewContentSize.height
+        NSFLog("CV height: \(collHeight.constant)")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -136,7 +142,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     // MARK: NutrientsFlowLayoutDelegate
 
     private static var cellHeight: CGFloat = 0.0
-    private static let sizingCell = NutrientCollectionViewCell(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 200.0, height: 200.0)))
+    private static let sizingCell = NutrientCollectionViewCell(frame: NutrientsTableViewCell.defaultRect)
 
     func textLengthForItem(at indexPath: IndexPath) -> Int? {
         guard indexPath.item < prefNutri.count else {
@@ -152,7 +158,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         }
 
         NutrientsTableViewCell.sizingCell.configure(nutrient: Nutrients.protein)
-        let size = NutrientsTableViewCell.sizingCell.systemLayoutSizeFitting(CGSize(width: 200.0, height: 200.0), withHorizontalFittingPriority: UILayoutPriority.required, verticalFittingPriority: UILayoutPriority.fittingSizeLevel)
+        let size = NutrientsTableViewCell.sizingCell.systemLayoutSizeFitting(NutrientsTableViewCell.defaultRect.size, withHorizontalFittingPriority: UILayoutPriority.required, verticalFittingPriority: UILayoutPriority.fittingSizeLevel)
         NSFLog("Cell size: \(size)")
 
         NutrientsTableViewCell.cellHeight = size.height
