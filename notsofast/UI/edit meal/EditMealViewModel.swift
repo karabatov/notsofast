@@ -60,6 +60,7 @@ enum EditMealInput {
     case cancelTapped
     case deleteConfirmed
     case selectedDate(Date)
+    case selectedNutrients(Nutrients)
 }
 
 enum EditMealOutput {
@@ -309,6 +310,9 @@ final class EditMealViewModel: ViewModel, DataProvider {
 
                 case .selectedDate(let date):
                     self?.update(model: config.meal, withDate: date)
+
+                case .selectedNutrients(let nutri):
+                    self?.update(model: config.meal, withNutrients: nutri)
                 }
             })
             .disposed(by: disposeBag)
@@ -335,19 +339,13 @@ final class EditMealViewModel: ViewModel, DataProvider {
         dataConfigIntention.onNext(EditMealDataConfigIntention.meal(newMeal))
     }
 
-    private func update(model: Meal, withSize size: Serving) {
-        let newMeal = Meal(id: model.id, eaten: model.eaten, size: size, nutri: model.nutri, what: model.what)
+    private func update(model: Meal, withNutrients nutrients: Nutrients) {
+        let newMeal = Meal(id: model.id, eaten: model.eaten, size: model.size, nutri: nutrients, what: model.what)
         dataConfigIntention.onNext(EditMealDataConfigIntention.meal(newMeal))
     }
 
-    private func update(model: Meal, withNutri nutri: Nutrients) {
-        var newNutri = model.nutri
-        if newNutri.contains(nutri) {
-            newNutri.subtract(nutri)
-        } else {
-            newNutri.insert(nutri)
-        }
-        let newMeal = Meal(id: model.id, eaten: model.eaten, size: model.size, nutri: newNutri, what: model.what)
+    private func update(model: Meal, withSize size: Serving) {
+        let newMeal = Meal(id: model.id, eaten: model.eaten, size: size, nutri: model.nutri, what: model.what)
         dataConfigIntention.onNext(EditMealDataConfigIntention.meal(newMeal))
     }
 }

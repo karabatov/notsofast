@@ -151,6 +151,13 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         case .ingredients(nutri: let nutri):
             guard let cell = cell as? NutrientsTableViewCell else { return }
             cell.configure(nutri: nutri)
+            cell.selectedNutrients
+                .debug("NUTRI")
+                .map { nutri -> EditMealInput in
+                    return .selectedNutrients(nutri)
+                }
+                .bind(to: viewModel.input)
+                .disposed(by: cell.disposeBag)
 
         case .date(let date):
             cell.imageView?.image = nil

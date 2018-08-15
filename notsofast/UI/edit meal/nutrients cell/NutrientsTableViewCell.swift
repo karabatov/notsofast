@@ -57,9 +57,12 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     }
 
     func configure(nutri: Nutrients) {
+        disposeBag = DisposeBag()
         for (idx, item) in prefNutri.enumerated() {
             if nutri.contains(item) {
                 selectDict[idx] = true
+            } else {
+                selectDict[idx] = false
             }
         }
     }
