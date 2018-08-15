@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     /// Global app tint color.
-    static let nsfTintColor = UIColor.red
+    static let nsfTintColor = UIColor(red: 0.0/255.0, green: 102.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     /// Solid background for rounded cells in the meal list collection view.
     static let mealListCellBackground = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
     /// A bit lighter text for meal cell absolute date.

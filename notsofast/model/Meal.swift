@@ -36,14 +36,20 @@ enum Serving: Int {
 
     func imageName() -> String {
         switch self {
+        case .nothing:
+            return ""
+
         case .bite:
             return R.image.size_bite_32.name
 
         case .handful:
             return R.image.size_handful_32.name
 
-        default:
-            return ""
+        case .plate:
+            return R.image.size_plate_32.name
+
+        case .bucket:
+            return R.image.size_bucket_32.name
         }
     }
 }
