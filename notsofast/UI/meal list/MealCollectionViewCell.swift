@@ -35,6 +35,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
 
         return df
     }()
+    private let servingImageView = UIImageView(frame: CGRect.zero)
     private let servingLabel = UILabel(frame: CGRect.zero)
     private let absoluteDateLabel = UILabel(frame: CGRect.zero)
     private let relativeDateLabel = UILabel(frame: CGRect.zero)
@@ -67,6 +68,9 @@ final class MealCollectionViewCell: UICollectionViewCell {
         layer.masksToBounds = true
         layer.cornerRadius = 10.0
 
+        servingImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(servingImageView)
+
         servingLabel.font = MealCollectionViewCell.fontSet.title3Font
         servingLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(servingLabel)
@@ -93,15 +97,18 @@ final class MealCollectionViewCell: UICollectionViewCell {
         nutriContainer.addArrangedSubview(fatView)
 
         let views = [
+            "image": servingImageView,
             "serving": servingLabel,
             "relative": relativeDateLabel,
             "absolute": absoluteDateLabel,
             "nutri": nutriContainer
         ]
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[image(32)]-[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=0)-[image(32)]", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraint(servingImageView.centerYAnchor.constraint(equalTo: servingLabel.centerYAnchor))
         contentView.addConstraint(relativeDateLabel.firstBaselineAnchor.constraint(equalTo: servingLabel.firstBaselineAnchor))
     }
 
@@ -129,6 +136,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
     func configure(model: MealCellModel) {
         self.model = model
 
+        servingImageView.image = model.meal.size.image()
         servingLabel.text = model.size
         absoluteDateLabel.text = MealCollectionViewCell.absDateFormatter.string(from: model.date)
         configureRelativeDateLabel(displayElapsed: model.displayElapsedTime, date: model.date)
