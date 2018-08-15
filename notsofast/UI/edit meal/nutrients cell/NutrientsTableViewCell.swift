@@ -61,8 +61,10 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         for (idx, item) in prefNutri.enumerated() {
             if nutri.contains(item) {
                 selectDict[idx] = true
+                collectionView.selectItem(at: IndexPath(item: idx, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition.init(rawValue: 0))
             } else {
                 selectDict[idx] = false
+                collectionView.deselectItem(at: IndexPath(item: idx, section: 0), animated: false)
             }
         }
     }
@@ -91,7 +93,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     }
 
     private func outputSelectedNutri() {
-        var set = Nutrients()
+        var set: Nutrients = []
         for (idx, nutri) in prefNutri.enumerated() {
             if selectDict[idx] ?? false {
                 set.insert(nutri)
@@ -124,7 +126,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        selectDict[indexPath.item] = true
+        selectDict[indexPath.item] = false
         if let cell = collectionView.cellForItem(at: indexPath) {
             animateTap(on: cell)
         }
