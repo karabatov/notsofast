@@ -66,7 +66,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         tableView.register(DateSelectorTableViewCell.self, forCellReuseIdentifier: DateSelectorTableViewCell.reuseIdentifier)
         tableView.register(NutrientsTableViewCell.self, forCellReuseIdentifier: NutrientsTableViewCell.reuseIdentifier)
-        tableView.estimatedRowHeight = 44.0
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.dataSource = self
         dataProvider.configure(delegate: self)
@@ -286,8 +285,13 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
     // MARK: ProxyDataSourceDelegate
 
+    private func applySingleChange(change: ProxyDataSourceChange) {
+
+    }
+
     func batch(changes: [ProxyDataSourceChange]) {
         print(changes)
+        UIView.setAnimationsEnabled(false)
         tableView.beginUpdates()
         for change in changes {
             switch change {
@@ -318,6 +322,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             }
         }
         tableView.endUpdates()
+        UIView.setAnimationsEnabled(true)
     }
 
     func forceReload() {

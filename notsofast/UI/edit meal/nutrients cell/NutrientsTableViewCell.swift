@@ -47,7 +47,6 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
 
         flowLayout.prepare()
         collHeight.constant = flowLayout.collectionViewContentSize.height
-        NSFLog("CV height: \(collHeight.constant)")
     }
 
     required init?(coder aDecoder: NSCoder) {
