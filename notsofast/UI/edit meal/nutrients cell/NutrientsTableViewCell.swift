@@ -87,6 +87,17 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         )
     }
 
+    private func outputSelectedNutri() {
+        var set = Nutrients()
+        for (idx, nutri) in prefNutri.enumerated() {
+            if selectDict[idx] ?? false {
+                set.insert(nutri)
+            }
+        }
+
+        selectedNutrients.onNext(set)
+    }
+
     // MARK: UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -106,6 +117,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         if let cell = collectionView.cellForItem(at: indexPath) {
             animateTap(on: cell)
         }
+        outputSelectedNutri()
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -113,5 +125,6 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         if let cell = collectionView.cellForItem(at: indexPath) {
             animateTap(on: cell)
         }
+        outputSelectedNutri()
     }
 }
