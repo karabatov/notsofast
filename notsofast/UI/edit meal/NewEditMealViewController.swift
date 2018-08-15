@@ -105,6 +105,13 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             }
             .bind(to: viewModel.input)
             .disposed(by: disposeBag)
+
+        cancelButton.rx.tap
+            .map { _ -> EditMealInput in
+                return .cancelTapped
+            }
+            .bind(to: viewModel.input)
+            .disposed(by: disposeBag)
     }
 
     private func bindViewState() {
