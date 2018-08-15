@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate {
+final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, NutrientsFlowLayoutDelegate {
     static let reuseIdentifier = "NutrientsTableViewCell"
     private let flowLayout = NutrientsFlowLayout()
     private lazy var collectionView = {
@@ -42,7 +42,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        flowLayout.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize
+        flowLayout.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -131,5 +131,31 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
             animateTap(on: cell)
         }
         outputSelectedNutri()
+    }
+
+    // MARK: NutrientsFlowLayoutDelegate
+
+    private static var cellHeight: CGFloat = 0.0
+    private static let sizingCell = NutrientCollectionViewCell(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 200.0, height: 200.0)))
+
+    func textLengthForItem(at indexPath: IndexPath) -> Int? {
+        guard indexPath.item < prefNutri.count else {
+            return nil
+        }
+
+        return prefNutri[indexPath.item].forDisplay().count
+    }
+
+    func preferredCellHeight() -> CGFloat {
+        if NutrientsTableViewCell.cellHeight > 0.0 {
+            return NutrientsTableViewCell.cellHeight
+        }
+
+        NutrientsTableViewCell.sizingCell.configure(nutrient: Nutrients.protein)
+        let size = NutrientsTableViewCell.sizingCell.systemLayoutSizeFitting(CGSize(width: 200.0, height: 200.0), withHorizontalFittingPriority: UILayoutPriority.required, verticalFittingPriority: UILayoutPriority.fittingSizeLevel)
+        NSFLog("Cell size: \(size)")
+
+        NutrientsTableViewCell.cellHeight = size.height
+        return size.height
     }
 }
