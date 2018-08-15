@@ -66,7 +66,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         for (idx, item) in prefNutri.enumerated() {
             if nutri.contains(item) {
                 selectDict[idx] = true
-                collectionView.selectItem(at: IndexPath(item: idx, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition.init(rawValue: 0))
+                collectionView.selectItem(at: IndexPath(item: idx, section: 0), animated: false, scrollPosition: [])
             } else {
                 selectDict[idx] = false
                 collectionView.deselectItem(at: IndexPath(item: idx, section: 0), animated: false)
