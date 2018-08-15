@@ -307,7 +307,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                         self?.configureCell(cell: cell, with: model)
                     }
                 } else {
-                    tableView.reloadRows(at: [ip], with: UITableViewRowAnimation.automatic)
+                    tableView.reloadRows(at: [ip], with: UITableViewRowAnimation.none)
                 }
 
             case .insertSection(let sectionIndex):
