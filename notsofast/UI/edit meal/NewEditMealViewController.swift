@@ -27,7 +27,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     private var agoDateFormatter: DateComponentsFormatter = {
         let df = DateComponentsFormatter()
 
-        df.maximumUnitCount = 1
         df.unitsStyle = .abbreviated
         df.allowedUnits = [.hour, .minute]
 
