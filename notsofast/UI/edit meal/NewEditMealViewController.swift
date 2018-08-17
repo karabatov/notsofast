@@ -17,7 +17,13 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     private let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: nil, action: nil)
     private let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: nil)
     private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-    private let dateFormatter = DateFormatter()
+    private var dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+
+        df.setLocalizedDateFormatFromTemplate(Constants.preferredDateTimeFormat)
+
+        return df
+    }()
     private var agoDateFormatter: DateComponentsFormatter = {
         let df = DateComponentsFormatter()
 
@@ -34,9 +40,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         self.viewModel = viewModel
         self.dataProvider = dataProvider
         super.init(nibName: nil, bundle: nil)
-
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
 
         navigationItem.hidesBackButton = true
         navigationItem.rightBarButtonItem = doneButton

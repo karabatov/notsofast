@@ -46,8 +46,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         df.timeStyle = .none
 
         let rdf = DateIntervalFormatter()
-        rdf.dateStyle = .short
-        rdf.timeStyle = .short
+        rdf.dateTemplate = DateFormatter.dateFormat(fromTemplate: Constants.preferredDateTimeFormat, options: 0, locale: Locale.current)
 
         dataProvider.dataConfig
             .map { dataConfig -> MealListViewState in

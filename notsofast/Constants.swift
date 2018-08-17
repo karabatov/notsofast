@@ -14,4 +14,7 @@ final class Constants {
 
     /// Name for the Core Data model of the app.
     static let coreDataModelName = "MealsModel"
+
+    /// Skeleton format string for compact display of time and date.
+    static let preferredDateTimeFormat = "MMMd, h:mm"
 }

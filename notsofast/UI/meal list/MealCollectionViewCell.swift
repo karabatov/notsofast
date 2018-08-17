@@ -30,8 +30,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private static var absDateFormatter: DateFormatter = {
         let df = DateFormatter()
 
-        df.dateStyle = .medium
-        df.timeStyle = .short
+        df.setLocalizedDateFormatFromTemplate(Constants.preferredDateTimeFormat)
 
         return df
     }()
