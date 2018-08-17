@@ -48,6 +48,12 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private lazy var sizingWidthConstraint: NSLayoutConstraint = {
         return contentView.widthAnchor.constraint(equalToConstant: bounds.size.width)
     }()
+    /// When there is no serving, display the serving size text flush to the left.
+    private var servingLeftConstraint: NSLayoutConstraint?
+    /// When there is no serving image, display the label flush to the left.
+    private let servingLeftNoImageOffset: CGFloat = 16.0
+    /// When there is a serving image, display the image view and give it space.
+    private let servingLeftWithImageOffset: CGFloat = 56.0
 
     /// This will come in handy when watching the font size change.
     private var model: MealCellModel?
@@ -102,13 +108,17 @@ final class MealCollectionViewCell: UICollectionViewCell {
             "absolute": absoluteDateLabel,
             "nutri": nutriContainer
         ]
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[image(32)]-[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[image(32)]", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=0)-[image(32)]", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraint(servingImageView.centerYAnchor.constraint(equalTo: servingLabel.centerYAnchor))
         contentView.addConstraint(relativeDateLabel.firstBaselineAnchor.constraint(equalTo: servingLabel.firstBaselineAnchor))
+        let servingLeft = servingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 56.0)
+        servingLeftConstraint = servingLeft
+        contentView.addConstraint(servingLeft)
     }
 
     func willDisplayCell() {
@@ -139,6 +149,14 @@ final class MealCollectionViewCell: UICollectionViewCell {
         servingLabel.text = model.size
         absoluteDateLabel.text = MealCollectionViewCell.absDateFormatter.string(from: model.date)
         configureRelativeDateLabel(displayElapsed: model.displayElapsedTime, date: model.date)
+
+        if model.meal.size == .nothing {
+            servingImageView.isHidden = true
+            servingLeftConstraint?.constant = servingLeftNoImageOffset
+        } else {
+            servingImageView.isHidden = false
+            servingLeftConstraint?.constant = servingLeftWithImageOffset
+        }
 
         func colorView(view: UIView, nutri: Nutrients, color: UIColor) {
             if model.nutrients.contains(nutri) {
