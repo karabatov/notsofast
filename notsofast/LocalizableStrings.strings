@@ -26,3 +26,5 @@
 "Edit_meal_alert_text" = "Do you really want to delete this meal?";
 "Edit_meal_alert_delete" = "Delete";
 "Cancel" = "Cancel";
+"Empty_state_present" = "Eat something!";
+"Empty_state_past" = "Empty stomach";
