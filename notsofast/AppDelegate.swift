@@ -51,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        moveDataConfigForwardIfNeeded()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -64,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: Helpers
 
+    /// Move data config displayed date an hour forward every hour.
     private func setupDataSourceTimer() {
         guard let dp = mealDataProvider else { return }
 
@@ -73,7 +75,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSFLog("Going to update dataConfig in \(nextHour) seconds.")
         dp.dataConfig
             .sample(Observable<Int>.timer(nextHour, period: 60.0 * 60.0, scheduler: MainScheduler.asyncInstance))
-            .debug("DATACONFIG")
             .map { dataConfig -> MealListDataConfig in
                 if dataConfig.endDate == Date.distantFuture {
                     return MealListDataConfig(startDate: Date().beginningOfNextHourYesterday(), endDate: Date.distantFuture)
@@ -83,6 +84,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             .bind(to: dp.dataConfig)
             .disposed(by: timerDisposeBag)
+    }
+
+    /// Update the start date to be not older than 24 hours immediately rather than at the next hour.
+    private func moveDataConfigForwardIfNeeded() {
+        guard let dp = mealDataProvider else { return }
+
+        dp.dataConfig
+            .take(1)
+            .map { dataConfig -> MealListDataConfig in
+                guard dataConfig.endDate == Date.distantFuture else {
+                    return dataConfig
+                }
+
+                return MealListDataConfig(startDate: Date().beginningOfNextHourYesterday(), endDate: Date.distantFuture)
+            }
+            // Avoid binding otherwise it sends “isCompleted” down the line.
+            .subscribe(onNext: { dataConfig in
+                dp.dataConfig.onNext(dataConfig)
+            })
+            .dispose()
     }
 }
 
