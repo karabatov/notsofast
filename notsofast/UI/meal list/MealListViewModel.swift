@@ -37,11 +37,14 @@ struct MealCellModel {
 final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate, ViewModel where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
     typealias CellModel = MealCellModel
     private let dataProvider: ConcreteProvider
+    private let needToRefreshViewState = ReplaySubject<Void>.create(bufferSize: 1)
     private var disposeBag = DisposeBag()
 
     init(dataProvider: ConcreteProvider) {
         self.dataProvider = dataProvider
         self.dataProvider.configure(delegate: self)
+
+        needToRefreshViewState.onNext(())
 
         let df = DateFormatter()
         df.dateStyle = .medium
@@ -50,8 +53,8 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         let rdf = DateIntervalFormatter()
         rdf.dateTemplate = DateFormatter.dateFormat(fromTemplate: Constants.preferredDateTimeFormat, options: 0, locale: Locale.current)
 
-        dataProvider.dataConfig
-            .map { dataConfig -> MealListViewState in
+        Observable.combineLatest(dataProvider.dataConfig, needToRefreshViewState) { ($0, $1) }
+            .map { dataConfig, _ -> MealListViewState in
                 let emptyString: String
                 if dataConfig.endDate == Date.distantFuture {
                     emptyString = R.string.localizableStrings.empty_state_present()
@@ -75,6 +78,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
                     )
                 }
             }
+            .distinctUntilChanged()
             .bind(to: viewState)
             .disposed(by: disposeBag)
 
@@ -184,10 +188,12 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
 
     func batch(changes: [ProxyDataSourceChange]) {
         dataSourceDelegate?.batch(changes: changes)
+        needToRefreshViewState.onNext(())
     }
 
     func forceReload() {
         dataSourceDelegate?.forceReload()
+        needToRefreshViewState.onNext(())
     }
 
     // MARK: Helpers
