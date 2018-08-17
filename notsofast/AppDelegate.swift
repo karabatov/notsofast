@@ -73,8 +73,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let nextHour = Date().beginningOfNextHour().timeIntervalSinceNow
         NSFLog("Going to update dataConfig in \(nextHour) seconds.")
-        dp.dataConfig
-            .sample(Observable<Int>.timer(nextHour, period: 60.0 * 60.0, scheduler: MainScheduler.asyncInstance))
+        Observable<Int>.timer(nextHour, period: 60.0 * 60.0, scheduler: MainScheduler.asyncInstance)
+            .withLatestFrom(dp.dataConfig)
             .map { dataConfig -> MealListDataConfig in
                 if dataConfig.endDate == Date.distantFuture {
                     return MealListDataConfig(startDate: Date().beginningOfNextHourYesterday(), endDate: Date.distantFuture)
