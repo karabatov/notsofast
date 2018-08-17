@@ -79,21 +79,7 @@ struct Nutrients: OptionSet {
             return R.string.localizableStrings.nutrients_fat_full()
 
         default:
-            var units: [String] = []
-            if self.contains(Nutrients.fastCarb) {
-                units.append(R.string.localizableStrings.nutrients_fast_carb_short())
-            }
-            if self.contains(Nutrients.protein) {
-                units.append(R.string.localizableStrings.nutrients_protein_short())
-            }
-            if self.contains(Nutrients.slowCarb) {
-                units.append(R.string.localizableStrings.nutrients_slow_carb_short())
-            }
-            if self.contains(Nutrients.fat) {
-                units.append(R.string.localizableStrings.nutrients_fat_short())
-            }
-
-            return "[\(units.joined(separator: ", "))]"
+            return ""
         }
     }
 }

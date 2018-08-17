@@ -5,7 +5,6 @@
   Created by Yuri Karabatov on 25/06/2018.
   Copyright © 2018 Yuri Karabatov. All rights reserved.
 */
-"Last_24_hours" = "Last 24 hours";
 "Create_meal" = "I just ate!";
 "Edit_meal" = "Did I really?…";
 "Serving" = "Size";
@@ -19,15 +18,8 @@
 "Nutrients_fast_carb_full" = "Fast carb";
 "Nutrients_fat_full" = "Fat";
 "Nutrients_slow_carb_full" = "Slow carb";
-"Nutrients_protein_short" = "P";
-"Nutrients_fast_carb_short" = "FC";
-"Nutrients_fat_short" = "F";
-"Nutrients_slow_carb_short" = "SC";
 "Edit_meal_date" = "When";
 "Edit_meal_delete" = "Delete meal";
-"Since_last_meal" = "%@ since last meal";
-"Calendar_today" = "Today";
-"Calendar_title" = "Calendar";
 "Meal_relative_ago" = "%@ ago";
 "Meal_relative_now" = "Now";
 "Edit_meal_alert_title" = "Delete meal";
