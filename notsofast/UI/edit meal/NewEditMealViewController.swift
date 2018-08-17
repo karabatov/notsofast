@@ -286,10 +286,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
     // MARK: ProxyDataSourceDelegate
 
-    private func applySingleChange(change: ProxyDataSourceChange) {
-
-    }
-
     func batch(changes: [ProxyDataSourceChange]) {
         print(changes)
         UIView.setAnimationsEnabled(false)
