@@ -12,6 +12,8 @@ import RxSwift
 struct MealListViewState: Equatable {
     let title: String
     let enableCalendarRightButton: Bool
+    let listOfMealsHidden: Bool
+    let emptyStateText: String
 }
 
 enum MealListInput {
@@ -50,15 +52,26 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
 
         dataProvider.dataConfig
             .map { dataConfig -> MealListViewState in
+                let emptyString: String
+                if dataConfig.endDate == Date.distantFuture {
+                    emptyString = R.string.localizableStrings.empty_state_present()
+                } else {
+                    emptyString = R.string.localizableStrings.empty_state_past()
+                }
+
                 if dataConfig.endDate > Date() {
                     return MealListViewState(
                         title: rdf.string(from: dataConfig.startDate, to: dataConfig.startDate + 24 * 60 * 60),
-                        enableCalendarRightButton: false
+                        enableCalendarRightButton: false,
+                        listOfMealsHidden: dataProvider.isEmpty(),
+                        emptyStateText: emptyString
                     )
                 } else {
                     return MealListViewState(
                         title: df.string(from: dataConfig.startDate),
-                        enableCalendarRightButton: true
+                        enableCalendarRightButton: true,
+                        listOfMealsHidden: dataProvider.isEmpty(),
+                        emptyStateText: emptyString
                     )
                 }
             }
@@ -135,6 +148,10 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
 
     func configure(delegate: ProxyDataSourceDelegate?) {
         dataSourceDelegate = delegate
+    }
+
+    func isEmpty() -> Bool {
+        return dataProvider.isEmpty()
     }
 
     func numberOfSections() -> Int {

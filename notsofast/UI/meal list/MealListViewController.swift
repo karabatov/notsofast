@@ -201,6 +201,8 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
             .subscribe(onNext: { [weak self] viewState in
                 self?.titleButton.setTitle(viewState.title, for: UIControlState.normal)
                 self?.rightButton.isEnabled = viewState.enableCalendarRightButton
+                self?.collectionView.isHidden = viewState.listOfMealsHidden
+                self?.emptyStateLabel.text = viewState.emptyStateText
             })
             .disposed(by: disposeBag)
     }

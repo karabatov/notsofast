@@ -53,6 +53,10 @@ struct MealListDataConfig: Equatable {
         dataSourceDelegate = delegate
     }
 
+    func isEmpty() -> Bool {
+        return frc.fetchedObjects?.isEmpty ?? true
+    }
+
     func numberOfSections() -> Int {
         return frc.sections?.count ?? 0
     }

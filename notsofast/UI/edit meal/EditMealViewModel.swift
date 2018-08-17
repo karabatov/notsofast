@@ -112,6 +112,10 @@ final class EditMealViewModel: ViewModel, DataProvider {
     typealias CellModel = EditMealCell
     weak var dataSourceDelegate: ProxyDataSourceDelegate?
 
+    func isEmpty() -> Bool {
+        return false
+    }
+
     func numberOfSections() -> Int {
         return dsSections.count
     }

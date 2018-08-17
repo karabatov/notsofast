@@ -11,6 +11,7 @@ import Foundation
 protocol ProxyDataSource {
     associatedtype CellModel
 
+    func isEmpty() -> Bool
     func numberOfSections() -> Int
     func numberOfItems(in section: Int) -> Int
     func titleForHeader(in section: Int) -> String?
