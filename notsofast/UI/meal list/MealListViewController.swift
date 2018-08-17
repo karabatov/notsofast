@@ -20,6 +20,8 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
     private let addButton = UIButton(type: UIButtonType.custom)
     /// Custom button in the title of the navbar.
     private let titleButton = UIButton(type: UIButtonType.custom)
+    /// Empty state label behind the collection view.
+    private let emptyStateLabel = UILabel()
     /// Collection view for displaying the list of meals.
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: MealListFlowLayout())
     private let dataSource: ConcreteDataSource
@@ -70,6 +72,14 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         super.viewDidLoad()
 
         view.backgroundColor = UIColor.white
+
+        emptyStateLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)
+        emptyStateLabel.textColor = UIColor.darkGray
+        emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(emptyStateLabel)
+        view.addConstraint(emptyStateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 32.0))
+        view.addConstraint(emptyStateLabel.leftAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0))
+        view.addConstraint(emptyStateLabel.leftAnchor.constraint(equalTo: view.trailingAnchor, constant: 16.0))
 
         // Keeping the collection view opaque allows showing an “empty” state on the main view background and helps performance.
         collectionView.backgroundColor = UIColor.white
