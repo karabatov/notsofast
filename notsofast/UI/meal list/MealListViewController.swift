@@ -83,7 +83,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         view.addSubview(emptyStateLabel)
         view.addConstraint(emptyStateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 32.0))
         view.addConstraint(emptyStateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0))
-        view.addConstraint(emptyStateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16.0))
+        view.addConstraint(emptyStateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0))
 
         // Keeping the collection view opaque allows showing an “empty” state on the main view background and helps performance.
         collectionView.backgroundColor = UIColor.white
