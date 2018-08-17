@@ -66,6 +66,7 @@ enum EditMealInput {
 enum EditMealOutput {
     case dismissController
     case confirmDeletion
+    case scrollToRowAfterUpdates(IndexPath)
 }
 
 /// View model for the create/edit meal view controller.
@@ -289,6 +290,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
                         self?.output.onNext(EditMealOutput.confirmDeletion)
 
                     case .date(_):
+                        self?.output.onNext(EditMealOutput.scrollToRowAfterUpdates(indexPath))
                         self?.dataConfigIntention.onNext(EditMealDataConfigIntention.editingDate(true))
 
                     default:

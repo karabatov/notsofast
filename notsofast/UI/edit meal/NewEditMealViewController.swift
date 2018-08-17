@@ -27,6 +27,8 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         return df
     }()
+    /// Index path to scroll to after updates.
+    private var scrollToIndexPath: IndexPath?
 
     required init(viewModel: ConcreteViewModel, dataProvider: ConcreteDataProvider) {
         self.viewModel = viewModel
@@ -93,6 +95,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
                 case .confirmDeletion:
                     self?.displayDeleteConfirmation()
+
+                case .scrollToRowAfterUpdates(let indexPath):
+                    self?.scrollToIndexPath = indexPath
                 }
             })
             .disposed(by: disposeBag)
@@ -320,6 +325,11 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         }
         tableView.endUpdates()
         UIView.setAnimationsEnabled(true)
+
+        if let targetIP = scrollToIndexPath {
+            tableView.scrollToRow(at: targetIP, at: UITableViewScrollPosition.middle, animated: true)
+            scrollToIndexPath = nil
+        }
     }
 
     func forceReload() {
