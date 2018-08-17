@@ -34,6 +34,8 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     }()
     /// Index path to scroll to after updates.
     private var scrollToIndexPath: IndexPath?
+    /// We want to update the date text in the cell automatically.
+    private let autoupdatingDateCellIndexPath = ReplaySubject<IndexPath?>.create(bufferSize: 1)
 
     required init(viewModel: ConcreteViewModel, dataProvider: ConcreteDataProvider) {
         self.viewModel = viewModel
@@ -46,6 +48,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         bindViewState()
         setupTableReaction()
+        setupAutoUpdateDateCell()
         setupModelOutput()
         setupModelInput()
     }
@@ -85,6 +88,24 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                 return EditMealInput.selectedCellAt(path)
             }
             .bind(to: viewModel.input)
+            .disposed(by: disposeBag)
+    }
+
+    private func setupAutoUpdateDateCell() {
+        Observable<Int>.timer(60.0, period: 60.0, scheduler: MainScheduler.asyncInstance)
+            .withLatestFrom(autoupdatingDateCellIndexPath)
+            .subscribe(onNext: { [weak self] maybeIP in
+                guard
+                    let ip = maybeIP,
+                    let cell = self?.tableView.cellForRow(at: ip),
+                    let model = self?.dataProvider.modelForItem(at: ip),
+                    cell.reuseIdentifier == self?.reuseIdentifier(for: model)
+                else {
+                    return
+                }
+
+                self?.configureCell(cell: cell, with: model)
+            })
             .disposed(by: disposeBag)
     }
 
@@ -277,6 +298,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         case .date(_):
             let cell = UITableViewCell.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Date")
             configureCell(cell: cell, with: model)
+            autoupdatingDateCellIndexPath.onNext(indexPath)
             return cell
 
         case .delete:
@@ -287,6 +309,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         case .editDate(_):
             let cell = tableView.dequeueReusableCell(withIdentifier: DateSelectorTableViewCell.reuseIdentifier)!
             configureCell(cell: cell, with: model)
+            autoupdatingDateCellIndexPath.onNext(nil)
             return cell
         }
     }
@@ -294,7 +317,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     // MARK: ProxyDataSourceDelegate
 
     func batch(changes: [ProxyDataSourceChange]) {
-        print(changes)
         UIView.setAnimationsEnabled(false)
         tableView.beginUpdates()
         for change in changes {
