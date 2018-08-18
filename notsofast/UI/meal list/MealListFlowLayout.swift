@@ -24,16 +24,36 @@ final class MealListFlowLayout: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
 
-        guard let cv = collectionView else { return }
-        self.estimatedItemSize = CGSize(width: cv.bounds.width - cv.layoutMargins.left - cv.layoutMargins.right, height: 80.0)
-        if #available(iOS 11.0, *) {
-            self.sectionInsetReference = .fromSafeArea
-        }
+        calculateEstimatedSize()
+    }
+
+    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        super.invalidateLayout(with: context)
+
+        calculateEstimatedSize()
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         guard let cv = collectionView else { return true }
 
         return newBounds.width != cv.bounds.width
+    }
+
+    private func calculateEstimatedSize() {
+        guard let cv = collectionView else { return }
+        if #available(iOS 11.0, *) {
+            self.sectionInsetReference = .fromSafeArea
+        }
+
+        var estSize = CGSize(width: cv.bounds.width, height: 80.0)
+        estSize.width -= cv.contentInset.left + cv.contentInset.right
+        estSize.width -= sectionInset.left + sectionInset.right
+        estSize.width -= cv.layoutMargins.left + cv.layoutMargins.right
+
+        if #available(iOS 11.0, *) {
+            estSize.width -= cv.safeAreaInsets.left + cv.safeAreaInsets.right
+        }
+
+        self.estimatedItemSize = estSize
     }
 }

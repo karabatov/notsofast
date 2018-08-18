@@ -46,7 +46,9 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private var agoTimer: Observable<Int>?
     private var timerDisposeBag = DisposeBag()
     private lazy var sizingWidthConstraint: NSLayoutConstraint = {
-        return contentView.widthAnchor.constraint(equalToConstant: bounds.size.width)
+        let c = contentView.widthAnchor.constraint(equalToConstant: bounds.size.width)
+        c.isActive = false
+        return c
     }()
     /// When there is no serving, display the serving size text flush to the left.
     private var servingLeftConstraint: NSLayoutConstraint?
@@ -69,6 +71,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
     }
 
     private func commonInit() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.backgroundColor = UIColor.mealListCellBackground
         layer.masksToBounds = true
         layer.cornerRadius = 10.0
@@ -135,11 +138,14 @@ final class MealCollectionViewCell: UICollectionViewCell {
 
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         sizingWidthConstraint.constant = targetSize.width
-        return contentView.systemLayoutSizeFitting(
+        sizingWidthConstraint.isActive = true
+        let size = contentView.systemLayoutSizeFitting(
             targetSize,
             withHorizontalFittingPriority: UILayoutPriority.required,
             verticalFittingPriority: verticalFittingPriority
         )
+        sizingWidthConstraint.isActive = false
+        return size
     }
 
     func configure(model: MealCellModel) {
