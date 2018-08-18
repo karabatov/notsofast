@@ -222,10 +222,19 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     }
 
     private func displayDeleteConfirmation() {
+        let alertStyle: UIAlertControllerStyle
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            alertStyle = .actionSheet
+
+        default:
+            alertStyle = .alert
+        }
+
         let alert = UIAlertController(
             title: R.string.localizableStrings.edit_meal_alert_title(),
             message: R.string.localizableStrings.edit_meal_alert_text(),
-            preferredStyle: UIAlertControllerStyle.actionSheet
+            preferredStyle: alertStyle
         )
         alert.addAction(
             UIAlertAction.init(
