@@ -99,8 +99,12 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         addButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addButton)
         let buttonOffset: CGFloat = -12.0
-        view.addConstraint(NSLayoutConstraint.init(item: addButton, attribute: NSLayoutAttribute.rightMargin, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: buttonOffset))
-        view.addConstraint(NSLayoutConstraint.init(item: addButton, attribute: NSLayoutAttribute.bottomMargin, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: buttonOffset))
+        view.addConstraint(addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonOffset))
+        if #available(iOS 11.0, *) {
+            view.addConstraint(addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: buttonOffset))
+        } else {
+            view.addConstraint(addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: buttonOffset))
+        }
 
         collectionView.contentInset.bottom += 30.0
         collectionView.bounces = true
