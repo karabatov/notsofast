@@ -204,6 +204,11 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
 
     func forceReload() {
         collectionView.reloadData()
+        if #available(iOS 11.0, *) {
+        } else {
+            // Fixes a bug where UICollectionView would crash with the wrong number of cells from layout.
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
 
     // MARK: ViewModel
