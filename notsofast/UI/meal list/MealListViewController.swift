@@ -106,6 +106,11 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
             view.addConstraint(addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: buttonOffset))
         }
 
+        if #available(iOS 11.0, *) {
+        } else {
+            collectionView.contentInset.top += 70.0
+        }
+
         collectionView.contentInset.bottom += 30.0
         collectionView.bounces = true
         collectionView.alwaysBounceVertical = true
