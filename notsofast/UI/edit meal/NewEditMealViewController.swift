@@ -180,7 +180,6 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             guard let cell = cell as? NutrientsTableViewCell else { return }
             cell.configure(nutri: nutri)
             cell.selectedNutrients
-                .debug("NUTRI")
                 .map { nutri -> EditMealInput in
                     return .selectedNutrients(nutri)
                 }

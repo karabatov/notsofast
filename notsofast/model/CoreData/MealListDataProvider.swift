@@ -27,7 +27,6 @@ struct MealListDataConfig: Equatable {
 
         self.dataConfig
             .distinctUntilChanged()
-            .debug("MLDP")
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] dc in
                 NSFetchedResultsController<MealEntity>.deleteCache(withName: frc.cacheName)
