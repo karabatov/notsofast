@@ -71,7 +71,6 @@ final class MealCollectionViewCell: UICollectionViewCell {
     }
 
     private func commonInit() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.backgroundColor = UIColor.mealListCellBackground
         layer.masksToBounds = true
         layer.cornerRadius = 10.0
@@ -137,6 +136,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
     }
 
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         sizingWidthConstraint.constant = targetSize.width
         sizingWidthConstraint.isActive = true
         let size = contentView.systemLayoutSizeFitting(
@@ -145,6 +145,7 @@ final class MealCollectionViewCell: UICollectionViewCell {
             verticalFittingPriority: verticalFittingPriority
         )
         sizingWidthConstraint.isActive = false
+        contentView.translatesAutoresizingMaskIntoConstraints = true
         return size
     }
 
