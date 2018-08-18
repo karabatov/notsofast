@@ -28,9 +28,8 @@ final class MealListFlowLayout: UICollectionViewFlowLayout {
     }
 
     override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
-        super.invalidateLayout(with: context)
-
         calculateEstimatedSize()
+        super.invalidateLayout(with: context)
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
@@ -41,6 +40,8 @@ final class MealListFlowLayout: UICollectionViewFlowLayout {
 
     private func calculateEstimatedSize() {
         guard let cv = collectionView else { return }
+        itemSize = UICollectionViewFlowLayoutAutomaticSize
+
         if #available(iOS 11.0, *) {
             self.sectionInsetReference = .fromSafeArea
         }
