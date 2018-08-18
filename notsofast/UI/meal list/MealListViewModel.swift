@@ -82,9 +82,10 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
             .bind(to: viewState)
             .disposed(by: disposeBag)
 
-        Observable.combineLatest(dataProvider.dataConfig, input) { ($0, $1) }
-            .sample(input)
-            .filter { _, input in
+        let dcInput = Observable.combineLatest(dataProvider.dataConfig, input) { ($0, $1) }
+
+        input
+            .filter { input in
                 switch input {
                 case .goLeft, .goRight:
                     return true
@@ -93,6 +94,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
                     return false
                 }
             }
+            .withLatestFrom(dcInput)
             .map { dataConfig, input -> MealListDataConfig in
                 let newStartDate: Date
                 let newEndDate: Date
@@ -124,7 +126,9 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
 
                 return MealListDataConfig(startDate: newStartDate, endDate: newEndDate)
             }
-            .bind(to: dataProvider.dataConfig)
+            .subscribe(onNext: { newDC in
+                dataProvider.dataConfig.onNext(newDC)
+            })
             .disposed(by: disposeBag)
 
         input
