@@ -32,8 +32,8 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(collectionView)
         contentView.addConstraint(collectionView.topAnchor.constraint(equalTo: contentView.topAnchor))
-        contentView.addConstraint(collectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor))
-        contentView.addConstraint(collectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor))
+        contentView.addConstraint(collectionView.leadingAnchor.constraint(equalTo: contentView.readableContentGuide.leadingAnchor))
+        contentView.addConstraint(collectionView.trailingAnchor.constraint(equalTo: contentView.readableContentGuide.trailingAnchor))
         contentView.addConstraint(collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
         contentView.addConstraint(collHeight)
 
