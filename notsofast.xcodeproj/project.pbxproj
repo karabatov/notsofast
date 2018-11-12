@@ -18,6 +18,7 @@
 		D12F651F211DF43600026FDC /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12F651E211DF43600026FDC /* DateExtension.swift */; };
 		D14595BE211C817D00966BD9 /* MealListFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14595BD211C817D00966BD9 /* MealListFlowLayout.swift */; };
 		D14595C0211C9D3C00966BD9 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14595BF211C9D3C00966BD9 /* ViewModel.swift */; };
+		D1524122219A293C00F2D2E7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D1524121219A293C00F2D2E7 /* README.md */; };
 		D16AE58F2124BD5B0009A524 /* ServingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16AE58E2124BD5B0009A524 /* ServingExtension.swift */; };
 		D18A2E0820AA0FFA0076227E /* UIColorPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */; };
 		D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D18A2E0B20AB6B9A0076227E /* MealsModel.xcdatamodeld */; };
@@ -80,6 +81,7 @@
 		D12F651E211DF43600026FDC /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		D14595BD211C817D00966BD9 /* MealListFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListFlowLayout.swift; sourceTree = "<group>"; };
 		D14595BF211C9D3C00966BD9 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		D1524121219A293C00F2D2E7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		D16AE58E2124BD5B0009A524 /* ServingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServingExtension.swift; sourceTree = "<group>"; };
 		D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorPreset.swift; sourceTree = "<group>"; };
 		D18A2E0C20AB6B9A0076227E /* MealsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MealsModel.xcdatamodel; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 		D11E81ED2094BE8400B87926 /* notsofast */ = {
 			isa = PBXGroup;
 			children = (
+				D1524121219A293C00F2D2E7 /* README.md */,
 				D1F4FB8120E11B8F0058CBFB /* R.generated.swift */,
 				D18A2E0E20AB6E640076227E /* Constants.swift */,
 				D11E81EE2094BE8400B87926 /* AppDelegate.swift */,
@@ -413,6 +416,7 @@
 			files = (
 				D1F4FB7F20E119BE0058CBFB /* LocalizableStrings.strings in Resources */,
 				D11E81F92094BE8400B87926 /* LaunchScreen.storyboard in Resources */,
+				D1524122219A293C00F2D2E7 /* README.md in Resources */,
 				D11E81F62094BE8400B87926 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
