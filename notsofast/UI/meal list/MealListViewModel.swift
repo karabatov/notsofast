@@ -9,6 +9,17 @@
 import Foundation
 import RxSwift
 
+struct MealListDataConfig: Equatable {
+    let startDate: Date
+    let endDate: Date
+}
+
+struct MealListDataSection: DataSourceSection {
+    typealias CellModel = Meal
+    let name: String?
+    let items: [Meal]
+}
+
 struct MealListViewState: Equatable {
     let title: String
     let enableCalendarRightButton: Bool

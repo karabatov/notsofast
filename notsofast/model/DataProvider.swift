@@ -14,6 +14,8 @@ protocol DataSourceSection {
 
     var name: String? { get }
     var items: [CellModel] { get }
+
+    init(name: String?, items: [CellModel])
 }
 
 protocol DataSourceProvider {

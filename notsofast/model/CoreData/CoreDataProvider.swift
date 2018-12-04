@@ -37,7 +37,7 @@ final class CoreDataProvider: MealActionController {
         }
     }
 
-    func dataProviderForMealList(config: MealListDataConfig) -> MealListDataProvider {
+    func dataProviderForMealList(config: MealListDataConfig) -> FRCDataProvider<MealEntity, MealListDataSection, MealListDataConfig> {
         let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
         fr.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %@", argumentArray: [config.startDate, config.endDate])
         fr.sortDescriptors = [NSSortDescriptor(key: "eaten", ascending: false)]
@@ -48,7 +48,16 @@ final class CoreDataProvider: MealActionController {
             cacheName: "MealList"
         )
         try? frc.performFetch()
-        return MealListDataProvider(frc: frc, config: config)
+        return FRCDataProvider.init(
+            frc: frc,
+            config: config,
+            applyDataConfigChange: { dc, frc in
+                frc.fetchRequest.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %@", argumentArray: [dc.startDate, dc.endDate])
+            },
+            itemToCellModel: { entity -> Meal? in
+                return entity.meal()
+            }
+        )
     }
 
     /// Returns a preconfigured fetched results controller for the target place to be used.
