@@ -10,17 +10,17 @@ import Foundation
 import CoreData
 import RxSwift
 
-class FRCDataProvider<T: NSFetchRequestResult, S: DataSourceSection, C: Equatable>: NSObject, DataProvider, NSFetchedResultsControllerDelegate {
+class FRCDataProvider<T: NSFetchRequestResult, M: Equatable, C: Equatable>: NSObject, DataProvider, NSFetchedResultsControllerDelegate {
     private let frc: NSFetchedResultsController<T>
     private var disposeBag = DisposeBag()
     private let applyDataConfigChange: (C, NSFetchedResultsController<T>) -> Void
-    private let itemToCellModel: (T) -> Section.CellModel?
+    private let itemToCellModel: (T) -> M?
 
     init(
         frc: NSFetchedResultsController<T>,
         config: C,
         applyDataConfigChange: @escaping (C, NSFetchedResultsController<T>) -> Void,
-        itemToCellModel: @escaping (T) -> Section.CellModel?
+        itemToCellModel: @escaping (T) -> M?
     )
     {
         self.dataConfig.onNext(config)
@@ -44,7 +44,7 @@ class FRCDataProvider<T: NSFetchRequestResult, S: DataSourceSection, C: Equatabl
     }
 
     private func updateData(from frc: NSFetchedResultsController<T>) {
-        var sections = [S]()
+        var sections = [DataSourceSection<M>]()
 
         for (idx, section) in (frc.sections ?? []).enumerated() {
             let items = (0..<section.numberOfObjects)
@@ -52,7 +52,7 @@ class FRCDataProvider<T: NSFetchRequestResult, S: DataSourceSection, C: Equatabl
                 .map { frc.object(at: $0) }
                 .compactMap(itemToCellModel)
 
-            sections.append(S(name: section.name, items: items))
+            sections.append(DataSourceSection(name: section.name, items: items))
         }
 
         data.onNext(sections)
@@ -60,13 +60,8 @@ class FRCDataProvider<T: NSFetchRequestResult, S: DataSourceSection, C: Equatabl
 
     // MARK: DataProvider
 
-    typealias DataConfig = C
-    let dataConfig = ReplaySubject<DataConfig>.create(bufferSize: 1)
-
-    // MARK: DataSourceProvider
-
-    typealias Section = S
-    let data = ReplaySubject<[Section]>.create(bufferSize: 1)
+    let dataConfig = ReplaySubject<C>.create(bufferSize: 1)
+    let data = ReplaySubject<[DataSourceSection<M>]>.create(bufferSize: 1)
 
     // MARK: NSFetchedResultsControllerDelegate
 

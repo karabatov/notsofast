@@ -16,6 +16,7 @@
 		D14595BE211C817D00966BD9 /* MealListFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14595BD211C817D00966BD9 /* MealListFlowLayout.swift */; };
 		D14595C0211C9D3C00966BD9 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14595BF211C9D3C00966BD9 /* ViewModel.swift */; };
 		D1524122219A293C00F2D2E7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D1524121219A293C00F2D2E7 /* README.md */; };
+		D153AA4621B7111C00FE6DB1 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D153AA4521B7111C00FE6DB1 /* ArrayExtension.swift */; };
 		D16AE58F2124BD5B0009A524 /* ServingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16AE58E2124BD5B0009A524 /* ServingExtension.swift */; };
 		D18A2E0820AA0FFA0076227E /* UIColorPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */; };
 		D18A2E0D20AB6B9A0076227E /* MealsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D18A2E0B20AB6B9A0076227E /* MealsModel.xcdatamodeld */; };
@@ -58,6 +59,7 @@
 		D14595BD211C817D00966BD9 /* MealListFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListFlowLayout.swift; sourceTree = "<group>"; };
 		D14595BF211C9D3C00966BD9 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		D1524121219A293C00F2D2E7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		D153AA4521B7111C00FE6DB1 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		D16AE58E2124BD5B0009A524 /* ServingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServingExtension.swift; sourceTree = "<group>"; };
 		D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorPreset.swift; sourceTree = "<group>"; };
 		D18A2E0C20AB6B9A0076227E /* MealsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MealsModel.xcdatamodel; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				D18A2E0720AA0FFA0076227E /* UIColorPreset.swift */,
 				D12F651E211DF43600026FDC /* DateExtension.swift */,
 				D16AE58E2124BD5B0009A524 /* ServingExtension.swift */,
+				D153AA4521B7111C00FE6DB1 /* ArrayExtension.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				D1B959962119FC370045A9E2 /* ProxyDataSource.swift in Sources */,
 				D1C335A82121F99200C6E351 /* DateSelectorTableViewCell.swift in Sources */,
 				D1F4FB8C20E2B14B0058CBFB /* EditMealViewModel.swift in Sources */,
+				D153AA4621B7111C00FE6DB1 /* ArrayExtension.swift in Sources */,
 				D18A2E0F20AB6E640076227E /* Constants.swift in Sources */,
 				D16AE58F2124BD5B0009A524 /* ServingExtension.swift in Sources */,
 				D1F4FB8720E182B20058CBFB /* CoreDataProvider.swift in Sources */,

@@ -9,19 +9,15 @@
 import Foundation
 import RxSwift
 
-protocol DataSourceSection {
-    associatedtype CellModel
-
-    var name: String? { get }
-    var items: [CellModel] { get }
-
-    init(name: String?, items: [CellModel])
+struct DataSourceSection<T> {
+    let name: String
+    let items: [T]
 }
 
 protocol DataSourceProvider {
-    associatedtype Section: DataSourceSection
+    associatedtype CellModel: Equatable
 
-    var data: ReplaySubject<[Section]> { get }
+    var data: ReplaySubject<[DataSourceSection<CellModel>]> { get }
 }
 
 protocol DataProvider: DataSourceProvider {
