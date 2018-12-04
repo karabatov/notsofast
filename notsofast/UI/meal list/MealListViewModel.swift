@@ -31,7 +31,7 @@ enum MealListOutput {
     case openEditMeal(meal: Meal)
 }
 
-struct MealCellModel {
+struct MealCellModel: Equatable {
     let meal: Meal
     let size: String
     let date: Date
@@ -145,6 +145,30 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
                 }
             })
             .disposed(by: disposeBag)
+
+        self.dataProvider.data
+            .map { sections -> [DataSourceSection<MealCellModel>] in
+                return sections
+                    .map { section -> DataSourceSection<MealCellModel> in
+                        let items = section.items
+                            .map { meal -> MealCellModel in
+                                MealCellModel(
+                                    meal: meal,
+                                    size: meal.size.forDisplay(),
+                                    date: meal.eaten,
+                                    displayElapsedTime: Date().timeIntervalSince(meal.eaten) <= 24 * 60 * 60,
+                                    nutrients: meal.nutri
+                                )
+                            }
+
+                        return DataSourceSection<MealCellModel>.init(
+                            name: section.name,
+                            items: items
+                        )
+                    }
+            }
+            .bind(to: data)
+            .disposed(by: disposeBag)
     }
 
     // MARK: ViewModel
@@ -155,46 +179,10 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
 
     // MARK: DataProvider
 
+    typealias DataConfig = MealListDataConfig
     let dataConfig = ReplaySubject<MealListDataConfig>.create(bufferSize: 1)
+    typealias CellModel = MealCellModel
     let data = ReplaySubject<[DataSourceSection<MealCellModel>]>.create(bufferSize: 1)
-
-    // MARK: ProxyDataSource
-
-    private weak var dataSourceDelegate: ProxyDataSourceDelegate?
-
-    func configure(delegate: ProxyDataSourceDelegate?) {
-        dataSourceDelegate = delegate
-    }
-
-    func isEmpty() -> Bool {
-        return dataProvider.isEmpty()
-    }
-
-    func numberOfSections() -> Int {
-        return dataProvider.numberOfSections()
-    }
-
-    func numberOfItems(in section: Int) -> Int {
-        return dataProvider.numberOfItems(in: section)
-    }
-
-    func modelForItem(at indexPath: IndexPath) -> MealCellModel? {
-        guard let meal = dataProvider.modelForItem(at: indexPath) else {
-            return nil
-        }
-
-        return MealCellModel(
-            meal: meal,
-            size: meal.size.forDisplay(),
-            date: meal.eaten,
-            displayElapsedTime: Date().timeIntervalSince(meal.eaten) <= 24 * 60 * 60,
-            nutrients: meal.nutri
-        )
-    }
-
-    func titleForHeader(in section: Int) -> String? {
-        return dataProvider.titleForHeader(in: section)
-    }
 
     // MARK: Helpers
 
@@ -202,7 +190,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
         data
             .take(1)
             .map { sections -> Meal? in
-                return sections[safeIndex: item.section]?.items[safeIndex: item.row]
+                return sections[safeIndex: item.section]?.items[safeIndex: item.row]?.meal
             }
             .filter { $0 != nil }
             .map { MealListOutput.openEditMeal(meal: $0!) }
