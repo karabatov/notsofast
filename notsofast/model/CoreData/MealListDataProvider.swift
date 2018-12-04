@@ -15,7 +15,13 @@ struct MealListDataConfig: Equatable {
     let endDate: Date
 }
 
-@objc final class MealListDataProvider: NSObject, DataProvider, CollectingFetchDelegate {
+struct MealListDataSection: DataSourceSection {
+    typealias CellModel = Meal
+    let name: String?
+    let items: [Meal]
+}
+
+@objc final class MealListDataProvider: NSObject, DataProvider, NSFetchedResultsControllerDelegate {
     private var frc: NSFetchedResultsController<MealEntity>
     private var disposeBag = DisposeBag()
 
@@ -23,7 +29,8 @@ struct MealListDataConfig: Equatable {
         self.dataConfig.onNext(config)
         self.frc = frc
         super.init()
-        setupForwardDelegate(frc: frc)
+
+        self.frc.delegate = self
 
         self.dataConfig
             .distinctUntilChanged()
@@ -32,9 +39,31 @@ struct MealListDataConfig: Equatable {
                 NSFetchedResultsController<MealEntity>.deleteCache(withName: frc.cacheName)
                 frc.fetchRequest.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %@", argumentArray: [dc.startDate, dc.endDate])
                 try? frc.performFetch()
-                self?.dataSourceDelegate?.forceReload()
+                self?.updateData(from: frc)
             })
             .disposed(by: disposeBag)
+    }
+
+    private func updateData(from frc: NSFetchedResultsController<MealEntity>) {
+        var sections = [MealListDataSection]()
+
+        for (idx, section) in (frc.sections ?? []).enumerated() {
+            var items = [Meal]()
+            for item in 0..<section.numberOfObjects {
+                let ip = IndexPath(row: item, section: idx)
+                if let meal = frc.object(at: ip).meal() {
+                    items.append(meal)
+                }
+            }
+
+            let mealSection = MealListDataSection(
+                name: section.name,
+                items: items
+            )
+            sections.append(mealSection)
+        }
+
+        data.onNext(sections)
     }
 
     // MARK: DataProvider
@@ -42,51 +71,8 @@ struct MealListDataConfig: Equatable {
     typealias DataConfig = MealListDataConfig
     let dataConfig = ReplaySubject<MealListDataConfig>.create(bufferSize: 1)
 
-    // MARK: ProxyDataSource
+    // MARK: DataSourceProvider
 
-    private weak var dataSourceDelegate: ProxyDataSourceDelegate?
-
-    typealias CellModel = Meal
-
-    func configure(delegate: ProxyDataSourceDelegate?) {
-        dataSourceDelegate = delegate
-    }
-
-    func isEmpty() -> Bool {
-        return frc.fetchedObjects?.isEmpty ?? true
-    }
-
-    func numberOfSections() -> Int {
-        return frc.sections?.count ?? 0
-    }
-
-    func numberOfItems(in section: Int) -> Int {
-        return frc.sections?[section].numberOfObjects ?? 0
-    }
-
-    func modelForItem(at indexPath: IndexPath) -> Meal? {
-        return frc.object(at: indexPath).meal()
-    }
-
-    func titleForHeader(in section: Int) -> String? {
-        return frc.sections?[section].name
-    }
-
-    // MARK: CollectingFetchDelegate
-
-    private var changeCollector = [ProxyDataSourceChange]()
-
-    var forwardDelegate: CollectingFetchForwardDelegate?
-
-    func append(change: ProxyDataSourceChange) {
-        changeCollector.append(change)
-    }
-
-    func clearPendingChanges() {
-        changeCollector.removeAll(keepingCapacity: true)
-    }
-
-    func forwardPendingChanges() {
-        dataSourceDelegate?.batch(changes: changeCollector)
-    }
+    typealias Section = MealListDataSection
+    let data = ReplaySubject<[Section]>.create(bufferSize: 1)
 }

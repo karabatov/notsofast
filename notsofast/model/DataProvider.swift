@@ -9,7 +9,20 @@
 import Foundation
 import RxSwift
 
-protocol DataProvider: ProxyDataSource {
+protocol DataSourceSection {
+    associatedtype CellModel
+
+    var name: String? { get }
+    var items: [CellModel] { get }
+}
+
+protocol DataSourceProvider {
+    associatedtype Section: DataSourceSection
+
+    var data: ReplaySubject<[Section]> { get }
+}
+
+protocol DataProvider: DataSourceProvider {
     associatedtype DataConfig: Equatable
 
     var dataConfig: ReplaySubject<DataConfig> { get }
