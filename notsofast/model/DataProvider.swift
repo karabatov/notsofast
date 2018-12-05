@@ -9,8 +9,8 @@
 import Foundation
 import RxSwift
 
-struct DataSourceSection<T> {
-    let name: String
+struct DataSourceSection<T: Equatable>: Equatable {
+    let name: String?
     let items: [T]
 }
 

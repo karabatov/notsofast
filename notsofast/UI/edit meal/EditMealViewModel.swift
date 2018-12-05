@@ -9,11 +9,6 @@
 import Foundation
 import RxSwift
 
-struct EditMealSection: Equatable {
-    let title: String?
-    let rows: [EditMealCell]
-}
-
 enum EditMealCell: Equatable {
     case size(size: Serving, selected: Bool)
     case ingredients(nutri: Nutrients)
@@ -75,8 +70,6 @@ final class EditMealViewModel: ViewModel, DataProvider {
     private let typeSection = PublishSubject<[EditMealCell]>()
     private let dateSection = PublishSubject<[EditMealCell]>()
     private let buttonSection = PublishSubject<[EditMealCell]>()
-    private let data = ReplaySubject<[EditMealSection]>.create(bufferSize: 1)
-    private var dsSections: [EditMealSection] = []
 
     private let mealStorage: MealActionController
 
@@ -106,35 +99,8 @@ final class EditMealViewModel: ViewModel, DataProvider {
     typealias DataConfig = EditMealDataConfig
     let dataConfig = ReplaySubject<EditMealDataConfig>.create(bufferSize: 1)
     private let dataConfigIntention = PublishSubject<EditMealDataConfigIntention>()
-
-    // MARK: ProxyDataSource
-
     typealias CellModel = EditMealCell
-    weak var dataSourceDelegate: ProxyDataSourceDelegate?
-
-    func isEmpty() -> Bool {
-        return false
-    }
-
-    func numberOfSections() -> Int {
-        return dsSections.count
-    }
-
-    func numberOfItems(in section: Int) -> Int {
-        return dsSections[section].rows.count
-    }
-
-    func titleForHeader(in section: Int) -> String? {
-        return dsSections[section].title
-    }
-
-    func modelForItem(at indexPath: IndexPath) -> EditMealCell? {
-        return dsSections[indexPath.section].rows[indexPath.row]
-    }
-
-    func configure(delegate: ProxyDataSourceDelegate?) {
-        dataSourceDelegate = delegate
-    }
+    let data = ReplaySubject<[DataSourceSection<EditMealCell>]>.create(bufferSize: 1)
 
     // MARK: Helpers
 
@@ -218,63 +184,20 @@ final class EditMealViewModel: ViewModel, DataProvider {
 
     private func configureDataOutput() {
         Observable.combineLatest(sizeSection, typeSection, dateSection, buttonSection) { ($0, $1, $2, $3) }
-            .map { (sizes, types, dates, buttons) -> [EditMealSection] in
+            .map { (sizes, types, dates, buttons) -> [DataSourceSection<EditMealCell>] in
                 var sections = [
-                    EditMealSection(title: R.string.localizableStrings.serving(), rows: sizes),
-                    EditMealSection(title: R.string.localizableStrings.nutrients(), rows: types),
-                    EditMealSection(title: R.string.localizableStrings.edit_meal_date(), rows: dates),
+                    DataSourceSection<EditMealCell>(name: R.string.localizableStrings.serving(), items: sizes),
+                    DataSourceSection<EditMealCell>(name: R.string.localizableStrings.nutrients(), items: types),
+                    DataSourceSection<EditMealCell>(name: R.string.localizableStrings.edit_meal_date(), items: dates)
                 ]
 
                 if buttons.count > 0 {
-                    sections.append(EditMealSection(title: nil, rows: buttons))
+                    sections.append(DataSourceSection<EditMealCell>(name: nil, items: buttons))
                 }
 
                 return sections
             }
             .distinctUntilChanged()
-            .do(onNext: { [weak self] sections in
-                self?.dsSections = sections
-            })
-            .scan([EditMealSection]()) { [weak self] (dataBefore, newData) -> [EditMealSection] in
-                var changes: [ProxyDataSourceChange] = []
-
-                var sectionIndex = 0
-                for (lhs, rhs) in zip(dataBefore, newData) {
-                    var rowIndex = 0
-                    for (lhr, rhr) in zip(lhs.rows, rhs.rows) {
-                        if lhr != rhr {
-                            changes.append(ProxyDataSourceChange.update(IndexPath(row: rowIndex, section: sectionIndex)))
-                        }
-
-                        rowIndex += 1
-                    }
-
-                    if rhs.rows.count > lhs.rows.count {
-                        for i in lhs.rows.count..<rhs.rows.count {
-                            changes.append(ProxyDataSourceChange.insert(IndexPath(row: i, section: sectionIndex)))
-                        }
-                    } else if rhs.rows.count < lhs.rows.count {
-                        for i in rhs.rows.count..<lhs.rows.count {
-                            changes.append(ProxyDataSourceChange.delete(IndexPath(row: i, section: sectionIndex)))
-                        }
-                    }
-
-                    sectionIndex += 1
-                }
-                if newData.count > dataBefore.count {
-                    for i in dataBefore.count..<newData.count {
-                        changes.append(ProxyDataSourceChange.insertSection(i))
-                    }
-                } else if newData.count < dataBefore.count {
-                    for i in newData.count..<dataBefore.count {
-                        changes.append(ProxyDataSourceChange.deleteSection(i))
-                    }
-                }
-
-                self?.dataSourceDelegate?.batch(changes: changes)
-
-                return newData
-            }
             .bind(to: data)
             .disposed(by: disposeBag)
     }
@@ -285,7 +208,7 @@ final class EditMealViewModel: ViewModel, DataProvider {
             .subscribe(onNext: { [weak self] config, data, input in
                 switch input {
                 case .selectedCellAt(let indexPath):
-                    let cell = data[indexPath.section].rows[indexPath.row]
+                    let cell = data[indexPath.section].items[indexPath.row]
                     switch cell {
                     case .size(size: let size, selected: _):
                         self?.update(model: config.meal, withSize: size)

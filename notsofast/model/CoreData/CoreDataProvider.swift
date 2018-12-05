@@ -37,7 +37,7 @@ final class CoreDataProvider: MealActionController {
         }
     }
 
-    func dataProviderForMealList(config: MealListDataConfig) -> FRCDataProvider<MealEntity, MealListDataSection, MealListDataConfig> {
+    func dataProviderForMealList(config: MealListDataConfig) -> FRCDataProvider<MealEntity, Meal, MealListDataConfig> {
         let fr = NSFetchRequest<MealEntity>(entityName: "MealEntity")
         fr.predicate = NSPredicate(format: "eaten >= %@ and eaten <= %@", argumentArray: [config.startDate, config.endDate])
         fr.sortDescriptors = [NSSortDescriptor(key: "eaten", ascending: false)]
