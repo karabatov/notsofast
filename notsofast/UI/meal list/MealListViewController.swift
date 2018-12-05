@@ -8,9 +8,10 @@
 
 import UIKit
 import RxSwift
+import RxDataSources
 
 /// Display a list of meals in a collection view.
-final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProxyDataSourceDelegate where ConcreteDataProvider.CellModel == MealCellModel, ConcreteDataProvider.DataConfig == MealListDataConfig, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
+final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout where ConcreteDataProvider.CellModel == MealCellModel, ConcreteDataProvider.DataConfig == MealListDataConfig, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
     /// Scroll the calendar to the past.
     private let leftButton: UIBarButtonItem = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     /// Scroll the calendar to the future.
@@ -115,12 +116,22 @@ final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteV
         collectionView.alwaysBounceVertical = true
 
         collectionView.register(MealCollectionViewCell.self, forCellWithReuseIdentifier: MealCollectionViewCell.reuseIdentifier)
-        collectionView.dataSource = self
         collectionView.delegate = self
 
         bindViewState()
         bindModelOutput()
         configureCellTouchingAnimation()
+
+        let dataSource = RxCollectionViewSectionedReloadDataSource<DataSourceSection<MealCellModel>>.init(
+            configureCell: { (ds, cv, indexPath, model) -> UICollectionViewCell in
+                let cell = cv.dequeueReusableCell(withReuseIdentifier: MealCollectionViewCell.reuseIdentifier, for: indexPath) as! MealCollectionViewCell
+                cell.configure(model: model)
+                return cell
+            }
+        )
+        dataProvider.data
+            .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
     }
 
     // MARK: Button targets
@@ -132,26 +143,6 @@ final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteV
 
     @objc func titleButtonPressed() {
         NSFLog("Title pressed")
-    }
-
-    // MARK: UICollectionViewDataSource
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return dataSource.numberOfSections()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.numberOfItems(in: section)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let model = dataSource.modelForItem(at: indexPath) else {
-            return UICollectionViewCell()
-        }
-
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MealCollectionViewCell.reuseIdentifier, for: indexPath) as! MealCollectionViewCell
-        cell.configure(model: model)
-        return cell
     }
 
     // MARK: UICollectionViewDelegate
@@ -167,47 +158,6 @@ final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteV
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         (cell as? MealCollectionViewCell)?.didEndDisplayingCell()
-    }
-
-    // MARK: ProxyDataSourceDelegate
-
-    func batch(changes: [ProxyDataSourceChange]) {
-        let cv = collectionView
-        NSFLog("Got \(changes.count) changes.")
-        collectionView.performBatchUpdates({
-            for change in changes {
-                switch change {
-                case .delete(let ip):
-                    cv.deleteItems(at: [ip])
-
-                case .insert(let ip):
-                    cv.insertItems(at: [ip])
-
-                case .update(let ip):
-                    if
-                        let mdl = dataSource.modelForItem(at: ip),
-                        let cell = cv.cellForItem(at: ip) as? MealCollectionViewCell
-                    {
-                        cell.configure(model: mdl)
-                    }
-
-                case .insertSection(let sectionIndex):
-                    cv.insertSections(IndexSet.init(integer: sectionIndex))
-
-                case .deleteSection(let sectionIndex):
-                    cv.deleteSections(IndexSet.init(integer: sectionIndex))
-                }
-            }
-        }, completion: nil)
-    }
-
-    func forceReload() {
-        collectionView.reloadData()
-        if #available(iOS 11.0, *) {
-        } else {
-            // Fixes a bug where UICollectionView would crash with the wrong number of cells from layout.
-            collectionView.collectionViewLayout.invalidateLayout()
-        }
     }
 
     // MARK: ViewModel
