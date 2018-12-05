@@ -39,7 +39,9 @@ struct MealCellModel: Equatable {
     let nutrients: Nutrients
 }
 
-final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataProvider where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
+final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataProvider where
+    ConcreteProvider.CellModel == Meal,
+    ConcreteProvider.DataConfig == MealListDataConfig {
     private let dataProvider: ConcreteProvider
     private let needToRefreshViewState = ReplaySubject<Void>.create(bufferSize: 1)
     private var disposeBag = DisposeBag()
@@ -179,9 +181,7 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
 
     // MARK: DataProvider
 
-    typealias DataConfig = MealListDataConfig
     let dataConfig = ReplaySubject<MealListDataConfig>.create(bufferSize: 1)
-    typealias CellModel = MealCellModel
     let data = ReplaySubject<[DataSourceSection<MealCellModel>]>.create(bufferSize: 1)
 
     // MARK: Helpers
@@ -194,9 +194,10 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
             }
             .filter { $0 != nil }
             .map { MealListOutput.openEditMeal(meal: $0!) }
-            .debug("openEditMeal")
-            // TODO: Check that it doesn't send completion.
-            .bind(to: output)
+            // Avoid binding to not send OnCompleted event.
+            .subscribe(onNext: { [weak self] signal in
+                self?.output.onNext(signal)
+            })
             .disposed(by: disposeBag)
     }
 }

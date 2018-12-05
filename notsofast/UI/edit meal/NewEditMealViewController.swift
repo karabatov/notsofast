@@ -10,19 +10,13 @@ import UIKit
 import RxSwift
 import RxDataSources
 
-extension DataSourceSection: SectionModelType {
-    typealias Item = T
-
-    init(original: DataSourceSection<T>, items: [T]) {
-        self = DataSourceSection<T>.init(
-            name: original.name,
-            items: items
-        )
-    }
-}
-
 /// Create or edit a meal.
-final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteDataProvider: DataProvider>: UIViewController where ConcreteViewModel.InputEnum == EditMealInput, ConcreteViewModel.OutputEnum == EditMealOutput, ConcreteViewModel.ViewState == EditMealViewState, ConcreteDataProvider.CellModel == EditMealCell, ConcreteDataProvider.DataConfig == EditMealDataConfig {
+final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteDataProvider: DataProvider>: UIViewController where
+        ConcreteViewModel.InputEnum == EditMealInput,
+        ConcreteViewModel.OutputEnum == EditMealOutput,
+        ConcreteViewModel.ViewState == EditMealViewState,
+        ConcreteDataProvider.CellModel == EditMealCell,
+        ConcreteDataProvider.DataConfig == EditMealDataConfig {
     private let viewModel: ConcreteViewModel
     private let dataProvider: ConcreteDataProvider
     private var disposeBag = DisposeBag()
@@ -306,6 +300,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         present(alert, animated: true, completion: nil)
     }
 
+    /*
     private func reuseIdentifier(for model: EditMealCell) -> String {
         switch model {
         case .date(_):
@@ -324,4 +319,5 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             return "Simple"
         }
     }
+    */
 }

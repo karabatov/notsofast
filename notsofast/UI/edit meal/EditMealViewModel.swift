@@ -96,10 +96,8 @@ final class EditMealViewModel: ViewModel, DataProvider {
 
     // MARK: DataProvider
 
-    typealias DataConfig = EditMealDataConfig
     let dataConfig = ReplaySubject<EditMealDataConfig>.create(bufferSize: 1)
     private let dataConfigIntention = PublishSubject<EditMealDataConfigIntention>()
-    typealias CellModel = EditMealCell
     let data = ReplaySubject<[DataSourceSection<EditMealCell>]>.create(bufferSize: 1)
 
     // MARK: Helpers

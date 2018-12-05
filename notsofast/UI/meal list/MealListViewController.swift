@@ -11,7 +11,12 @@ import RxSwift
 import RxDataSources
 
 /// Display a list of meals in a collection view.
-final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout where ConcreteDataProvider.CellModel == MealCellModel, ConcreteDataProvider.DataConfig == MealListDataConfig, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
+final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout where
+        ConcreteDataProvider.CellModel == MealCellModel,
+        ConcreteDataProvider.DataConfig == MealListDataConfig,
+        ConcreteViewModel.ViewState == MealListViewState,
+        ConcreteViewModel.InputEnum == MealListInput,
+        ConcreteViewModel.OutputEnum == MealListOutput {
     /// Scroll the calendar to the past.
     private let leftButton: UIBarButtonItem = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItem.Style.plain, target: nil, action: nil)
     /// Scroll the calendar to the future.

@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import RxSwift
 
-class FRCDataProvider<T: NSFetchRequestResult, M: Equatable, C: Equatable>: NSObject, DataProvider, NSFetchedResultsControllerDelegate {
+final class FRCDataProvider<T: NSFetchRequestResult, M: Equatable, C: Equatable>: NSObject, DataProvider, NSFetchedResultsControllerDelegate {
     private let frc: NSFetchedResultsController<T>
     private var disposeBag = DisposeBag()
     private let applyDataConfigChange: (C, NSFetchedResultsController<T>) -> Void
