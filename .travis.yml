@@ -1,0 +1,5 @@
+osx_image: xcode10.1
+language: swift
+xcode_workspace: notsofast.xcworkspace
+xcode_scheme: notsofast
+xcode_destination: platform=iOS Simulator,OS=10.3.1,name=iPhone 5

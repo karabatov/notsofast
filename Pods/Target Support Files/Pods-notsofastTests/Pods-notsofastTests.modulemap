@@ -1,6 +1,0 @@
-framework module Pods_notsofastTests {
-  umbrella header "Pods-notsofastTests-umbrella.h"
-
-  export *
-  module * { export * }
-}

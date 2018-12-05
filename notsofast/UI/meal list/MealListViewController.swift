@@ -8,46 +8,51 @@
 
 import UIKit
 import RxSwift
+import RxDataSources
 
 /// Display a list of meals in a collection view.
-final class MealListViewController<ConcreteDataSource: ProxyDataSource, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
+final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout where
+        ConcreteDataProvider.CellModel == MealCellModel,
+        ConcreteDataProvider.DataConfig == MealListDataConfig,
+        ConcreteViewModel.ViewState == MealListViewState,
+        ConcreteViewModel.InputEnum == MealListInput,
+        ConcreteViewModel.OutputEnum == MealListOutput {
     /// Scroll the calendar to the past.
-    private let leftButton: UIBarButtonItem = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+    private let leftButton: UIBarButtonItem = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItem.Style.plain, target: nil, action: nil)
     /// Scroll the calendar to the future.
-    private let rightButton = UIBarButtonItem(image: R.image.arrow_right(), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+    private let rightButton = UIBarButtonItem(image: R.image.arrow_right(), style: UIBarButtonItem.Style.plain, target: nil, action: nil)
     /// Hovering plus bottom on the bottom right to add a meal.
     /// TODO: Make it tinted to the app's tint color. So, a custom control.
-    private let addButton = UIButton(type: UIButtonType.custom)
+    private let addButton = UIButton(type: UIButton.ButtonType.custom)
     /// Custom button in the title of the navbar.
-    private let titleButton = UIButton(type: UIButtonType.custom)
+    private let titleButton = UIButton(type: UIButton.ButtonType.custom)
     /// Empty state label behind the collection view.
     private let emptyStateLabel = UILabel()
     /// Collection view for displaying the list of meals.
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: MealListFlowLayout())
-    private let dataSource: ConcreteDataSource
+    private let dataProvider: ConcreteDataProvider
     private let viewModel: ConcreteViewModel
     private var disposeBag = DisposeBag()
 
     // MARK: System methods
 
-    required init(dataSource: ConcreteDataSource, viewModel: ConcreteViewModel) {
-        self.dataSource = dataSource
+    required init(dataProvider: ConcreteDataProvider, viewModel: ConcreteViewModel) {
+        self.dataProvider = dataProvider
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.dataSource.configure(delegate: self)
 
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = leftButton
         navigationItem.rightBarButtonItem = rightButton
         navigationItem.titleView = titleButton
 
-        addButton.addTarget(self, action: #selector(MealListViewController.addButtonPressed), for: UIControlEvents.primaryActionTriggered)
+        addButton.addTarget(self, action: #selector(MealListViewController.addButtonPressed), for: UIControl.Event.primaryActionTriggered)
 
-        titleButton.addTarget(self, action: #selector(MealListViewController.titleButtonPressed), for: UIControlEvents.primaryActionTriggered)
+        titleButton.addTarget(self, action: #selector(MealListViewController.titleButtonPressed), for: UIControl.Event.primaryActionTriggered)
         titleButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        titleButton.setTitleColor(UIColor.nsfTintColor, for: UIControlState.normal)
+        titleButton.setTitleColor(UIColor.nsfTintColor, for: UIControl.State.normal)
         // For some reason, if no title is set initially, the button will come out miniscule.
-        titleButton.setTitle("                                                      ", for: UIControlState.normal)
+        titleButton.setTitle("                                                      ", for: UIControl.State.normal)
 
         leftButton.rx.tap
             .map { _ -> MealListInput in
@@ -73,7 +78,7 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
 
         view.backgroundColor = UIColor.white
 
-        emptyStateLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
+        emptyStateLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         emptyStateLabel.textColor = UIColor.lightGray
         emptyStateLabel.lineBreakMode = .byWordWrapping
         emptyStateLabel.numberOfLines = 0
@@ -89,12 +94,12 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         collectionView.backgroundColor = UIColor.white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
-        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutConstraint.Attribute.left, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: collectionView, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1.0, constant: 0.0))
 
-        addButton.setImage(R.image.add_meal_button(), for: UIControlState.normal)
+        addButton.setImage(R.image.add_meal_button(), for: UIControl.State.normal)
         addButton.showsTouchWhenHighlighted = true
         addButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addButton)
@@ -116,12 +121,22 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         collectionView.alwaysBounceVertical = true
 
         collectionView.register(MealCollectionViewCell.self, forCellWithReuseIdentifier: MealCollectionViewCell.reuseIdentifier)
-        collectionView.dataSource = self
         collectionView.delegate = self
 
         bindViewState()
         bindModelOutput()
         configureCellTouchingAnimation()
+
+        let dataSource = RxCollectionViewSectionedReloadDataSource<DataSourceSection<MealCellModel>>.init(
+            configureCell: { (ds, cv, indexPath, model) -> UICollectionViewCell in
+                let cell = cv.dequeueReusableCell(withReuseIdentifier: MealCollectionViewCell.reuseIdentifier, for: indexPath) as! MealCollectionViewCell
+                cell.configure(model: model)
+                return cell
+            }
+        )
+        dataProvider.data
+            .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
     }
 
     // MARK: Button targets
@@ -133,26 +148,6 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
 
     @objc func titleButtonPressed() {
         NSFLog("Title pressed")
-    }
-
-    // MARK: UICollectionViewDataSource
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return dataSource.numberOfSections()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.numberOfItems(in: section)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let model = dataSource.modelForItem(at: indexPath) else {
-            return UICollectionViewCell()
-        }
-
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MealCollectionViewCell.reuseIdentifier, for: indexPath) as! MealCollectionViewCell
-        cell.configure(model: model)
-        return cell
     }
 
     // MARK: UICollectionViewDelegate
@@ -170,54 +165,13 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
         (cell as? MealCollectionViewCell)?.didEndDisplayingCell()
     }
 
-    // MARK: ProxyDataSourceDelegate
-
-    func batch(changes: [ProxyDataSourceChange]) {
-        let cv = collectionView
-        NSFLog("Got \(changes.count) changes.")
-        collectionView.performBatchUpdates({
-            for change in changes {
-                switch change {
-                case .delete(let ip):
-                    cv.deleteItems(at: [ip])
-
-                case .insert(let ip):
-                    cv.insertItems(at: [ip])
-
-                case .update(let ip):
-                    if
-                        let mdl = dataSource.modelForItem(at: ip),
-                        let cell = cv.cellForItem(at: ip) as? MealCollectionViewCell
-                    {
-                        cell.configure(model: mdl)
-                    }
-
-                case .insertSection(let sectionIndex):
-                    cv.insertSections(IndexSet.init(integer: sectionIndex))
-
-                case .deleteSection(let sectionIndex):
-                    cv.deleteSections(IndexSet.init(integer: sectionIndex))
-                }
-            }
-        }, completion: nil)
-    }
-
-    func forceReload() {
-        collectionView.reloadData()
-        if #available(iOS 11.0, *) {
-        } else {
-            // Fixes a bug where UICollectionView would crash with the wrong number of cells from layout.
-            collectionView.collectionViewLayout.invalidateLayout()
-        }
-    }
-
     // MARK: ViewModel
 
     private func bindViewState() {
         viewModel.viewState
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] viewState in
-                self?.titleButton.setTitle(viewState.title, for: UIControlState.normal)
+                self?.titleButton.setTitle(viewState.title, for: UIControl.State.normal)
                 self?.rightButton.isEnabled = viewState.enableCalendarRightButton
                 self?.collectionView.isHidden = viewState.listOfMealsHidden
                 self?.emptyStateLabel.text = viewState.emptyStateText

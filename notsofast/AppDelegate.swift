@@ -14,16 +14,16 @@ import RxCocoa
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    private var mealDataProvider: MealListDataProvider?
+    private var mealDataProvider: FRCDataProvider<MealEntity, Meal, MealListDataConfig>?
     private var timerDisposeBag = DisposeBag()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let config = MealListDataConfig(startDate: Date().beginningOfNextHourYesterday(), endDate: Date.distantFuture)
         let dp = CoreDataProvider.sharedInstance.dataProviderForMealList(config: config)
         mealDataProvider = dp
         let vm = MealListViewModel(dataProvider: dp)
-        let mainVC = MealListViewController(dataSource: vm, viewModel: vm)
+        let mainVC = MealListViewController(dataProvider: vm, viewModel: vm)
         let nav = UINavigationController(rootViewController: mainVC)
 
         if window == nil {

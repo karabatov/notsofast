@@ -25,7 +25,7 @@ final class NutrientsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         return collectionView.heightAnchor.constraint(equalToConstant: 150.0)
     }()
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         collectionView.backgroundColor = UIColor.white

@@ -16,7 +16,7 @@ class DateSelectorTableViewCell: UITableViewCell {
     var disposeBag = DisposeBag()
     let selectedDate = PublishSubject<Date>()
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         dateSelector.datePickerMode = .dateAndTime

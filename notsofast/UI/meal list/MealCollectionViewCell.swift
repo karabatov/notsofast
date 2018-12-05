@@ -110,12 +110,12 @@ final class MealCollectionViewCell: UICollectionViewCell {
             "absolute": absoluteDateLabel,
             "nutri": nutriContainer
         ]
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[image(32)]", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[serving]-(>=8)-[relative]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=0)-[image(32)]", options: NSLayoutFormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[image(32)]", options: NSLayoutConstraint.FormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[serving]-(>=8)-[relative]-16-|", options: NSLayoutConstraint.FormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[absolute]-16-|", options: NSLayoutConstraint.FormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[nutri]-16-|", options: NSLayoutConstraint.FormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-7-[serving]-12-[absolute]-12-[nutri(4)]|", options: NSLayoutConstraint.FormatOptions.init(rawValue: 0), metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=0)-[image(32)]", options: NSLayoutConstraint.FormatOptions.init(rawValue: 0), metrics: nil, views: views))
         contentView.addConstraint(servingImageView.centerYAnchor.constraint(equalTo: servingLabel.centerYAnchor))
         contentView.addConstraint(relativeDateLabel.firstBaselineAnchor.constraint(equalTo: servingLabel.firstBaselineAnchor))
         let servingLeft = servingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 56.0)
@@ -218,16 +218,16 @@ final class MealCollectionViewCell: UICollectionViewCell {
 
     private static func createFontSet() -> FontSet {
         let subhead: UIFont
-        if let descr = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.subheadline).withSymbolicTraits(UIFontDescriptorSymbolicTraits.traitItalic) {
+        if let descr = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFont.TextStyle.subheadline).withSymbolicTraits(UIFontDescriptor.SymbolicTraits.traitItalic) {
             subhead = UIFont(descriptor: descr, size: descr.pointSize)
         } else {
-            subhead = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
+            subhead = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         }
 
         return FontSet(
-            title3Font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.title3),
-            bodyFont: UIFont.preferredFont(forTextStyle: UIFontTextStyle.body),
-            headlineFont: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline),
+            title3Font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.title3),
+            bodyFont: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body),
+            headlineFont: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline),
             subheadItalicFont: subhead
         )
     }
@@ -235,10 +235,10 @@ final class MealCollectionViewCell: UICollectionViewCell {
     private func agoStr(from relativeDate: String) -> NSAttributedString {
         let fontSet = MealCollectionViewCell.fontSet
         let regularAttrs = [
-            NSAttributedStringKey.font: fontSet.bodyFont
+            NSAttributedString.Key.font: fontSet.bodyFont
         ]
         let boldAttrs = [
-            NSAttributedStringKey.font: fontSet.headlineFont
+            NSAttributedString.Key.font: fontSet.headlineFont
         ]
         let agoStr = NSMutableAttributedString(string: R.string.localizableStrings.meal_relative_ago(relativeDate), attributes: regularAttrs)
         if let rangeOfDate = agoStr.string.range(of: relativeDate) {

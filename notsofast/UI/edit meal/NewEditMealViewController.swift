@@ -8,15 +8,21 @@
 
 import UIKit
 import RxSwift
+import RxDataSources
 
 /// Create or edit a meal.
-final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteDataProvider: DataProvider>: UIViewController, UITableViewDataSource, ProxyDataSourceDelegate where ConcreteViewModel.InputEnum == EditMealInput, ConcreteViewModel.OutputEnum == EditMealOutput, ConcreteViewModel.ViewState == EditMealViewState, ConcreteDataProvider.CellModel == EditMealCell, ConcreteDataProvider.DataConfig == EditMealDataConfig {
+final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteDataProvider: DataProvider>: UIViewController where
+        ConcreteViewModel.InputEnum == EditMealInput,
+        ConcreteViewModel.OutputEnum == EditMealOutput,
+        ConcreteViewModel.ViewState == EditMealViewState,
+        ConcreteDataProvider.CellModel == EditMealCell,
+        ConcreteDataProvider.DataConfig == EditMealDataConfig {
     private let viewModel: ConcreteViewModel
     private let dataProvider: ConcreteDataProvider
     private var disposeBag = DisposeBag()
-    private let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: nil, action: nil)
-    private let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: nil)
-    private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+    private let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: nil, action: nil)
+    private let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target: nil, action: nil)
+    private let tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     private var dateFormatter: DateFormatter = {
         let df = DateFormatter()
 
@@ -66,17 +72,55 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         view.addSubview(tableView)
 
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.left, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 0.0))
 
         tableView.register(DateSelectorTableViewCell.self, forCellReuseIdentifier: DateSelectorTableViewCell.reuseIdentifier)
         tableView.register(NutrientsTableViewCell.self, forCellReuseIdentifier: NutrientsTableViewCell.reuseIdentifier)
         tableView.estimatedRowHeight = 44.0
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.dataSource = self
-        dataProvider.configure(delegate: self)
+        tableView.rowHeight = UITableView.automaticDimension
+
+        let dataSource = RxTableViewSectionedReloadDataSource<DataSourceSection<EditMealCell>>.init(
+            configureCell: { [weak self] ds, tv, ip, model -> UITableViewCell in
+                switch model {
+                case .size(_):
+                    let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: "Simple")
+                    self?.configureCell(cell: cell, with: model)
+                    return cell
+
+                case .ingredients(_):
+                    let cell = tv.dequeueReusableCell(withIdentifier: NutrientsTableViewCell.reuseIdentifier)!
+                    self?.configureCell(cell: cell, with: model)
+                    return cell
+
+                case .date(_):
+                    let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "Date")
+                    self?.configureCell(cell: cell, with: model)
+                    self?.autoupdatingDateCellIndexPath.onNext(ip)
+                    return cell
+
+                case .delete:
+                    let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: "Delete")
+                    self?.configureCell(cell: cell, with: model)
+                    return cell
+
+                case .editDate(_):
+                    let cell = tv.dequeueReusableCell(withIdentifier: DateSelectorTableViewCell.reuseIdentifier)!
+                    self?.configureCell(cell: cell, with: model)
+                    self?.autoupdatingDateCellIndexPath.onNext(nil)
+                    return cell
+                }
+            },
+            titleForHeaderInSection: { (ds, sectionIndex) -> String? in
+                return ds.sectionModels[sectionIndex].name
+            }
+        )
+
+        dataProvider.data
+            .bind(to: tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
     }
 
     private func setupTableReaction() {
@@ -92,6 +136,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     }
 
     private func setupAutoUpdateDateCell() {
+        /*
         Observable<Int>.timer(60.0, period: 60.0, scheduler: MainScheduler.asyncInstance)
             .withLatestFrom(autoupdatingDateCellIndexPath)
             .subscribe(onNext: { [weak self] maybeIP in
@@ -107,6 +152,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                 self?.configureCell(cell: cell, with: model)
             })
             .disposed(by: disposeBag)
+        */
     }
 
     private func setupModelOutput() {
@@ -221,7 +267,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     }
 
     private func displayDeleteConfirmation() {
-        let alertStyle: UIAlertControllerStyle
+        let alertStyle: UIAlertController.Style
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
             alertStyle = .actionSheet
@@ -238,7 +284,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         alert.addAction(
             UIAlertAction.init(
                 title: R.string.localizableStrings.edit_meal_alert_delete(),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { [weak self] _ in
                     self?.viewModel.input.onNext(EditMealInput.deleteConfirmed)
                 }
@@ -247,13 +293,14 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         alert.addAction(
             UIAlertAction.init(
                 title: R.string.localizableStrings.cancel(),
-                style: UIAlertActionStyle.cancel,
+                style: UIAlertAction.Style.cancel,
                 handler: nil
             )
         )
         present(alert, animated: true, completion: nil)
     }
 
+    /*
     private func reuseIdentifier(for model: EditMealCell) -> String {
         switch model {
         case .date(_):
@@ -272,99 +319,5 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
             return "Simple"
         }
     }
-
-    // MARK: UITableViewDataSource
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return dataProvider.numberOfSections()
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataProvider.numberOfItems(in: section)
-    }
-
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return dataProvider.titleForHeader(in: section)
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let model = dataProvider.modelForItem(at: indexPath) else {
-            return UITableViewCell()
-        }
-
-        switch model {
-        case .size(_):
-            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Simple")
-            configureCell(cell: cell, with: model)
-            return cell
-
-        case .ingredients(_):
-            let cell = tableView.dequeueReusableCell(withIdentifier: NutrientsTableViewCell.reuseIdentifier)!
-            configureCell(cell: cell, with: model)
-            return cell
-
-        case .date(_):
-            let cell = UITableViewCell.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Date")
-            configureCell(cell: cell, with: model)
-            autoupdatingDateCellIndexPath.onNext(indexPath)
-            return cell
-
-        case .delete:
-            let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Delete")
-            configureCell(cell: cell, with: model)
-            return cell
-
-        case .editDate(_):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DateSelectorTableViewCell.reuseIdentifier)!
-            configureCell(cell: cell, with: model)
-            autoupdatingDateCellIndexPath.onNext(nil)
-            return cell
-        }
-    }
-
-    // MARK: ProxyDataSourceDelegate
-
-    func batch(changes: [ProxyDataSourceChange]) {
-        UIView.setAnimationsEnabled(false)
-        tableView.beginUpdates()
-        for change in changes {
-            switch change {
-            case .delete(let ip):
-                tableView.deleteRows(at: [ip], with: UITableViewRowAnimation.automatic)
-
-            case .insert(let ip):
-                tableView.insertRows(at: [ip], with: UITableViewRowAnimation.automatic)
-
-            case .update(let ip):
-                if
-                    let cell = tableView.cellForRow(at: ip),
-                    let model = dataProvider.modelForItem(at: ip),
-                    reuseIdentifier(for: model) == cell.reuseIdentifier
-                {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.configureCell(cell: cell, with: model)
-                    }
-                } else {
-                    tableView.reloadRows(at: [ip], with: UITableViewRowAnimation.none)
-                }
-
-            case .insertSection(let sectionIndex):
-                tableView.insertSections(IndexSet(integer: sectionIndex), with: UITableViewRowAnimation.automatic)
-
-            case .deleteSection(let sectionIndex):
-                tableView.deleteSections(IndexSet(integer: sectionIndex), with: UITableViewRowAnimation.automatic)
-            }
-        }
-        tableView.endUpdates()
-        UIView.setAnimationsEnabled(true)
-
-        if let targetIP = scrollToIndexPath {
-            tableView.scrollToRow(at: targetIP, at: UITableViewScrollPosition.middle, animated: true)
-            scrollToIndexPath = nil
-        }
-    }
-
-    func forceReload() {
-        tableView.reloadData()
-    }
+    */
 }

@@ -40,7 +40,7 @@ final class MealListFlowLayout: UICollectionViewFlowLayout {
 
     private func calculateEstimatedSize() {
         guard let cv = collectionView else { return }
-        itemSize = UICollectionViewFlowLayoutAutomaticSize
+        itemSize = UICollectionViewFlowLayout.automaticSize
 
         if #available(iOS 11.0, *) {
             self.sectionInsetReference = .fromSafeArea

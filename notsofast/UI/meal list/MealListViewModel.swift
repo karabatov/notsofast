@@ -9,6 +9,11 @@
 import Foundation
 import RxSwift
 
+struct MealListDataConfig: Equatable {
+    let startDate: Date
+    let endDate: Date
+}
+
 struct MealListViewState: Equatable {
     let title: String
     let enableCalendarRightButton: Bool
@@ -26,7 +31,7 @@ enum MealListOutput {
     case openEditMeal(meal: Meal)
 }
 
-struct MealCellModel {
+struct MealCellModel: Equatable {
     let meal: Meal
     let size: String
     let date: Date
@@ -34,17 +39,14 @@ struct MealCellModel {
     let nutrients: Nutrients
 }
 
-final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, ProxyDataSourceDelegate, ViewModel where ConcreteProvider.CellModel == Meal, ConcreteProvider.DataConfig == MealListDataConfig {
-    typealias CellModel = MealCellModel
+final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataProvider where
+    ConcreteProvider.CellModel == Meal,
+    ConcreteProvider.DataConfig == MealListDataConfig {
     private let dataProvider: ConcreteProvider
-    private let needToRefreshViewState = ReplaySubject<Void>.create(bufferSize: 1)
     private var disposeBag = DisposeBag()
 
     init(dataProvider: ConcreteProvider) {
         self.dataProvider = dataProvider
-        self.dataProvider.configure(delegate: self)
-
-        needToRefreshViewState.onNext(())
 
         let df = DateFormatter()
         df.dateStyle = .medium
@@ -53,8 +55,11 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
         let rdf = DateIntervalFormatter()
         rdf.dateTemplate = DateFormatter.dateFormat(fromTemplate: Constants.preferredDateTimeFormat, options: 0, locale: Locale.current)
 
-        Observable.combineLatest(dataProvider.dataConfig, needToRefreshViewState) { ($0, $1) }
-            .map { dataConfig, _ -> MealListViewState in
+        Observable.combineLatest(dataProvider.data, dataProvider.dataConfig) { ($0, $1) }
+            .distinctUntilChanged { p1, p2 -> Bool in
+                return p1.0 == p2.0 && p1.1 == p2.1
+            }
+            .map { data, dataConfig -> MealListViewState in
                 let emptyString: String
                 if dataConfig.endDate == Date.distantFuture {
                     emptyString = R.string.localizableStrings.empty_state_present()
@@ -66,19 +71,18 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
                     return MealListViewState(
                         title: rdf.string(from: dataConfig.startDate, to: dataConfig.startDate + 24 * 60 * 60),
                         enableCalendarRightButton: false,
-                        listOfMealsHidden: dataProvider.isEmpty(),
+                        listOfMealsHidden: data.isEmpty,
                         emptyStateText: emptyString
                     )
                 } else {
                     return MealListViewState(
                         title: df.string(from: dataConfig.startDate),
                         enableCalendarRightButton: true,
-                        listOfMealsHidden: dataProvider.isEmpty(),
+                        listOfMealsHidden: data.isEmpty,
                         emptyStateText: emptyString
                     )
                 }
             }
-            .distinctUntilChanged()
             .bind(to: viewState)
             .disposed(by: disposeBag)
 
@@ -142,6 +146,30 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
                 }
             })
             .disposed(by: disposeBag)
+
+        self.dataProvider.data
+            .map { sections -> [DataSourceSection<MealCellModel>] in
+                return sections
+                    .map { section -> DataSourceSection<MealCellModel> in
+                        let items = section.items
+                            .map { meal -> MealCellModel in
+                                MealCellModel(
+                                    meal: meal,
+                                    size: meal.size.forDisplay(),
+                                    date: meal.eaten,
+                                    displayElapsedTime: Date().timeIntervalSince(meal.eaten) <= 24 * 60 * 60,
+                                    nutrients: meal.nutri
+                                )
+                            }
+
+                        return DataSourceSection<MealCellModel>.init(
+                            name: section.name,
+                            items: items
+                        )
+                    }
+            }
+            .bind(to: data)
+            .disposed(by: disposeBag)
     }
 
     // MARK: ViewModel
@@ -150,63 +178,25 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ProxyDataSource, 
     let input = PublishSubject<MealListInput>()
     let output = PublishSubject<MealListOutput>()
 
-    // MARK: ProxyDataSource
+    // MARK: DataProvider
 
-    private weak var dataSourceDelegate: ProxyDataSourceDelegate?
-
-    func configure(delegate: ProxyDataSourceDelegate?) {
-        dataSourceDelegate = delegate
-    }
-
-    func isEmpty() -> Bool {
-        return dataProvider.isEmpty()
-    }
-
-    func numberOfSections() -> Int {
-        return dataProvider.numberOfSections()
-    }
-
-    func numberOfItems(in section: Int) -> Int {
-        return dataProvider.numberOfItems(in: section)
-    }
-
-    func modelForItem(at indexPath: IndexPath) -> MealCellModel? {
-        guard let meal = dataProvider.modelForItem(at: indexPath) else {
-            return nil
-        }
-
-        return MealCellModel(
-            meal: meal,
-            size: meal.size.forDisplay(),
-            date: meal.eaten,
-            displayElapsedTime: Date().timeIntervalSince(meal.eaten) <= 24 * 60 * 60,
-            nutrients: meal.nutri
-        )
-    }
-
-    func titleForHeader(in section: Int) -> String? {
-        return dataProvider.titleForHeader(in: section)
-    }
-
-    // MARK: ProxyDataSourceDelegate
-
-    func batch(changes: [ProxyDataSourceChange]) {
-        dataSourceDelegate?.batch(changes: changes)
-        needToRefreshViewState.onNext(())
-    }
-
-    func forceReload() {
-        dataSourceDelegate?.forceReload()
-        needToRefreshViewState.onNext(())
-    }
+    let dataConfig = ReplaySubject<MealListDataConfig>.create(bufferSize: 1)
+    let data = ReplaySubject<[DataSourceSection<MealCellModel>]>.create(bufferSize: 1)
 
     // MARK: Helpers
 
     private func openEditMeal(from item: IndexPath) {
-        guard let meal = dataProvider.modelForItem(at: item) else {
-            return
-        }
-
-        output.onNext(MealListOutput.openEditMeal(meal: meal))
+        data
+            .take(1)
+            .map { sections -> Meal? in
+                return sections[safeIndex: item.section]?.items[safeIndex: item.row]?.meal
+            }
+            .filter { $0 != nil }
+            .map { MealListOutput.openEditMeal(meal: $0!) }
+            // Avoid binding to not send OnCompleted event.
+            .subscribe(onNext: { [weak self] signal in
+                self?.output.onNext(signal)
+            })
+            .disposed(by: disposeBag)
     }
 }
