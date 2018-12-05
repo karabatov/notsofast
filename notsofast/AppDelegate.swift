@@ -14,7 +14,7 @@ import RxCocoa
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    private var mealDataProvider: FRCDataProvider<MealEntity, MealListDataSection, MealListDataConfig>?
+    private var mealDataProvider: FRCDataProvider<MealEntity, Meal, MealListDataConfig>?
     private var timerDisposeBag = DisposeBag()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
