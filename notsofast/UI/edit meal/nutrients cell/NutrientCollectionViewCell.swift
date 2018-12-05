@@ -19,7 +19,7 @@ final class NutrientCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
 
         textLabel.textAlignment = .center
-        textLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+        textLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
         textLabel.lineBreakMode = .byTruncatingTail
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(textLabel)

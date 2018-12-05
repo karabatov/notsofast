@@ -26,9 +26,9 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     private let viewModel: ConcreteViewModel
     private let dataProvider: ConcreteDataProvider
     private var disposeBag = DisposeBag()
-    private let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: nil, action: nil)
-    private let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: nil)
-    private let tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+    private let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: nil, action: nil)
+    private let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target: nil, action: nil)
+    private let tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     private var dateFormatter: DateFormatter = {
         let df = DateFormatter()
 
@@ -78,21 +78,21 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
 
         view.addSubview(tableView)
 
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.left, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint.init(item: tableView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 0.0))
 
         tableView.register(DateSelectorTableViewCell.self, forCellReuseIdentifier: DateSelectorTableViewCell.reuseIdentifier)
         tableView.register(NutrientsTableViewCell.self, forCellReuseIdentifier: NutrientsTableViewCell.reuseIdentifier)
         tableView.estimatedRowHeight = 44.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
 
         let dataSource = RxTableViewSectionedReloadDataSource<DataSourceSection<EditMealCell>>.init(
             configureCell: { [weak self] ds, tv, ip, model -> UITableViewCell in
                 switch model {
                 case .size(_):
-                    let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Simple")
+                    let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: "Simple")
                     self?.configureCell(cell: cell, with: model)
                     return cell
 
@@ -102,13 +102,13 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
                     return cell
 
                 case .date(_):
-                    let cell = UITableViewCell.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Date")
+                    let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "Date")
                     self?.configureCell(cell: cell, with: model)
                     self?.autoupdatingDateCellIndexPath.onNext(ip)
                     return cell
 
                 case .delete:
-                    let cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "Delete")
+                    let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: "Delete")
                     self?.configureCell(cell: cell, with: model)
                     return cell
 
@@ -273,7 +273,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
     }
 
     private func displayDeleteConfirmation() {
-        let alertStyle: UIAlertControllerStyle
+        let alertStyle: UIAlertController.Style
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
             alertStyle = .actionSheet
@@ -290,7 +290,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         alert.addAction(
             UIAlertAction.init(
                 title: R.string.localizableStrings.edit_meal_alert_delete(),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { [weak self] _ in
                     self?.viewModel.input.onNext(EditMealInput.deleteConfirmed)
                 }
@@ -299,7 +299,7 @@ final class NewEditMealViewController<ConcreteViewModel: ViewModel, ConcreteData
         alert.addAction(
             UIAlertAction.init(
                 title: R.string.localizableStrings.cancel(),
-                style: UIAlertActionStyle.cancel,
+                style: UIAlertAction.Style.cancel,
                 handler: nil
             )
         )

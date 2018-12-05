@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var mealDataProvider: FRCDataProvider<MealEntity, Meal, MealListDataConfig>?
     private var timerDisposeBag = DisposeBag()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let config = MealListDataConfig(startDate: Date().beginningOfNextHourYesterday(), endDate: Date.distantFuture)
         let dp = CoreDataProvider.sharedInstance.dataProviderForMealList(config: config)
