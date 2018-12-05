@@ -415,10 +415,11 @@
 			inputPaths = (
 			);
 			outputPaths = (
+				"$(SRCROOT)/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT\"";
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E2773E755998351CCE80A857 /* [CP] Check Pods Manifest.lock */ = {
