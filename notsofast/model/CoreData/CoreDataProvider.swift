@@ -122,6 +122,8 @@ final class CoreDataProvider: MealActionController {
 
         do {
             if context.hasChanges {
+                // For some reason RxDataSources gets a temporary ID on next tick.
+                try context.obtainPermanentIDs(for: [editEntity])
                 try context.save()
             }
         } catch {
@@ -144,7 +146,7 @@ final class CoreDataProvider: MealActionController {
                 try context.save()
             }
         } catch {
-            NSFLog("Context failed to save: \(meal)")
+            NSFLog("Context failed to delete: \(meal)")
         }
     }
 }

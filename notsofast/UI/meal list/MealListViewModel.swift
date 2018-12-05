@@ -43,13 +43,10 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
     ConcreteProvider.CellModel == Meal,
     ConcreteProvider.DataConfig == MealListDataConfig {
     private let dataProvider: ConcreteProvider
-    private let needToRefreshViewState = ReplaySubject<Void>.create(bufferSize: 1)
     private var disposeBag = DisposeBag()
 
     init(dataProvider: ConcreteProvider) {
         self.dataProvider = dataProvider
-
-        needToRefreshViewState.onNext(())
 
         let df = DateFormatter()
         df.dateStyle = .medium
@@ -58,8 +55,11 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
         let rdf = DateIntervalFormatter()
         rdf.dateTemplate = DateFormatter.dateFormat(fromTemplate: Constants.preferredDateTimeFormat, options: 0, locale: Locale.current)
 
-        Observable.combineLatest(dataProvider.data, dataProvider.dataConfig, needToRefreshViewState) { ($0, $1, $2) }
-            .map { data, dataConfig, _ -> MealListViewState in
+        Observable.combineLatest(dataProvider.data, dataProvider.dataConfig) { ($0, $1) }
+            .distinctUntilChanged { p1, p2 -> Bool in
+                return p1.0 == p2.0 && p1.1 == p2.1
+            }
+            .map { data, dataConfig -> MealListViewState in
                 let emptyString: String
                 if dataConfig.endDate == Date.distantFuture {
                     emptyString = R.string.localizableStrings.empty_state_present()
@@ -83,7 +83,6 @@ final class MealListViewModel<ConcreteProvider: DataProvider>: ViewModel, DataPr
                     )
                 }
             }
-            .distinctUntilChanged()
             .bind(to: viewState)
             .disposed(by: disposeBag)
 
