@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 /// Display a list of meals in a collection view.
-final class MealListViewController<ConcreteDataSource: ProxyDataSource, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProxyDataSourceDelegate where ConcreteDataSource.CellModel == MealCellModel, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
+final class MealListViewController<ConcreteDataProvider: DataProvider, ConcreteViewModel: ViewModel>: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProxyDataSourceDelegate where ConcreteDataProvider.CellModel == MealCellModel, ConcreteDataProvider.DataConfig == MealListDataConfig, ConcreteViewModel.ViewState == MealListViewState, ConcreteViewModel.InputEnum == MealListInput, ConcreteViewModel.OutputEnum == MealListOutput {
     /// Scroll the calendar to the past.
     private let leftButton: UIBarButtonItem = UIBarButtonItem(image: R.image.arrow_left(), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     /// Scroll the calendar to the future.
@@ -24,17 +24,16 @@ final class MealListViewController<ConcreteDataSource: ProxyDataSource, Concrete
     private let emptyStateLabel = UILabel()
     /// Collection view for displaying the list of meals.
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: MealListFlowLayout())
-    private let dataSource: ConcreteDataSource
+    private let dataProvider: ConcreteDataProvider
     private let viewModel: ConcreteViewModel
     private var disposeBag = DisposeBag()
 
     // MARK: System methods
 
-    required init(dataSource: ConcreteDataSource, viewModel: ConcreteViewModel) {
-        self.dataSource = dataSource
+    required init(dataProvider: ConcreteDataProvider, viewModel: ConcreteViewModel) {
+        self.dataProvider = dataProvider
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.dataSource.configure(delegate: self)
 
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = leftButton
