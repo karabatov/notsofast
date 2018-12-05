@@ -10,7 +10,6 @@ import XCTest
 @testable import notsofast
 
 class MealTests: XCTestCase {
-
     func testEmptyMeal() {
         let meal1 = Meal.createNewMeal()
         let meal2 = Meal.createNewMeal()
