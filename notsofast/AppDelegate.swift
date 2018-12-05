@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let dp = CoreDataProvider.sharedInstance.dataProviderForMealList(config: config)
         mealDataProvider = dp
         let vm = MealListViewModel(dataProvider: dp)
-        let mainVC = MealListViewController(dataSource: vm, viewModel: vm)
+        let mainVC = MealListViewController(dataProvider: vm, viewModel: vm)
         let nav = UINavigationController(rootViewController: mainVC)
 
         if window == nil {
